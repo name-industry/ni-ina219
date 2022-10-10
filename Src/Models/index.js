@@ -1,6 +1,5 @@
 /**
- * REGISTER MAPS
- * =====================================================
+ * Models / Chip Register Maps
  * 
  * PDF reference link from WaveShare site.
  * https://www.waveshare.com/w/upload/1/10/Ina219.pdf

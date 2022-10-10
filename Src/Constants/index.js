@@ -1,10 +1,14 @@
 /**
  * CONSTANTS
+ * 
  */
 
 
 // default 12c address of WaveShare UPS INA219
 export const DEFAULT_I2C_ADDRESS = 0x42;
+
+// Rasp 4B I2c bus active on 1
+export const DEFAULT_I2C_BUS = 1;
 
 // REGISTERS
 
@@ -71,5 +75,23 @@ export const CONFIG_SETTINGS = {
         SVOLT_CONTINUOUS: 0x05, // shunt voltage continuous
         BVOLT_CONTINUOUS: 0x06, // bus voltage continuous
         SANDBVOLT_CONTINUOUS: 0x07, // shunt and bus voltage continuous
+    }
+}
+
+// Calibration Templates
+// ====================================================
+
+export const CALIBRATION_TEMPLATES = {
+    "32V2A": {
+        currentDivider_mA: 10,
+        powerDivider_mW: 2,
+        calValue: 4096,
+        currentLSB: 0.1, // Current LSB = 100uA per bit
+        powerLSB: 0.002, // Power LSB = 2mW per bit
+        config: CONFIG_SETTINGS.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
+            CONFIG_SETTINGS.GAIN.DIV_8_320MV << 11 |
+            CONFIG_SETTINGS.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
+            CONFIG_SETTINGS.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
+            CONFIG_SETTINGS.MODE.SANDBVOLT_CONTINUOUS
     }
 }
