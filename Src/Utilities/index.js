@@ -3,7 +3,7 @@
  * 
  */
 
- export const formatRegisterOutput = function (cmd, labelMap, buf, len) {
+ export const formatRegisterOutput = function (cmd, labelMap, buf) {
     let result = [];
     let byte0 = buf[0].toString(2).padStart(8, "0");
     let byte1 = buf[1].toString(2).padStart(8, "0");
@@ -12,7 +12,7 @@
         return labelMap[i] + ":" + v;
     })
 
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < 2; i++) {
         // unshift to pop it the other way
         result.push(buf[i].toString(2).padStart(8, "0"));
     }

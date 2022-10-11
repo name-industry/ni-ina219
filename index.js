@@ -32,6 +32,19 @@ class INA219_sensor {
 
     constructor() { }
 
+    /**
+     * initialize
+     * 
+     * Gets a handler to the INA219 chip via I2c.
+     * On success configures the chip and runs an initial
+     * calibration to ensure correct values on the 
+     * register.
+     * 
+     * @param {*} i2cAddress 
+     * @param {*} busNumber 
+     * @param {*} configId 
+     * @returns {ResultObject} Method Object result style
+     */
     initialize = async function (
         i2cAddress = DEFAULT_I2C_ADDRESS,
         busNumber = DEFAULT_I2C_BUS,
@@ -45,7 +58,7 @@ class INA219_sensor {
         let deviceReady = await this.configureAndCalibrateDevice(configId);
         // TODO: update errors here on scaffold
 
-        if (initI2cBus.success && deviceReady.success) {
+        if (initI2cBus.success && deviceReady?.success) {
             return {
                 success: true,
                 msg: "[UPS BOARD] - Ready",
@@ -83,6 +96,10 @@ class INA219_sensor {
                 REGISTERS.CONFIG_RW,
                 CALIBRATION_TEMPLATES["32V2A"].config);
 
+                if(writeConfiguration?.success === false) {
+                    return writeConfiguration;
+                }
+
             // run calibrate after config is set to make sure next 
             // readings are correct.
             let writeCalibration = await I2CBus.writeRegister(
@@ -115,9 +132,9 @@ class INA219_sensor {
      * @returns 
      */
     readRegister = async function (register) {
-        let prep = await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.CALIBRATION.calValue);
-        let data = await I2CBus.readRegister(register);
-        return data;
+        let writeData = await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.CALIBRATION.calValue);
+        let readData = await I2CBus.readRegister(register)
+        return readData;
     }
 
     /**
@@ -128,48 +145,48 @@ class INA219_sensor {
      * @returns 
      */
     writeRegister = async function (register, value) {
-        let prep = await I2CBus.writeRegister(register, value);
-        return prep;
+        let data = await I2CBus.writeRegister(register, value);
+        return data;
     }
 
     // ACTIONS
 
     getSystemSettings = async function () {
-        let data = await this.readRegister(REGISTERS.CONFIG_RW);
-        let output = formatRegisterOutput("CONFIGURATION", CONFIGURATION_MAP.LABELS, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.CONFIG_RW);
+        let output = formatRegisterOutput("CONFIGURATION", CONFIGURATION_MAP.LABELS, data.buffer);
         return output;
     }
 
     getSystemCalibration = async function () {
-        let data = await this.readRegister(REGISTERS.CALIBRATION_RW);
-        let output = formatRegisterOutput("CONFIGURATION", CALIBRATION_MAP.LABELS, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.CALIBRATION_RW);
+        let output = formatRegisterOutput("CONFIGURATION", CALIBRATION_MAP.LABELS, data.buffer);
         return output;
     }
 
     getBusVoltage = async function () {
-        let data = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
-        let output = formatRegisterOutput("BUS_VOLTAGE", BUS_VOLTAGE_MAP.LABELS, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
+        let output = formatRegisterOutput("BUS_VOLTAGE", BUS_VOLTAGE_MAP.LABELS, data.buffer);
         output.asFloat = (data.payload >> 3) * 0.004;
         return output;
     }
 
     getShuntVoltage = async function () {
-        let data = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
-        let output = formatRegisterOutput("SHUNT_VOLTAGE", SHUNT_VOLTAGE_MAP.LABELS_PGA_8, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
+        let output = formatRegisterOutput("SHUNT_VOLTAGE", SHUNT_VOLTAGE_MAP.LABELS_PGA_8, data.buffer);
         output.asFloat = data.payload * 0.01 / 1000;
         return output;
     }
 
     getPower = async function () {
-        let data = await this.readRegister(REGISTERS.POWER_R);
-        let output = formatRegisterOutput("POWER", POWER_MAP.LABELS, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.POWER_R);
+        let output = formatRegisterOutput("POWER", POWER_MAP.LABELS, data.buffer);
         output.asFloat = data.payload * this.CALIBRATION.powerLSB;
         return output;
     }
 
     getCurrent = async function () {
-        let data = await this.readRegister(REGISTERS.CURRENT_R);
-        let output = formatRegisterOutput("CURRENT", CURRENT_MAP.LABELS, data.buffer, data.bytesRead);
+        let {success, msg, data} = await this.readRegister(REGISTERS.CURRENT_R);
+        let output = formatRegisterOutput("CURRENT", CURRENT_MAP.LABELS, data.buffer);
         output.asFloat = data.payload * this.CALIBRATION.currentLSB / 1000;
         return output;
     }
@@ -177,5 +194,21 @@ class INA219_sensor {
     //
 
 }
+
+// JSDoc TYPES
+
+/**
+ * @typedef {Object} ErrorResultObject
+ * @property {boolean} success - Method result
+ * @property {string} msg - Method message
+ * @property {object} data - Method payload
+ */
+
+/**
+ * @typedef {Object} ResultObject
+ * @property {boolean} success - Method result
+ * @property {string} msg - Method message
+ * @property {object} data - Method payload
+ */
 
 export default new INA219_sensor();
