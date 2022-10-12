@@ -41,7 +41,7 @@
       * 
       * @param {Number} i2cAddress Address in hex of the sensor ie: 0x24
       * @param {Number} busNumber The Bus address as an integer ie: 1 ( for PI ) 
-      * @returns {Promise(ResultObject|ErrorResultObject}  returns value object
+      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
       */
      initialize = async function (
          i2cAddress,
@@ -89,8 +89,8 @@
      /**
       * Class setter
       * 
-      * @param {*} i2cAddress 
-      * @param {*} busNumber 
+      * @param {Number} i2cAddress 
+      * @param {Promise<Object>} busNumber 
       */
      updateBus = function (i2cAddress, wire) {
          this.i2cAddress = i2cAddress;
@@ -104,8 +104,8 @@
       * 
       * Returns bytesRead and the hydrated buffer on success 
       * 
-      * @param {*} register 
-      * @returns {Promise(ResultObject|ErrorResultObject} returns value object 
+      * @param {Number} register 
+      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
       */
      readRegister = async function (register) {
          
@@ -139,9 +139,9 @@
      /**
       * writeRegister 
       * 
-      * @param {*} register 
-      * @param {*} value 
-      * @returns {Promise(ResultObject|ErrorResultObject}  returns value object 
+      * @param {Number} register 
+      * @param {Number} value 
+      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
       */
      writeRegister = async function (register, value) {
  

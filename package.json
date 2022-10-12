@@ -7,7 +7,15 @@
   "license": "MIT",
   "private": false,
   "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "generate-docs": "node_modules/.bin/jsdoc index.js --configure .jsdoc.json --verbose"
+  },
   "dependencies": {
     "i2c-bus": "^5.2.2"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.11",
+    "jsdoc-template": "braintree/jsdoc-template"
   }
 }
