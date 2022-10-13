@@ -53,6 +53,8 @@ import I2CBus from "./Src/Bus/I2C/index.js";
 
 class NI_INA219 {
 
+    currentConfiguration;
+
     /**
      * @method NI_INA219#initialize
      * 
@@ -65,104 +67,55 @@ class NI_INA219 {
      * calibration to ensure correct values on the 
      * register.
      * 
-     * @async
+     * @async 
+     * 
      * @param {Number} i2cAddress Address in hex of the sensor ie: 0x24
-     * @param {Number} busNumber The Bus address as an integer ie: 1 ( for PI ) 
-     * @param {String} configId Configuring the sensor and calibration template Id
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @param {Number} busNumber The Bus address as an integer ie: 1 ( for PI )
+     * @param {*} configurationTemplateId Configuring the sensor and calibration template Id
+     * @param {*} useLogging Not implemented
+     * @param {*} loggingType Not implemented
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
      */
     initialize = async function (
         i2cAddress = DEFAULT_I2C_ADDRESS,
         busNumber = DEFAULT_I2C_BUS,
-        configId = "32V2A"
+        configurationTemplateId = "32V2A",
+        useLogging = false,
+        loggingType = "VERBOSE"
     ) {
         // get handle to I2c bus and sensor
         let initI2cBus = await I2CBus.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) return initI2cBus;
 
-        // set the sensors configuration register values
-        let deviceReady = await this.configureAndCalibrateDevice(configId);
-        // TODO: update errors here on scaffold
+        // write the configuration to the chip register
+        let writeConfiguration = await this.writeConfiguration(configurationTemplateId);
+        if (writeConfiguration.success === false) return writeConfiguration;
 
-        if (initI2cBus.success && deviceReady?.success) {
-            return {
-                success: true,
-                msg: "[UPS BOARD] - Ready",
-                data: {}
-            }
-        } else {
-            return {
-                success: false,
-                msg: "[UPS BOARD] - Unable to start board",
-                data: {
-                    errors: [
-                        {
-                            "I2c": {
-                                msg: initI2cBus.msg,
-                                data: initI2cBus.data
-                            }
-                        },
-                        {
-                            "Sensor": {
-                                msg: deviceReady.msg,
-                                data: deviceReady.data
-                            }
-                        }
-                    ]
-                }
-            }
+        // write calibration values to the chip register
+        let writeCalibration = await this.writeCalibration();
+        if (writeCalibration.success === false) return writeCalibration;
+
+        // update
+        this.setCurrentConfiguration();
+
+        return {
+            success: true,
+            msg: "[UPS BOARD] - Ready",
+            data: {}
         }
+
     }
 
     /**
-     * @method NI_INA219#configureAndCalibrateDevice
+     * @method NI_INA219#setCurrentConfiguration
      * 
      * @summary
-     * Temp method
+     * Class setter for keeping track of set configuration settings
      * 
-     * @description
-     * Temporary method for testing promise error on I2c connect/read/write
-     * Will be moved to a proper folder later
-     * 
-     * @async
-     * @param {String} configId Configuring the sensor and calibration template Id
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @param {object} configurationTemplate 
      */
-    configureAndCalibrateDevice = async function (
-        configId
-    ) {
-        if (configId === "32V2A") {
-            let writeConfiguration = await I2CBus.writeRegister(
-                REGISTERS.CONFIG_RW,
-                CALIBRATION_TEMPLATES["32V2A"].config);
-
-            if (writeConfiguration?.success === false) {
-                return writeConfiguration;
-            }
-
-            // run calibrate after config is set to make sure next 
-            // readings are correct.
-            let writeCalibration = await I2CBus.writeRegister(
-                REGISTERS.CALIBRATION_RW,
-                CALIBRATION_TEMPLATES["32V2A"].calValue);
-
-            this.CALIBRATION = CALIBRATION_TEMPLATES["32V2A"];
-            return {
-                success: true,
-                msg: "[UPS BOARD] Configured & calibrated",
-                data: {
-                    usingTemplateId: configId
-                }
-            }
-        } else {
-            return {
-                success: false,
-                msg: "Unknown configuration template Id",
-                data: {
-                    requestedId: configId
-                }
-            }
-        }
+    setCurrentConfiguration = function (configurationTemplate = {}) {
+        this.currentConfiguration = configurationTemplate;
     }
 
     /**
@@ -183,8 +136,14 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     readRegister = async function (register) {
-        let writeData = await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.CALIBRATION.calValue);
-        let readData = await I2CBus.readRegister(register)
+        // trigger fresh calcs
+        let writeData = await this.writeCalibration();
+        if (writeData.success === false) return writeData;
+
+        // read values
+        let readData = await I2CBus.readRegister(register);
+        if (readData.success === false) return readData;
+
         return readData;
     }
 
@@ -203,8 +162,61 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     writeRegister = async function (register, value) {
-        let data = await I2CBus.writeRegister(register, value);
-        return data;
+        return await I2CBus.writeRegister(register, value);
+    }
+
+    /**
+     * @method NI_INA219#writeConfiguration
+     *
+     * @summary
+     * Write the configuration the the Chip register 
+     * 
+     * @description
+     * Uses a template Id to select from pre-made system configurations
+     * and calculation values. Currently only "32V2A" ( 32 volts and 2 amps )
+     * is available
+     * 
+     * @param {string} configurationTemplateId
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     */
+    writeConfiguration = async function (configurationTemplateId) {
+        if (configurationTemplateId !== "32V2A") {
+            return {
+                success: false,
+                msg: "Unknown configuration template Id",
+                data: {
+                    requestedId: configurationTemplateId
+                }
+            }
+        }
+        return await I2CBus.writeRegister(
+            REGISTERS.CONFIG_RW,
+            CALIBRATION_TEMPLATES[configurationTemplateId].config);
+
+    }
+
+    /**
+     * @method NI_INA219#writeCalibration
+     * 
+     * @summary
+     * Write the calibration value the the Chip register 
+     * 
+     * @description
+     * When the system board settings are saved in the configuration 
+     * register, we get back calibration and measurement values that
+     * we can use to calibrate the results. This method also can be 
+     * used along with reading Power to trigger the main read register
+     * to calculate fresh values.
+     * 
+     * @param {number} chip calibration value
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     */
+    writeCalibration = async function (value = this.CALIBRATION.calValue) {
+        return await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, value);
     }
 
     /**
@@ -218,7 +230,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object
      */
     getSystemSettings = async function () {
         let { success, msg, data } = await this.readRegister(REGISTERS.CONFIG_RW);

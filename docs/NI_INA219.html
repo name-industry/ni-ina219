@@ -73,7 +73,7 @@
 
     
 
-    <h3>Classes</h3><ul><li id="NI_INA219-nav"><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type="method" id="NI_INA219-initialize-nav"><a href="NI_INA219.html#initialize">initialize</a></li><li data-type="method" id="NI_INA219-configureAndCalibrateDevice-nav"><a href="NI_INA219.html#configureAndCalibrateDevice">configureAndCalibrateDevice</a></li><li data-type="method" id="NI_INA219-readRegister-nav"><a href="NI_INA219.html#readRegister">readRegister</a></li><li data-type="method" id="NI_INA219-writeRegister-nav"><a href="NI_INA219.html#writeRegister">writeRegister</a></li><li data-type="method" id="NI_INA219-getSystemSettings-nav"><a href="NI_INA219.html#getSystemSettings">getSystemSettings</a></li><li data-type="method" id="NI_INA219-getSystemCalibration-nav"><a href="NI_INA219.html#getSystemCalibration">getSystemCalibration</a></li><li data-type="method" id="NI_INA219-getBusVoltage-nav"><a href="NI_INA219.html#getBusVoltage">getBusVoltage</a></li><li data-type="method" id="NI_INA219-getShuntVoltage-nav"><a href="NI_INA219.html#getShuntVoltage">getShuntVoltage</a></li><li data-type="method" id="NI_INA219-getPower-nav"><a href="NI_INA219.html#getPower">getPower</a></li><li data-type="method" id="NI_INA219-getCurrent-nav"><a href="NI_INA219.html#getCurrent">getCurrent</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONFIGURATION_MAP">CONFIGURATION_MAP</a></li><li><a href="global.html#SHUNT_VOLTAGE_MAP">SHUNT_VOLTAGE_MAP</a></li><li><a href="global.html#BUS_VOLTAGE_MAP">BUS_VOLTAGE_MAP</a></li><li><a href="global.html#POWER_MAP">POWER_MAP</a></li><li><a href="global.html#CURRENT_MAP">CURRENT_MAP</a></li><li><a href="global.html#CALIBRATION_MAP">CALIBRATION_MAP</a></li><li><a href="global.html#formatRegisterOutput">formatRegisterOutput</a></li></ul>
+    <h3>Classes</h3><ul><li id="NI_INA219-nav"><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type="method" id="NI_INA219-initialize-nav"><a href="NI_INA219.html#initialize">initialize</a></li><li data-type="method" id="NI_INA219-setCurrentConfiguration-nav"><a href="NI_INA219.html#setCurrentConfiguration">setCurrentConfiguration</a></li><li data-type="method" id="NI_INA219-readRegister-nav"><a href="NI_INA219.html#readRegister">readRegister</a></li><li data-type="method" id="NI_INA219-writeRegister-nav"><a href="NI_INA219.html#writeRegister">writeRegister</a></li><li data-type="method" id="NI_INA219-writeConfiguration-nav"><a href="NI_INA219.html#writeConfiguration">writeConfiguration</a></li><li data-type="method" id="NI_INA219-writeCalibration-nav"><a href="NI_INA219.html#writeCalibration">writeCalibration</a></li><li data-type="method" id="NI_INA219-getSystemSettings-nav"><a href="NI_INA219.html#getSystemSettings">getSystemSettings</a></li><li data-type="method" id="NI_INA219-getSystemCalibration-nav"><a href="NI_INA219.html#getSystemCalibration">getSystemCalibration</a></li><li data-type="method" id="NI_INA219-getBusVoltage-nav"><a href="NI_INA219.html#getBusVoltage">getBusVoltage</a></li><li data-type="method" id="NI_INA219-getShuntVoltage-nav"><a href="NI_INA219.html#getShuntVoltage">getShuntVoltage</a></li><li data-type="method" id="NI_INA219-getPower-nav"><a href="NI_INA219.html#getPower">getPower</a></li><li data-type="method" id="NI_INA219-getCurrent-nav"><a href="NI_INA219.html#getCurrent">getCurrent</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#CONFIGURATION_MAP">CONFIGURATION_MAP</a></li><li><a href="global.html#SHUNT_VOLTAGE_MAP">SHUNT_VOLTAGE_MAP</a></li><li><a href="global.html#BUS_VOLTAGE_MAP">BUS_VOLTAGE_MAP</a></li><li><a href="global.html#POWER_MAP">POWER_MAP</a></li><li><a href="global.html#CURRENT_MAP">CURRENT_MAP</a></li><li><a href="global.html#CALIBRATION_MAP">CALIBRATION_MAP</a></li><li><a href="global.html#formatRegisterOutput">formatRegisterOutput</a></li></ul>
   </nav>
 
   <div id="main">
@@ -226,7 +226,7 @@
       </svg>
     </a>
     <h4 class="name" id="initialize">
-      <span class="type-signature">(async) </span>initialize<span class="signature">(i2cAddress, busNumber, configId)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="global.html#ResultObject">ResultObject</a>|<a href="global.html#ErrorResultObject">ErrorResultObject</a>)>}</span>
+      <span class="type-signature">(async) </span>initialize<span class="signature">(i2cAddress, busNumber, configurationTemplateId, useLogging, loggingType)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="global.html#ResultObject">ResultObject</a>|<a href="global.html#ErrorResultObject">ErrorResultObject</a>)>}</span>
     </h4>
   </span>
 
@@ -330,14 +330,14 @@
     
       <tr>
         
-          <td class="name"><code>configId</code></td>
+          <td class="name"><code>configurationTemplateId</code></td>
         
 
         <td class="type">
           
             
     <span class="param-type">
-      String
+      *
     </span>
 
     
@@ -352,6 +352,64 @@
 
         <td class="description last">
           Configuring the sensor and calibration template Id
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>useLogging</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      *
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Not implemented
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>loggingType</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      *
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          Not implemented
           
         </td>
       </tr>
@@ -395,7 +453,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line56">line 56</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line58">line 58</a>
         </li>
       </ul>
     </dd>
@@ -428,27 +486,23 @@
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#configureAndCalibrateDevice">
+    <a class="link-icon" href="#setCurrentConfiguration">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="configureAndCalibrateDevice">
-      <span class="type-signature">(async) </span>configureAndCalibrateDevice<span class="signature">(configId)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="global.html#ResultObject">ResultObject</a>|<a href="global.html#ErrorResultObject">ErrorResultObject</a>)>}</span>
+    <h4 class="name" id="setCurrentConfiguration">
+      <span class="type-signature"></span>setCurrentConfiguration<span class="signature">(configurationTemplate)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
     <p class="summary">
-      Temp method
+      Class setter for keeping track of set configuration settings
     </p>
   
 
 
-
-  <div class="description">
-    Temporary method for testing promise error on I2c connect/read/writeWill be moved to a proper folder later
-  </div>
 
 
 
@@ -480,14 +534,14 @@
     
       <tr>
         
-          <td class="name"><code>configId</code></td>
+          <td class="name"><code>configurationTemplate</code></td>
         
 
         <td class="type">
           
             
     <span class="param-type">
-      String
+      object
     </span>
 
     
@@ -501,7 +555,7 @@
         
 
         <td class="description last">
-          Configuring the sensor and calibration template Id
+          
           
         </td>
       </tr>
@@ -545,7 +599,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line117">line 117</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line109">line 109</a>
         </li>
       </ul>
     </dd>
@@ -695,7 +749,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line168">line 168</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line121">line 121</a>
         </li>
       </ul>
     </dd>
@@ -874,7 +928,307 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line191">line 191</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line150">line 150</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#writeConfiguration">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="writeConfiguration">
+      <span class="type-signature">(async) </span>writeConfiguration<span class="signature">(configurationTemplateId)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="global.html#ResultObject">ResultObject</a>|<a href="global.html#ErrorResultObject">ErrorResultObject</a>)>}</span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      Write the configuration the the Chip register
+    </p>
+  
+
+
+
+  <div class="description">
+    Uses a template Id to select from pre-made system configurationsand calculation values. Currently only "32V2A" ( 32 volts and 2 amps )is available
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>configurationTemplateId</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line168">line 168</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#writeCalibration">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="writeCalibration">
+      <span class="type-signature">(async) </span>writeCalibration<span class="signature">(chip)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="global.html#ResultObject">ResultObject</a>|<a href="global.html#ErrorResultObject">ErrorResultObject</a>)>}</span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      Write the calibration value the the Chip register
+    </p>
+  
+
+
+
+  <div class="description">
+    When the system board settings are saved in the configuration register, we get back calibration and measurement values thatwe can use to calibrate the results. This method also can be used along with reading Power to trigger the main read registerto calculate fresh values.
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>chip</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      number
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          calibration value
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line200">line 200</a>
         </li>
       </ul>
     </dd>
@@ -969,7 +1323,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line210">line 210</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line222">line 222</a>
         </li>
       </ul>
     </dd>
@@ -1064,7 +1418,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line229">line 229</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line241">line 241</a>
         </li>
       </ul>
     </dd>
@@ -1159,7 +1513,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line248">line 248</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line260">line 260</a>
         </li>
       </ul>
     </dd>
@@ -1254,7 +1608,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line269">line 269</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line281">line 281</a>
         </li>
       </ul>
     </dd>
@@ -1349,7 +1703,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line290">line 290</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line302">line 302</a>
         </li>
       </ul>
     </dd>
@@ -1444,7 +1798,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line311">line 311</a>
+          <a href="index.js.html">index.js</a>, <a href="index.js.html#line323">line 323</a>
         </li>
       </ul>
     </dd>
