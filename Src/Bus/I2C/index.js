@@ -1,43 +1,34 @@
 /**
- * I2c Utility methods
+ * @class I2cBus
  * 
- * Registers are 16 bits.
- * Requires the I2c Address in Hex for the device
- * Requires the Register Pointer in Hex ( where to read )
- * Requires the length as an INT for total bytes to read back up to 32 Bytes
- * Requires a buffer with minimum = to length where results are places.
+ * @summary
+ * Temporary included I2c-Bus wrapper
  * 
- * Example:
- *  I2C_ADDRESS = 0x40;
- *  REG_BUS_VOLTAGE_R = 0x02;
- *  length = 2; // because INA219's 16 bit 2 byte size block
- *  
+ * @description
  * Notes: 
- * 
+ * <br /><br />
  *  In node we can allocate a buffer with a size and type and default values.
  *  I am not sure what the underlying wrappers to the main SMBus returns.
- * 
- * Raspberry Pi -> lscpu | grep -i endian
- *  returns Little Endian also double check
- * echo -en \\001\\002 | od -An -tx2
- *  0201  # little-endian <- returns
- *  0102  # big-endian
- * 
+ * <br /><br />
+ * Raspberry Pi -> lscpu | grep -i endian<br />
+ *  returns Little Endian also double check<br />
+ *  echo -en \\001\\002 | od -An -tx2<br />
+ *  0201  # little-endian <- returns<br />
+ *  0102  # big-endian<br />
  */
 
  import i2c from 'i2c-bus';
 
  class I2cBus {
  
-     constructor() { }
- 
      /**
-      * initialize
+      * @method I2cBus#initialize
       * 
-      *  Please note i2c-bus lib allows you to connect to any
-      *  bus number as long as its an INT. So the returned
-      *  bus object does not fail/error on "open" of an arbitrary
-      *  Hardware Bus line.
+      * @description
+      * Please note i2c-bus lib allows you to connect to any
+      * bus number as long as its an INT. So the returned
+      * bus object does not fail/error on "open" of an arbitrary
+      * hardware bus line.
       * 
       * @param {Number} i2cAddress Address in hex of the sensor ie: 0x24
       * @param {Number} busNumber The Bus address as an integer ie: 1 ( for PI ) 
@@ -72,7 +63,7 @@
              }
          } else {
  
-             this.updateBus(i2cAddress, wire);
+             this.setCurrentBusData(i2cAddress, wire);
  
              return {
                  success: true,
@@ -87,33 +78,52 @@
      }
  
      /**
-      * Class setter
+      * @method I2cBus#setCurrentBusData
+      * 
+      * @summary 
+      * Class setter for keeping track of the current bus settings
       * 
       * @param {Number} i2cAddress 
-      * @param {Promise<Object>} busNumber 
+      * @param {Promise<Object>} wire 
       */
-     updateBus = function (i2cAddress, wire) {
+     setCurrentBusData = function (i2cAddress, wire) {
          this.i2cAddress = i2cAddress;
          this.wire = wire;
      }
  
-     cleanupBus = function () { };
+     /**
+      * @method I2cBus#removeBus
+      * 
+      * @summary 
+      * Class setter for keeping track of the current bus settings
+      * 
+      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+      */
+     removeBus = function () {
+         // shutdown gracefully
+         // return promise when complete
+     };
  
      /**
-      * readRegister
+      * @method I2cBus#readRegister
       * 
+      * @summary
       * Returns bytesRead and the hydrated buffer on success 
       * 
-      * @param {Number} register 
+      * @description
+      * Registers are 16 bits. 2 bytes.
+      * Requires the I2c register address in Hex to read from
+      * 
+      * @param {Number} the address in hex of the register to read from ie: 0x24 
       * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
       */
      readRegister = async function (register) {
-         
+ 
          let resultBuffer = Buffer.alloc(2, 0, "utf-8");
          let data;
-         
+ 
          try {
-             data = await this.wire.readI2cBlock(this.i2cAddress, register, 2, resultBuffer);    
+             data = await this.wire.readI2cBlock(this.i2cAddress, register, 2, resultBuffer);
          } catch (error) {
              return {
                  success: false,
@@ -124,7 +134,7 @@
                  }
              }
          }
-         
+ 
          return {
              success: true,
              msg: "[I2c Bus] - Bytes written",
@@ -137,7 +147,7 @@
      }
  
      /**
-      * writeRegister 
+      * @method I2cBus#writeRegister 
       * 
       * @param {Number} register 
       * @param {Number} value 

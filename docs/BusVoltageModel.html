@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Global - Documentation
+      BusVoltageModel - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -79,7 +79,7 @@
   <div id="main">
     
       <h1 class="page-title">
-        Global
+        BusVoltageModel
       </h1>
     
 
@@ -90,7 +90,7 @@
     
       <h2>
         
-        
+        BusVoltageModel
         
       </h2>
 
@@ -103,7 +103,40 @@
       
         
 
-        
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#BusVoltageModel">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="BusVoltageModel">
+      <span class="type-signature"></span>new BusVoltageModel<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      BUS VOLTAGE REGISTER: PDF REF: Figure 24 pg. 23
+    </p>
+  
+
+
+
+  <div class="description">
+    BIT 1: Conversion ready<br /> CNVR is 1 when data from conversion is available at the data registers reading the Power Register resets this to 0<br /><br />BIT 0: Math Overflow Flag<br /> OVF is set when Power or Current calculations are out of range probably need board reset after seeing this
+  </div>
+
+
+
+
+
+
+
+
+
 
 <dl class="details">
 
@@ -132,6 +165,15 @@
   
 
   
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line1">line 1</a>
+        </li>
+      </ul>
+    </dd>
+  
 
   
 
@@ -141,7 +183,18 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
       
     </div>
 
@@ -161,15 +214,271 @@
         
             
 
-<h4 class="name" id="mappedLabelsAndBits">
-  <span class="type-signature">(constant) </span>mappedLabelsAndBits<span class="type-signature"></span>
+<h4 class="name" id="currentRawData">
+  <span class="type-signature"></span>currentRawData<span class="type-signature"> :object|undefined</span>
 </h4>
 
 
 
 
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line22">line 22</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="currentFormattedData">
+  <span class="type-signature"></span>currentFormattedData<span class="type-signature"> :object|undefined</span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line24">line 24</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="language">
+  <span class="type-signature"></span>language<span class="type-signature"> :string</span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line26">line 26</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="useFullReturn">
+  <span class="type-signature"></span>useFullReturn<span class="type-signature"> :boolean</span>
+</h4>
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line28">line 28</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+          
+        
+            
+
+<h4 class="name" id="bitLabels">
+  <span class="type-signature"></span>bitLabels<span class="type-signature"> :object</span>
+</h4>
+
+
+  <p class="summary">
+    If useFullReturn is true then the labels are added to the returnobject.
+  </p>
+
+
+
   <div class="description">
-    Utility methods
+    These are labels the directly match the reference sensor PDF doc. Whendebugging or in case UI desires it, arrays of labels and bits in the register will be matched.
   </div>
 
 
@@ -206,7 +515,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="Src_Utilities_index.js.html">Src/Utilities/index.js</a>, <a href="Src_Utilities_index.js.html#line6">line 6</a>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line65">line 65</a>
         </li>
       </ul>
     </dd>
@@ -226,155 +535,22 @@
 
           
         
-    
+            
 
-    
-
-    
-      <h3 class="subsection-title">Type Definitions</h3>
-
-      
-          
+<h4 class="name" id="measurement">
+  <span class="type-signature"></span>measurement<span class="type-signature"> :object</span>
+</h4>
 
 
-  
-
-  <span class='name-container'>
-    <a class="link-icon" href="#ErrorResultObject">
-      <svg height="20" width="20" style="fill: black;">
-        <use xlink:href="#linkIcon"></use>
-      </svg>
-    </a>
-    <h4 class="name" id="ErrorResultObject">
-      <span class="type-signature"></span>ErrorResultObject<span class="type-signature"> :Object</span>
-    </h4>
-  </span>
-
-  
+  <p class="summary">
+    the type of value in the register
+  </p>
 
 
 
-
-
-
-
-
-
-
-
-
-  <h5 class="subsection-title">Properties:</h5>
-
-  
-
-<table class="props">
-  <thead>
-    <tr>
-      
-        <th>Name</th>
-      
-
-      <th>Type</th>
-
-      
-
-      
-
-      <th class="last">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    
-
-    <tr>
-      
-        <td class="name"><code>success</code></td>
-      
-
-      <td class="type">
-        
-          
-    <span class="param-type">
-      boolean
-    </span>
-
-    
-
-
-        
-      </td>
-
-        
-
-        
-
-        <td class="description last">
-          Method result
-          </td>
-    </tr>
-
-  
-
-    <tr>
-      
-        <td class="name"><code>msg</code></td>
-      
-
-      <td class="type">
-        
-          
-    <span class="param-type">
-      string
-    </span>
-
-    
-
-
-        
-      </td>
-
-        
-
-        
-
-        <td class="description last">
-          Method message
-          </td>
-    </tr>
-
-  
-
-    <tr>
-      
-        <td class="name"><code>data</code></td>
-      
-
-      <td class="type">
-        
-          
-    <span class="param-type">
-      object
-    </span>
-
-    
-
-
-        
-      </td>
-
-        
-
-        
-
-        <td class="description last">
-          Method payload
-          </td>
-    </tr>
-
-  
-  </tbody>
-</table>
+  <div class="description">
+    Currently only english language value types
+  </div>
 
 
 
@@ -410,7 +586,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line359">line 359</a>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line84">line 84</a>
         </li>
       </ul>
     </dd>
@@ -428,49 +604,52 @@
 
 
 
-
-
-
-
-
-
-
-
-        
           
+        
+    
+
+    
+      <h3 class="subsection-title">Methods</h3>
+
+      
+        
 
 
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#ResultObject">
+    <a class="link-icon" href="#hydrate">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="ResultObject">
-      <span class="type-signature"></span>ResultObject<span class="type-signature"> :Object</span>
+    <h4 class="name" id="hydrate">
+      <span class="type-signature"></span>hydrate<span class="signature">(data, language, useFullReturn)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-  <h5 class="subsection-title">Properties:</h5>
-
+    <p class="summary">
+      Hydrate the default model with current data
+    </p>
   
 
-<table class="props">
+
+
+  <div class="description">
+    Uses the formatted return object from reading the I2c bus<br />Hydrates the model first with the raw data then automatically triggers theresult formatting.
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
   <thead>
     <tr>
       
@@ -489,73 +668,14 @@
 
   <tbody>
     
-
-    <tr>
-      
-        <td class="name"><code>success</code></td>
-      
-
-      <td class="type">
+      <tr>
         
+          <td class="name"><code>data</code></td>
+        
+
+        <td class="type">
           
-    <span class="param-type">
-      boolean
-    </span>
-
-    
-
-
-        
-      </td>
-
-        
-
-        
-
-        <td class="description last">
-          Method result
-          </td>
-    </tr>
-
-  
-
-    <tr>
-      
-        <td class="name"><code>msg</code></td>
-      
-
-      <td class="type">
-        
-          
-    <span class="param-type">
-      string
-    </span>
-
-    
-
-
-        
-      </td>
-
-        
-
-        
-
-        <td class="description last">
-          Method message
-          </td>
-    </tr>
-
-  
-
-    <tr>
-      
-        <td class="name"><code>data</code></td>
-      
-
-      <td class="type">
-        
-          
+            
     <span class="param-type">
       object
     </span>
@@ -563,21 +683,81 @@
     
 
 
-        
-      </td>
+          
+        </td>
 
         
 
         
 
         <td class="description last">
-          Method payload
-          </td>
-    </tr>
+          {bytesWritten, buffer, int from readInt16BE(0, 2)}
+          
+        </td>
+      </tr>
 
-  
+    
+      <tr>
+        
+          <td class="name"><code>language</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          default is english. is lower case
+          
+        </td>
+      </tr>
+
+    
+      <tr>
+        
+          <td class="name"><code>useFullReturn</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      boolean
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+
+        <td class="description last">
+          for debugging or if UI wants to display register data
+          
+        </td>
+      </tr>
+
+    
   </tbody>
 </table>
+
 
 
 
@@ -613,7 +793,7 @@
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="index.js.html">index.js</a>, <a href="index.js.html#line366">line 366</a>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line30">line 30</a>
         </li>
       </ul>
     </dd>
@@ -639,7 +819,200 @@
 
 
 
+      
         
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#formatData">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="formatData">
+      <span class="type-signature"></span>formatData<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      Takes the raw register value and formats it
+    </p>
+  
+
+
+
+  <div class="description">
+    This is where the raw data is formatted to human readable output.The calculation for the end result is done here. Currently no numericformatting is done. It is the float/int results as is returned in NodeJS via the Ic2 bus interface. It is saved to the local class
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line92">line 92</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#getCurrentValues">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="getCurrentValues">
+      <span class="type-signature"></span>getCurrentValues<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      return the formatted latest values from the model
+    </p>
+  
+
+
+
+  <div class="description">
+    Returns a cloned object. The formatted object
+  </div>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="Src_Models_BusVoltageModel.js.html">Src/Models/BusVoltageModel.js</a>, <a href="Src_Models_BusVoltageModel.js.html#line120">line 120</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    
+
+    
 
     
   </article>

@@ -36,18 +36,8 @@
     CALIBRATION_TEMPLATES
 } from "./Src/Constants/index.js";
 
-import {
-    CONFIGURATION_MAP,
-    SHUNT_VOLTAGE_MAP,
-    BUS_VOLTAGE_MAP,
-    POWER_MAP,
-    CURRENT_MAP,
-    CALIBRATION_MAP
-} from "./Src/Models/index.js";
-
-import {
-    formatRegisterOutput
-} from "./Src/Utilities/index.js";
+import { Models } from "./Src/Models/index.js";
+import { outputAsJson } from "./Src/Responder/index.js";
 
 import I2CBus from "./Src/Bus/I2C/index.js";
 
@@ -91,12 +81,12 @@ class NI_INA219 {
         let writeConfiguration = await this.writeConfiguration(configurationTemplateId);
         if (writeConfiguration.success === false) return writeConfiguration;
 
+        // update class
+        this.setCurrentConfiguration(writeConfiguration.data);
+
         // write calibration values to the chip register
         let writeCalibration = await this.writeCalibration();
         if (writeCalibration.success === false) return writeCalibration;
-
-        // update
-        this.setCurrentConfiguration();
 
         return {
             success: true,
@@ -191,10 +181,15 @@ class NI_INA219 {
                 }
             }
         }
-        return await I2CBus.writeRegister(
-            REGISTERS.CONFIG_RW,
-            CALIBRATION_TEMPLATES[configurationTemplateId].config);
 
+        let config = CALIBRATION_TEMPLATES[configurationTemplateId].config;
+        let writeResult = await I2CBus.writeRegister(REGISTERS.CONFIG_RW, config);
+        if (writeResult.success === true) {
+            writeResult.data = CALIBRATION_TEMPLATES[configurationTemplateId];
+            return writeResult;
+        } else {
+            return writeResult;
+        }
     }
 
     /**
@@ -210,13 +205,11 @@ class NI_INA219 {
      * used along with reading Power to trigger the main read register
      * to calculate fresh values.
      * 
-     * @param {number} chip calibration value
-     * 
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
      */
-    writeCalibration = async function (value = this.CALIBRATION.calValue) {
-        return await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, value);
+    writeCalibration = async function () {
+        return await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
     }
 
     /**
@@ -233,9 +226,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object
      */
     getSystemSettings = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.CONFIG_RW);
-        let output = formatRegisterOutput("CONFIGURATION", CONFIGURATION_MAP.LABELS, data.buffer);
-        return output;
+        let readResult = await this.readRegister(REGISTERS.CONFIG_RW);
+        if (readResult.success === true) {
+            Models.configuration.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.configuration.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
     /**
@@ -252,9 +249,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getSystemCalibration = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.CALIBRATION_RW);
-        let output = formatRegisterOutput("CONFIGURATION", CALIBRATION_MAP.LABELS, data.buffer);
-        return output;
+        let readResult = await this.readRegister(REGISTERS.CALIBRATION_RW);
+        if (readResult.success === true) {
+            Models.calibration.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.calibration.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
     /**
@@ -272,10 +273,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getBusVoltage = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
-        let output = formatRegisterOutput("BUS_VOLTAGE", BUS_VOLTAGE_MAP.LABELS, data.buffer);
-        output.asFloat = (data.payload >> 3) * 0.004;
-        return output;
+        let readResult = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
+        if (readResult.success === true) {
+            Models.busVoltage.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.busVoltage.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
     /**
@@ -293,10 +297,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getShuntVoltage = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
-        let output = formatRegisterOutput("SHUNT_VOLTAGE", SHUNT_VOLTAGE_MAP.LABELS_PGA_8, data.buffer);
-        output.asFloat = data.payload * 0.01 / 1000;
-        return output;
+        let readResult = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
+        if (readResult.success === true) {
+            Models.shuntVoltage.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.shuntVoltage.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
     /**
@@ -314,10 +321,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getPower = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.POWER_R);
-        let output = formatRegisterOutput("POWER", POWER_MAP.LABELS, data.buffer);
-        output.asFloat = data.payload * this.CALIBRATION.powerLSB;
-        return output;
+        let readResult = await this.readRegister(REGISTERS.POWER_R);
+        if (readResult.success === true) {
+            Models.power.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.power.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
     /**
@@ -335,10 +345,13 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getCurrent = async function () {
-        let { success, msg, data } = await this.readRegister(REGISTERS.CURRENT_R);
-        let output = formatRegisterOutput("CURRENT", CURRENT_MAP.LABELS, data.buffer);
-        output.asFloat = data.payload * this.CALIBRATION.currentLSB / 1000;
-        return output;
+        let readResult = await this.readRegister(REGISTERS.CURRENT_R);
+        if (readResult.success === true) {
+            Models.current.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.current.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
     }
 
 }
