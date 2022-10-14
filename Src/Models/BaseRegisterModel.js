@@ -1,3 +1,13 @@
+/**
+ * @class BaseRegisterModel
+ * 
+ * @summary
+ * Master Class template for modeling Registers
+ * 
+ * @description
+ * TODO: Register information regarding the sensor in question
+ */
+
 import { mappedLabelsAndBits, registerAsBinaryString } from "../Utilities/index.js";
 
 class BaseRegisterModel {

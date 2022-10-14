@@ -59,7 +59,7 @@ class CurrentModel extends BaseRegisterModel {
     * Takes the raw register value and formats it
     * 
     * @description
-    * 
+    * Calculate the Current in amps
     */
     calculateValue = function (currentValue) {
         return currentValue * 0.1 / 1000; // TODO: -> this.currentConfiguration.currentLSB;

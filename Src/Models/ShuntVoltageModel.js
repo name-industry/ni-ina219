@@ -109,7 +109,7 @@ class ShuntVoltageModel extends BaseRegisterModel {
     * Takes the raw register value and formats it
     * 
     * @description
-    * 
+    * Calculate the Shunt voltage in milli-volts
     */
     calculateValue = function (currentValue) {
         return currentValue * 0.01 / 1000;

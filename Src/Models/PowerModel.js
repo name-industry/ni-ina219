@@ -57,7 +57,7 @@ class PowerModel extends BaseRegisterModel {
     * Takes the raw register value and formats it
     * 
     * @description
-    * 
+    * Calculate the Power in volts
     */
     calculateValue = function (currentValue) {
         return currentValue * 0.002; // TODO: -> this.currentConfiguration.powerLSB;

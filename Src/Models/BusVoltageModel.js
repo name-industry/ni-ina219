@@ -67,7 +67,7 @@ class BusVoltageModel extends BaseRegisterModel {
      * Takes the raw register value and formats it
      * 
      * @description
-     * 
+     * Calculate the Bus voltage in volts
      */
     calculateValue = function (currentValue) {
         return (currentValue >> 3) * 0.004;
