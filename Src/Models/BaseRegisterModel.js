@@ -8,7 +8,7 @@
  * TODO: Register information regarding the sensor in question
  */
 
-import { mappedLabelsAndBits, registerAsBinaryString } from "../Utilities/index.js";
+import Utilities from "../Utilities/index.js";
 
 class BaseRegisterModel {
 
@@ -69,8 +69,8 @@ class BaseRegisterModel {
         }
         if (this.useFullReturn === true) {
             this.currentFormattedData["extended"] = {
-                mappedLabelsAndBits: mappedLabelsAndBits(this.bitLabels, this.currentRawData.buffer),
-                registerAsBinaryString: registerAsBinaryString(this.currentRawData.buffer)
+                mappedLabelsAndBits: Utilities.mappedLabelsAndBits(this.bitLabels, this.currentRawData.buffer),
+                registerAsBinaryString: Utilities.registerAsBinaryString(this.currentRawData.buffer)
             }
         }
     }

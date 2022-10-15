@@ -11,7 +11,7 @@
     "templates": {
         "referenceTitle": "WaveShare-UPS INA219",
         "disableSort": true,
-        "collapse": true
+        "collapse": false
     },
     "opts": {
         "destination": "./Docs/NI-INA219/",

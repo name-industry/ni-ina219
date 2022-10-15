@@ -1,5 +1,4 @@
 // V@ts-check <- has problems with 'this' in the init method for some reason
-
 /**
  * @class NI_INA219
  * 
