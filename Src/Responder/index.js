@@ -1,3 +1,3 @@
-export const outputAsJson = function (data) {
+export const outputAsJson = function (data, options) {
     return data;
 }

@@ -1,3 +1,5 @@
+// V@ts-check <- has problems with this in the init method
+
 /**
  * @class NI_INA219
  * 
@@ -74,12 +76,13 @@ class NI_INA219 {
         useLogging = false,
         loggingType = "VERBOSE"
     ) {
+
         // get handle to I2c bus and sensor
         let initI2cBus = await I2CBus.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) return initI2cBus;
 
         // write the configuration to the chip register
-        let writeConfiguration = await this.writeConfiguration(configurationTemplateId);
+        let writeConfiguration = await this.setConfiguration(configurationTemplateId);
         if (writeConfiguration.success === false) return writeConfiguration;
 
         // update class

@@ -8,7 +8,7 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./Example/index.js",
     "generate-docs": "node_modules/.bin/jsdoc index.js --configure .jsdoc.json --verbose"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "jsdoc": "^3.6.11",
-    "jsdoc-template": "braintree/jsdoc-template"
+    "jsdoc-template": "braintree/jsdoc-template",
+    "node-cleanup": "^2.1.2"
   }
 }
