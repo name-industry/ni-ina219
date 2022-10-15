@@ -4,17 +4,17 @@
         "dictionaries": ["jsdoc", "closure"]
     },
     "source": {
-        "include": ["Src"],
+        "include": ["./package.json", "./Docs/README.md", "Src"],
         "includePattern": ".+\\.(m|c)?js(doc|x)?$",
         "excludePattern": "(node_modules/|docs)"
     },
     "templates": {
         "referenceTitle": "WaveShare-UPS INA219",
         "disableSort": true,
-        "collapse": false
+        "collapse": true
     },
     "opts": {
-        "destination": "./Docs/",
+        "destination": "./Docs/NI-INA219/",
         "encoding": "utf8",
         "private": true,
         "recurse": true,

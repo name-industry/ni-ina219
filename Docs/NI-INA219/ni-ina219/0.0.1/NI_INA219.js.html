@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      INA_219.js - Documentation
+      NI_INA219.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -20,6 +20,8 @@
 
   <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
   <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+  <link type="text/css" rel="stylesheet" href="styles/collapse.css">
   
 
   
@@ -75,13 +77,13 @@
 
     
 
-    <h3>Classes</h3><ul><li id="I2cBus-nav"><a href="I2cBus.html">I2cBus</a><ul class='methods'><li data-type="method" id="I2cBus-initialize-nav"><a href="I2cBus.html#initialize">initialize</a></li><li data-type="method" id="I2cBus-setCurrentBusData-nav"><a href="I2cBus.html#setCurrentBusData">setCurrentBusData</a></li><li data-type="method" id="I2cBus-removeBus-nav"><a href="I2cBus.html#removeBus">removeBus</a></li><li data-type="method" id="I2cBus-readRegister-nav"><a href="I2cBus.html#readRegister">readRegister</a></li><li data-type="method" id="I2cBus-writeRegister-nav"><a href="I2cBus.html#writeRegister">writeRegister</a></li></ul></li><li id="NI_INA219-nav"><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type="method" id="NI_INA219-initialize-nav"><a href="NI_INA219.html#initialize">initialize</a></li><li data-type="method" id="NI_INA219-readRegister-nav"><a href="NI_INA219.html#readRegister">readRegister</a></li><li data-type="method" id="NI_INA219-writeRegister-nav"><a href="NI_INA219.html#writeRegister">writeRegister</a></li><li data-type="method" id="NI_INA219-setConfiguration-nav"><a href="NI_INA219.html#setConfiguration">setConfiguration</a></li><li data-type="method" id="NI_INA219-setCalibration-nav"><a href="NI_INA219.html#setCalibration">setCalibration</a></li><li data-type="method" id="NI_INA219-getConfiguration-nav"><a href="NI_INA219.html#getConfiguration">getConfiguration</a></li><li data-type="method" id="NI_INA219-getCalibration-nav"><a href="NI_INA219.html#getCalibration">getCalibration</a></li><li data-type="method" id="NI_INA219-getBusVoltage-nav"><a href="NI_INA219.html#getBusVoltage">getBusVoltage</a></li><li data-type="method" id="NI_INA219-getShuntVoltage-nav"><a href="NI_INA219.html#getShuntVoltage">getShuntVoltage</a></li><li data-type="method" id="NI_INA219-getPower-nav"><a href="NI_INA219.html#getPower">getPower</a></li><li data-type="method" id="NI_INA219-getCurrent-nav"><a href="NI_INA219.html#getCurrent">getCurrent</a></li></ul></li><li id="BaseRegisterModel-nav"><a href="BaseRegisterModel.html">BaseRegisterModel</a><ul class='methods'><li data-type="method" id="BaseRegisterModel-hydrate-nav"><a href="BaseRegisterModel.html#hydrate">hydrate</a></li><li data-type="method" id="BaseRegisterModel-formatData-nav"><a href="BaseRegisterModel.html#formatData">formatData</a></li><li data-type="method" id="BaseRegisterModel-getCurrentValues-nav"><a href="BaseRegisterModel.html#getCurrentValues">getCurrentValues</a></li><li data-type="method" id="BaseRegisterModel-getCurrentValues-nav"><a href="BaseRegisterModel.html#getCurrentValues">getCurrentValues</a></li></ul></li><li id="BusVoltageModel-nav"><a href="BusVoltageModel.html">BusVoltageModel</a><ul class='methods'><li data-type="method" id="BusVoltageModel-calculateValue-nav"><a href="BusVoltageModel.html#calculateValue">calculateValue</a></li></ul></li><li id="CalibrationModel-nav"><a href="CalibrationModel.html">CalibrationModel</a></li><li id="ConfigurationModel-nav"><a href="ConfigurationModel.html">ConfigurationModel</a></li><li id="CurrentModel-nav"><a href="CurrentModel.html">CurrentModel</a><ul class='methods'><li data-type="method" id="CurrentModel-calculateValue-nav"><a href="CurrentModel.html#calculateValue">calculateValue</a></li></ul></li><li id="PowerModel-nav"><a href="PowerModel.html">PowerModel</a><ul class='methods'><li data-type="method" id="PowerModel-calculateValue-nav"><a href="PowerModel.html#calculateValue">calculateValue</a></li></ul></li><li id="ShuntVoltageModel-nav"><a href="ShuntVoltageModel.html">ShuntVoltageModel</a><ul class='methods'><li data-type="method" id="ShuntVoltageModel-calculateValue-nav"><a href="ShuntVoltageModel.html#calculateValue">calculateValue</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#mappedLabelsAndBits">mappedLabelsAndBits</a></li></ul>
+    <h3>Classes</h3><ul><li id="I2cBus-nav"><a href="I2cBus.html">I2cBus</a><ul class='methods'><li data-type="method" id="I2cBus-initialize-nav"><a href="I2cBus.html#initialize">initialize</a></li><li data-type="method" id="I2cBus-setCurrentBusData-nav"><a href="I2cBus.html#setCurrentBusData">setCurrentBusData</a></li><li data-type="method" id="I2cBus-removeBus-nav"><a href="I2cBus.html#removeBus">removeBus</a></li><li data-type="method" id="I2cBus-readRegister-nav"><a href="I2cBus.html#readRegister">readRegister</a></li><li data-type="method" id="I2cBus-writeRegister-nav"><a href="I2cBus.html#writeRegister">writeRegister</a></li></ul></li><li id="BaseRegisterModel-nav"><a href="BaseRegisterModel.html">BaseRegisterModel</a><ul class='methods'><li data-type="method" id="BaseRegisterModel-hydrate-nav"><a href="BaseRegisterModel.html#hydrate">hydrate</a></li><li data-type="method" id="BaseRegisterModel-formatData-nav"><a href="BaseRegisterModel.html#formatData">formatData</a></li><li data-type="method" id="BaseRegisterModel-getCurrentValues-nav"><a href="BaseRegisterModel.html#getCurrentValues">getCurrentValues</a></li><li data-type="method" id="BaseRegisterModel-getCurrentValues-nav"><a href="BaseRegisterModel.html#getCurrentValues">getCurrentValues</a></li></ul></li><li id="BusVoltageModel-nav"><a href="BusVoltageModel.html">BusVoltageModel</a><ul class='methods'><li data-type="method" id="BusVoltageModel-calculateValue-nav"><a href="BusVoltageModel.html#calculateValue">calculateValue</a></li></ul></li><li id="CalibrationModel-nav"><a href="CalibrationModel.html">CalibrationModel</a></li><li id="ConfigurationModel-nav"><a href="ConfigurationModel.html">ConfigurationModel</a></li><li id="CurrentModel-nav"><a href="CurrentModel.html">CurrentModel</a><ul class='methods'><li data-type="method" id="CurrentModel-calculateValue-nav"><a href="CurrentModel.html#calculateValue">calculateValue</a></li></ul></li><li id="PowerModel-nav"><a href="PowerModel.html">PowerModel</a><ul class='methods'><li data-type="method" id="PowerModel-calculateValue-nav"><a href="PowerModel.html#calculateValue">calculateValue</a></li></ul></li><li id="ShuntVoltageModel-nav"><a href="ShuntVoltageModel.html">ShuntVoltageModel</a><ul class='methods'><li data-type="method" id="ShuntVoltageModel-calculateValue-nav"><a href="ShuntVoltageModel.html#calculateValue">calculateValue</a></li></ul></li><li id="NI_INA219-nav"><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type="method" id="NI_INA219-initialize-nav"><a href="NI_INA219.html#initialize">initialize</a></li><li data-type="method" id="NI_INA219-readRegister-nav"><a href="NI_INA219.html#readRegister">readRegister</a></li><li data-type="method" id="NI_INA219-writeRegister-nav"><a href="NI_INA219.html#writeRegister">writeRegister</a></li><li data-type="method" id="NI_INA219-setConfiguration-nav"><a href="NI_INA219.html#setConfiguration">setConfiguration</a></li><li data-type="method" id="NI_INA219-setCalibration-nav"><a href="NI_INA219.html#setCalibration">setCalibration</a></li><li data-type="method" id="NI_INA219-getConfiguration-nav"><a href="NI_INA219.html#getConfiguration">getConfiguration</a></li><li data-type="method" id="NI_INA219-getCalibration-nav"><a href="NI_INA219.html#getCalibration">getCalibration</a></li><li data-type="method" id="NI_INA219-getBusVoltage-nav"><a href="NI_INA219.html#getBusVoltage">getBusVoltage</a></li><li data-type="method" id="NI_INA219-getShuntVoltage-nav"><a href="NI_INA219.html#getShuntVoltage">getShuntVoltage</a></li><li data-type="method" id="NI_INA219-getPower-nav"><a href="NI_INA219.html#getPower">getPower</a></li><li data-type="method" id="NI_INA219-getCurrent-nav"><a href="NI_INA219.html#getCurrent">getCurrent</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#mappedLabelsAndBits">mappedLabelsAndBits</a></li></ul>
   </nav>
 
   <div id="main">
     
       <h1 class="page-title">
-        INA_219.js
+        NI_INA219.js
       </h1>
     
 
@@ -90,7 +92,9 @@
 
 <section>
   <article>
-    <pre class="prettyprint source linenums"><code>/**
+    <pre class="prettyprint source linenums"><code>// V@ts-check &lt;- has problems with 'this' in the init method for some reason
+
+/**
  * @class NI_INA219
  * 
  * @summary 
@@ -121,16 +125,11 @@
  * [specs]{@link https://www.orbtronic.com/content/NCR18650B-Datasheet-Panasonic-Specifications.pdf}&lt;br />
  */
 
-import {
-    DEFAULT_I2C_ADDRESS,
-    DEFAULT_I2C_BUS,
-    REGISTERS,
-    CALIBRATION_TEMPLATES
-} from "./Constants/index.js";
-
+import { Constants } from "./Constants/index.js";
 import { Models } from "./Models/index.js";
 import { outputAsJson } from "./Responder/index.js";
 
+// 3rd party import
 import I2CBus from "./Bus/I2C/index.js";
 
 class NI_INA219 {
@@ -160,18 +159,19 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object 
      */
     initialize = async function (
-        i2cAddress = DEFAULT_I2C_ADDRESS,
-        busNumber = DEFAULT_I2C_BUS,
+        i2cAddress = Constants.DEFAULT_I2C_ADDRESS,
+        busNumber = Constants.DEFAULT_I2C_BUS,
         configurationTemplateId = "32V2A",
         useLogging = false,
         loggingType = "VERBOSE"
     ) {
+
         // get handle to I2c bus and sensor
         let initI2cBus = await I2CBus.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) return initI2cBus;
 
         // write the configuration to the chip register
-        let writeConfiguration = await this.writeConfiguration(configurationTemplateId);
+        let writeConfiguration = await this.setConfiguration(configurationTemplateId);
         if (writeConfiguration.success === false) return writeConfiguration;
 
         // update class
@@ -263,10 +263,10 @@ class NI_INA219 {
             }
         }
 
-        let config = CALIBRATION_TEMPLATES[configurationTemplateId].config;
-        let writeResult = await I2CBus.writeRegister(REGISTERS.CONFIG_RW, config);
+        let config = Constants.CALIBRATION_TEMPLATES[configurationTemplateId].config;
+        let writeResult = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
         if (writeResult.success === true) {
-            writeResult.data = CALIBRATION_TEMPLATES[configurationTemplateId];
+            writeResult.data = Constants.CALIBRATION_TEMPLATES[configurationTemplateId];
             return writeResult;
         } else {
             return writeResult;
@@ -290,7 +290,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>} returns value object 
      */
     setCalibration = async function () {
-        return await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
+        return await I2CBus.writeRegister(Constants.REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
     }
 
     /**
@@ -307,7 +307,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>} returns value object
      */
     getConfiguration = async function () {
-        let readResult = await this.readRegister(REGISTERS.CONFIG_RW);
+        let readResult = await this.readRegister(Constants.REGISTERS.CONFIG_RW);
         if (readResult.success === true) {
             Models.configuration.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.configuration.getCurrentValues(), {});
@@ -330,7 +330,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object
      */
     getCalibration = async function () {
-        let readResult = await this.readRegister(REGISTERS.CALIBRATION_RW);
+        let readResult = await this.readRegister(Constants.REGISTERS.CALIBRATION_RW);
         if (readResult.success === true) {
             Models.calibration.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.calibration.getCurrentValues(), {});
@@ -354,7 +354,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object
      */
     getBusVoltage = async function () {
-        let readResult = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.BUS_VOLTAGE_R);
         if (readResult.success === true) {
             Models.busVoltage.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.busVoltage.getCurrentValues(), {});
@@ -378,7 +378,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object
      */
     getShuntVoltage = async function () {
-        let readResult = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.SHUNT_VOLTAGE_R);
         if (readResult.success === true) {
             Models.shuntVoltage.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.shuntVoltage.getCurrentValues(), {});
@@ -402,7 +402,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object
      */
     getPower = async function () {
-        let readResult = await this.readRegister(REGISTERS.POWER_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
         if (readResult.success === true) {
             Models.power.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.power.getCurrentValues(), {});
@@ -426,7 +426,7 @@ class NI_INA219 {
      * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns value object
      */
     getCurrent = async function () {
-        let readResult = await this.readRegister(REGISTERS.CURRENT_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.CURRENT_R);
         if (readResult.success === true) {
             Models.current.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.current.getCurrentValues(), {});
@@ -436,20 +436,6 @@ class NI_INA219 {
     }
 
 }
-
-/**
- * @typedef {Object} ErrorResultObject
- * @property {boolean} success - Method result
- * @property {string} msg - Method message
- * @property {object} data - Method payload
- */
-
-/**
- * @typedef {Object} ResultObject
- * @property {boolean} success - Method result
- * @property {string} msg - Method message
- * @property {object} data - Method payload
- */
 
 export default new NI_INA219();</code></pre>
   </article>
