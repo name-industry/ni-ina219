@@ -1,4 +1,4 @@
-// V@ts-check <- has problems with this in the init method
+// V@ts-check <- has problems with 'this' in the init method for some reason
 
 /**
  * @class NI_INA219
@@ -31,16 +31,11 @@
  * [specs]{@link https://www.orbtronic.com/content/NCR18650B-Datasheet-Panasonic-Specifications.pdf}<br />
  */
 
-import {
-    DEFAULT_I2C_ADDRESS,
-    DEFAULT_I2C_BUS,
-    REGISTERS,
-    CALIBRATION_TEMPLATES
-} from "./Constants/index.js";
-
+import { Constants } from "./Constants/index.js";
 import { Models } from "./Models/index.js";
 import { outputAsJson } from "./Responder/index.js";
 
+// 3rd party import
 import I2CBus from "./Bus/I2C/index.js";
 
 class NI_INA219 {
@@ -70,8 +65,8 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
      */
     initialize = async function (
-        i2cAddress = DEFAULT_I2C_ADDRESS,
-        busNumber = DEFAULT_I2C_BUS,
+        i2cAddress = Constants.DEFAULT_I2C_ADDRESS,
+        busNumber = Constants.DEFAULT_I2C_BUS,
         configurationTemplateId = "32V2A",
         useLogging = false,
         loggingType = "VERBOSE"
@@ -174,10 +169,10 @@ class NI_INA219 {
             }
         }
 
-        let config = CALIBRATION_TEMPLATES[configurationTemplateId].config;
-        let writeResult = await I2CBus.writeRegister(REGISTERS.CONFIG_RW, config);
+        let config = Constants.CALIBRATION_TEMPLATES[configurationTemplateId].config;
+        let writeResult = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
         if (writeResult.success === true) {
-            writeResult.data = CALIBRATION_TEMPLATES[configurationTemplateId];
+            writeResult.data = Constants.CALIBRATION_TEMPLATES[configurationTemplateId];
             return writeResult;
         } else {
             return writeResult;
@@ -201,7 +196,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
      */
     setCalibration = async function () {
-        return await I2CBus.writeRegister(REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
+        return await I2CBus.writeRegister(Constants.REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
     }
 
     /**
@@ -218,7 +213,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object
      */
     getConfiguration = async function () {
-        let readResult = await this.readRegister(REGISTERS.CONFIG_RW);
+        let readResult = await this.readRegister(Constants.REGISTERS.CONFIG_RW);
         if (readResult.success === true) {
             Models.configuration.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.configuration.getCurrentValues(), {});
@@ -241,7 +236,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getCalibration = async function () {
-        let readResult = await this.readRegister(REGISTERS.CALIBRATION_RW);
+        let readResult = await this.readRegister(Constants.REGISTERS.CALIBRATION_RW);
         if (readResult.success === true) {
             Models.calibration.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.calibration.getCurrentValues(), {});
@@ -265,7 +260,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getBusVoltage = async function () {
-        let readResult = await this.readRegister(REGISTERS.BUS_VOLTAGE_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.BUS_VOLTAGE_R);
         if (readResult.success === true) {
             Models.busVoltage.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.busVoltage.getCurrentValues(), {});
@@ -289,7 +284,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getShuntVoltage = async function () {
-        let readResult = await this.readRegister(REGISTERS.SHUNT_VOLTAGE_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.SHUNT_VOLTAGE_R);
         if (readResult.success === true) {
             Models.shuntVoltage.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.shuntVoltage.getCurrentValues(), {});
@@ -313,7 +308,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getPower = async function () {
-        let readResult = await this.readRegister(REGISTERS.POWER_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
         if (readResult.success === true) {
             Models.power.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.power.getCurrentValues(), {});
@@ -337,7 +332,7 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
      */
     getCurrent = async function () {
-        let readResult = await this.readRegister(REGISTERS.CURRENT_R);
+        let readResult = await this.readRegister(Constants.REGISTERS.CURRENT_R);
         if (readResult.success === true) {
             Models.current.hydrate(readResult.data, "en", true);
             return outputAsJson(Models.current.getCurrentValues(), {});
@@ -347,19 +342,5 @@ class NI_INA219 {
     }
 
 }
-
-/**
- * @typedef {Object} ErrorResultObject
- * @property {boolean} success - Method result
- * @property {string} msg - Method message
- * @property {object} data - Method payload
- */
-
-/**
- * @typedef {Object} ResultObject
- * @property {boolean} success - Method result
- * @property {string} msg - Method message
- * @property {object} data - Method payload
- */
 
 export default new NI_INA219();

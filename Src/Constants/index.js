@@ -5,10 +5,10 @@
 
 
 // default 12c address of WaveShare UPS INA219
-export const DEFAULT_I2C_ADDRESS = 0x42;
+const DEFAULT_I2C_ADDRESS = 0x42;
 
 // Rasp 4B I2c bus active on 1
-export const DEFAULT_I2C_BUS = 1;
+const DEFAULT_I2C_BUS = 1;
 
 // REGISTERS
 
@@ -16,7 +16,7 @@ export const DEFAULT_I2C_BUS = 1;
 // {label}_{read/write} = Pointer Address in Hex
 // ====================================================
 
-export const REGISTERS = {
+const REGISTERS = {
     CONFIG_RW: 0x00, // chip reset/configuration
     SHUNT_VOLTAGE_R: 0x01,// measurement.
     BUS_VOLTAGE_R: 0x02, // measurement. defaults to 0 due to CALIBRATION default to 0
@@ -29,7 +29,7 @@ export const REGISTERS = {
 // Address in Hex
 // ====================================================
 
-export const CONFIG_SETTINGS = {
+const CONFIGURATION = {
     BUS_VOLTAGE_RANGE: {
         RANGE_16V: 0x00, // set bus voltage range to 16V
         RANGE_32V: 0x01  // set bus voltage range to 32V (default)
@@ -81,17 +81,25 @@ export const CONFIG_SETTINGS = {
 // Calibration Templates
 // ====================================================
 
-export const CALIBRATION_TEMPLATES = {
+const CALIBRATION_TEMPLATES = {
     "32V2A": {
         currentDivider_mA: 10,
         powerDivider_mW: 2,
         calValue: 4096,
         currentLSB: 0.1, // Current LSB = 100uA per bit
         powerLSB: 0.002, // Power LSB = 2mW per bit
-        config: CONFIG_SETTINGS.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
-            CONFIG_SETTINGS.GAIN.DIV_8_320MV << 11 |
-            CONFIG_SETTINGS.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
-            CONFIG_SETTINGS.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
-            CONFIG_SETTINGS.MODE.SANDBVOLT_CONTINUOUS
+        config: CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
+                CONFIGURATION.GAIN.DIV_8_320MV << 11 |
+                CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
+                CONFIGURATION.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
+                CONFIGURATION.MODE.SANDBVOLT_CONTINUOUS
     }
+}
+
+export const Constants = {
+    DEFAULT_I2C_ADDRESS: DEFAULT_I2C_ADDRESS,
+    DEFAULT_I2C_BUS: DEFAULT_I2C_BUS,
+    REGISTERS: REGISTERS,
+    CONFIGURATION: CONFIGURATION,
+    CALIBRATION_TEMPLATES: CALIBRATION_TEMPLATES
 }
