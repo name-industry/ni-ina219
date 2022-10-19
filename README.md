@@ -39,7 +39,6 @@ yarn install
 ```
 
 ```Javascript
-
 import NI_INA219 from "ni-ina219";
 
 let defaultIC2SensorAddress = 0x42;
@@ -52,6 +51,7 @@ if(initializeUPS.success === true) {
   // there was an error with the bus and or writing/reading to the device
   console.log("Initialized sensor error", initializeUPS);
 }
+```
 
 <br /><br />
 
