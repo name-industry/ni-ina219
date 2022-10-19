@@ -1,3 +1,7 @@
 export const outputAsJson = function (data, options) {
-    return data;
+    return {
+        success: true,
+        msg: data.register,
+        data: data
+    };
 }

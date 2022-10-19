@@ -157,25 +157,29 @@ class NI_INA219 {
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
      */
-    setConfiguration = async function (configurationTemplateId) {
-        if (configurationTemplateId !== "32V2A") {
+    setConfiguration = async function (configurationTemplateId = "32V2A") {
+
+        let allTemplateIds = Constants.CALIBRATION_TEMPLATES.IDS;
+        let allTemplates = Constants.CALIBRATION_TEMPLATES;
+        let registerAddress = Constants.REGISTERS.CONFIG_RW;
+        let writeResult = {};
+
+        if (!allTemplateIds.includes(configurationTemplateId)) {
             return {
                 success: false,
                 msg: "Unknown configuration template Id",
                 data: {
                     requestedId: configurationTemplateId
                 }
-            }
+            };
+        } else {
+            writeResult = await I2CBus.writeRegister(
+                registerAddress,
+                allTemplates[configurationTemplateId].config);
         }
 
-        let config = Constants.CALIBRATION_TEMPLATES[configurationTemplateId].config;
-        let writeResult = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
-        if (writeResult.success === true) {
-            writeResult.data = Constants.CALIBRATION_TEMPLATES[configurationTemplateId];
-            return writeResult;
-        } else {
-            return writeResult;
-        }
+        writeResult.data = (writeResult.success) ? allTemplates[configurationTemplateId] : writeResult.data;
+        return writeResult;
     }
 
     /**

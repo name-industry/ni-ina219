@@ -7,7 +7,7 @@
   />
 </div>
 
-<hr />
+<br /><br />
 
 <div align="left">
   <img src="https://img.shields.io/badge/version-v0.0.1-green" />
@@ -16,16 +16,16 @@
   <img src="https://img.shields.io/badge/jsDocs-v3.5-yellow" />
 </div>
 
-#### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embeded [TI INA219](https://www.waveshare.com/w/upload/1/10/Ina219.pdf)_sensor.
+#### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embedded [TI INA219](https://www.waveshare.com/w/upload/1/10/Ina219.pdf)_sensor.
 
-<br /><br />
+<br />
 
 1. Quick start
 2. Description
 3. Dependencies
 4. Documentation
 5. Examples
-6. Measurments
+6. Measurements
 7. Prior art
 8. Links to other NI modules
 9. Other links
@@ -49,11 +49,9 @@ if(initializeUPS.success === true) {
   // Ready
   console.log("Initialized sensor", initializeUPS);
 } else {
-  // there was an error with the bus and or wrtting/reading to the device
+  // there was an error with the bus and or writing/reading to the device
   console.log("Initialized sensor error", initializeUPS);
 }
-
-```
 
 <br /><br />
 

@@ -82,6 +82,7 @@ const CONFIGURATION = {
 // ====================================================
 
 const CALIBRATION_TEMPLATES = {
+    IDS: ["32V2A"],
     "32V2A": {
         currentDivider_mA: 10,
         powerDivider_mW: 2,
