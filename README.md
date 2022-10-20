@@ -1,5 +1,4 @@
-
-
+<br />
 <div align="left">
   <img src="./Docs/img/830x80_NI_INA219_Light.png"
        alt="header img"
@@ -16,21 +15,34 @@
   <img src="https://img.shields.io/badge/jsDocs-v3.5-yellow" />
 </div>
 
+<br />
+
 #### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embedded [TI INA219](https://www.waveshare.com/w/upload/1/10/Ina219.pdf)_sensor.
 <br />
-{img here}
-<br /><br />
 
-1. Quick start
-2. Description
-3. Dependencies
-4. Documentation
-5. Coverage & Tests
+<div align="center">
+  <img src="./Docs/img/UPS-HAT-details-3.jpg" width="30%">
+  <img src="./Docs/img/UPS-HAT-details-9.jpg" width="31.8%">
+  <img src="./Docs/img/UPS-HAT-details-size.jpg" width="34.8%">
+</div>
+
+<br />
+
+#### Contents:
+<br />
+
+1. [Quick start](#1-quick-start)
+2. [Description](#2-description)
+3. [Dependencies](#3-dependencies)
+4. [Documentation](#4-documentation)
+5. [Coverage & Tests](#5-coverage--tests)
 6. Examples
 7. Measurements
 8. Prior art
 9. Links to other NI modules
 10. Other links
+
+<br />
 
 ## 1. Quick start
 
@@ -60,7 +72,13 @@ if(initializeUPS.success === true) {
 <br />
 
 ## 2. Description
-<br /><br />
+<br />
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=nodejs,raspberrypi" />
+  </a>
+</p>
+
 Uninterruptible Power Supply (UPS) for Raspberry PI. Allows for easily developing projects that could require emergency shutdown or logging during a power outage, giving extra run time when it is needed. 
 
 It uses an 8.4v adapter for charging and has space for 2x 18650 batteries. I was using 2 of these Panasonic [NCR18650B](https://www.orbtronic.com/content/NCR18650B-Datasheet-Panasonic-Specifications.pdf) for testing.
@@ -77,13 +95,13 @@ This module interacts specifically with the INA-219 on this hat.
 <br /><br />
 Currently for using the example in the ./Example folder and to run tests via Jest, There is included the i2c-bus library found [here](https://github.com/fivdi/i2c-bus). This module ( NI_INA219 ) is not meant to run on its own, but rather controlled via a parent application. Its more like an API exposing services and calls to other applications. When it is feature complete i2c-bus will be removed. Under normal situations the end user will provide the handle to the wire.
 <br /><br />
-### 3rd Party Dependencies
+### 3.1 - 3rd Party Dependencies
 
 | name | description | version |
 | - | - | - |
 | ic2-bus | NodeJs interface to the I2C bus | ^5.2.2 |
 
-### Development Dependencies
+### 3.2 - Development Dependencies
 
 | name | description | version |
 | - | - | - |
@@ -107,10 +125,16 @@ various other helper packages:
 <br />
 
 ## 4. Documentation 
-<br /><br />
+<br />
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=jest,nodejs,html,js" />
+  </a>
+</p>
+
 The module is fully documented with jsDoc within the source as well as the generated docs being included in the Repo. You can pull up the docs at anytime using the small server via Node / Yarn. Creating the docs again is also available.
 
-### View the docs in a browser
+### 4.1 - View the docs in a browser
 <br />
 
 Run this from console.
@@ -122,7 +146,7 @@ yarn docs-view
 
 <br />
 
-### Re-create the docs from source
+### 4.2 Re-create the docs from source
 <br />
 Output is in ".Docs/NI-INA219". The html in Docs is kept for versioning and adding resources/documents that are persistent.
 
@@ -133,7 +157,26 @@ yarn docs-create
 <br />
 
 ## 5. Coverage & Tests  
-<br /><br />
+<br />
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=jest,nodejs,html,js" />
+  </a>
+</p>
+<br />
+
+Run this from console.
+
+Currently the main NI_INA219 js file is running with tests and outputs coverage. The wrapper for the 3rd party Ic2-Bus module is mocked. The tests are only for returning the correct valid method result shape for data and errors. All methods pass around a value object for modularity.
+
+```Javascript
+yarn test
+```
+
+Running this will output coverage in the ./coverage folder by default. This will be hoisted into the ./Docs folder to be displayed alongside the main jsDocs.
+
+
+
 
 
 <br /><br />

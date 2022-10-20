@@ -11,8 +11,7 @@
     "start": "node ./Example/index.js",
     "docs-create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
     "docs-view": "http-server ./Docs/ -p 0 -o --log-ip",
-    "test": "jest",
-    "test-save": "jest --json --outputFile=./Docs/TestOutput.json"
+    "test": "jest"
   },
   "dependencies": {
     "i2c-bus": "^5.2.2"
