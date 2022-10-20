@@ -11,7 +11,7 @@
  Author: Alexander Davis - 2022 alex@name-industry.com
  License: MIT
 
-***/
+****/
 
 import "./Src/Constants/jsDocsTypeDef.js";
 import NI_INA219 from "./Src/NI_INA219.js";
