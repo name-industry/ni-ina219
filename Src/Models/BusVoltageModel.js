@@ -57,7 +57,7 @@ class BusVoltageModel extends BaseRegisterModel {
         en: {
             full: "volt",
             plural: "volts",
-            short: "v"
+            short: "V"
         }
     }
 

@@ -49,7 +49,7 @@ class CurrentModel extends BaseRegisterModel {
         en: {
             full: "milliamp",
             plural: "milliamps",
-            short: "ma"
+            short: "mA"
         }
     }
 

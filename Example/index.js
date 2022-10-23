@@ -2,6 +2,15 @@
 import nodeCleanup from "node-cleanup";
 import NI_INA219 from "../index.js";
 
+
+const formattedOutput = function (valueObject) {
+    if (valueObject.success === true)
+        return valueObject.data.valueString + " " + valueObject.data.valueType.short;
+    else {
+        return "Error getting result";
+    }
+}
+
 const initUPS = async function () {
     let started = await NI_INA219.initialize(0x42);
     if (started.success === true) {
@@ -10,13 +19,13 @@ const initUPS = async function () {
         // let CALIBRATION = await NI_INA219.getCalibration();
         // console.log("CALIBRATION", CALIBRATION);
         let BUS_VOLTAGE = await NI_INA219.getBusVoltage();
-        console.log("BUS VOLTAGE", BUS_VOLTAGE);
+        console.log("    BUS VOLTAGE       ", formattedOutput(BUS_VOLTAGE));
         let SHUNT_VOLTAGE = await NI_INA219.getShuntVoltage();
-        console.log("SHUNT VOLTAGE", SHUNT_VOLTAGE);
+        console.log("    SHUNT VOLTAGE     ", formattedOutput(SHUNT_VOLTAGE));
         let CURRENT_AMPS = await NI_INA219.getCurrent();
-        console.log("CURRENT MILLIAMPS", CURRENT_AMPS);
+        console.log("    CURRENT MILLIAMPS ", formattedOutput(CURRENT_AMPS));
         let POWER_WATTS = await NI_INA219.getPower();
-        console.log("POWER WATTS", POWER_WATTS);
+        console.log("    POWER WATTS       ", formattedOutput(POWER_WATTS));
     } else {
         console.log("STARTED SENSOR ERROR", started);
     }

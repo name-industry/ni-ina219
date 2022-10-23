@@ -47,7 +47,7 @@ class PowerModel extends BaseRegisterModel {
         en: {
             full: "watt",
             plural: "watts",
-            short: "w"
+            short: "W"
         }
     }
 
