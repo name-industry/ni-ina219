@@ -9,6 +9,7 @@
  * the values of the current with the value of the bus voltage
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import Big from "big.js";
 
 class PowerModel extends BaseRegisterModel {
 
@@ -60,7 +61,12 @@ class PowerModel extends BaseRegisterModel {
     * Calculate the Power in volts
     */
     calculateValue = function (currentValue) {
-        return currentValue * 0.002; // TODO: -> this.currentConfiguration.powerLSB;
+        let calculation = currentValue * this.options.powerLSB;
+        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        return {
+            rawNumber: calculation,
+            withPrecision: formatted
+        }
     }
 }
 

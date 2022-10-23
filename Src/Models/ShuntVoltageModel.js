@@ -9,6 +9,7 @@
  * default is +8 (320mV range) see PDF pg.19 Table 4. PG Bit Settings
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import Big from "big.js";
 
 class ShuntVoltageModel extends BaseRegisterModel {
 
@@ -112,7 +113,12 @@ class ShuntVoltageModel extends BaseRegisterModel {
     * Calculate the Shunt voltage in milli-volts
     */
     calculateValue = function (currentValue) {
-        return currentValue * 0.01 / 1000;
+        let calculation = currentValue * 0.00001;
+        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        return {
+            rawNumber: calculation,
+            withPrecision: formatted
+        }
     }
 }
 

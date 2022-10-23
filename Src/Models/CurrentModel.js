@@ -10,6 +10,7 @@
  * the Calibration register
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import Big from "big.js";
 
 class CurrentModel extends BaseRegisterModel {
 
@@ -46,9 +47,9 @@ class CurrentModel extends BaseRegisterModel {
      */
     measurement = {
         en: {
-            full: "amp",
-            plural: "amps",
-            short: "a"
+            full: "milliamp",
+            plural: "milliamps",
+            short: "ma"
         }
     }
 
@@ -62,7 +63,12 @@ class CurrentModel extends BaseRegisterModel {
     * Calculate the Current in amps
     */
     calculateValue = function (currentValue) {
-        return currentValue * 0.1 / 1000; // TODO: -> this.currentConfiguration.currentLSB;
+        let calculation = currentValue * this.options.currentLSB;
+        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        return {
+            rawNumber: calculation,
+            withPrecision: formatted
+        }
     }
 }
 

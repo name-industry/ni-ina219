@@ -25,6 +25,8 @@ class BaseRegisterModel {
         this.useFullReturn = false;
         /** @type {integer} */
         this.defaultPrecision = 4;
+        /** @type {object | undefined} */
+        this.options;
     }
 
     /**
@@ -42,8 +44,10 @@ class BaseRegisterModel {
      * @param {object} data {bytesWritten, buffer, int from readInt16BE(0, 2)}
      * @param {string} language default is english. is lower case
      * @param {boolean} useFullReturn for debugging or if UI wants to display register data
+     * @param {object|undefined} options for debugging or if UI wants to display register data
      */
-    hydrate = function (data, language = "en", useFullReturn = false) {
+    hydrate = function (data, language = "en", useFullReturn = false, options) {
+        this.options = options;
         this.language = language;
         this.useFullReturn = useFullReturn;
         this.currentRawData = data;

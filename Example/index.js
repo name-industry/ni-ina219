@@ -11,12 +11,12 @@ const initUPS = async function () {
         // console.log("CALIBRATION", CALIBRATION);
         let BUS_VOLTAGE = await NI_INA219.getBusVoltage();
         console.log("BUS VOLTAGE", BUS_VOLTAGE);
-        // let SHUNT_VOLTAGE = await NI_INA219.getShuntVoltage();
-        // console.log("SHUNT VOLTAGE", SHUNT_VOLTAGE);
-        // let CURRENT_AMPS = await NI_INA219.getCurrent();
-        // console.log("CURRENT MILLIAMPS", CURRENT_AMPS);
-        // let POWER_WATTS = await NI_INA219.getPower();
-        // console.log("POWER WATTS", POWER_WATTS);
+        let SHUNT_VOLTAGE = await NI_INA219.getShuntVoltage();
+        console.log("SHUNT VOLTAGE", SHUNT_VOLTAGE);
+        let CURRENT_AMPS = await NI_INA219.getCurrent();
+        console.log("CURRENT MILLIAMPS", CURRENT_AMPS);
+        let POWER_WATTS = await NI_INA219.getPower();
+        console.log("POWER WATTS", POWER_WATTS);
     } else {
         console.log("STARTED SENSOR ERROR", started);
     }

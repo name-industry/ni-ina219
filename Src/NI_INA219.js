@@ -313,7 +313,9 @@ class NI_INA219 {
     getPower = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
         if (readResult.success === true) {
-            Models.power.hydrate(readResult.data, "en", true);
+            Models.power.hydrate(readResult.data, "en", true,{
+                powerLSB: this.currentConfiguration.powerLSB
+            });
             return outputAsJson(Models.power.getCurrentValues(), {});
         } else {
             return readResult;
@@ -337,7 +339,9 @@ class NI_INA219 {
     getCurrent = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.CURRENT_R);
         if (readResult.success === true) {
-            Models.current.hydrate(readResult.data, "en", true);
+            Models.current.hydrate(readResult.data, "en", true, {
+                currentLSB: this.currentConfiguration.currentLSB
+            });
             return outputAsJson(Models.current.getCurrentValues(), {});
         } else {
             return readResult;
