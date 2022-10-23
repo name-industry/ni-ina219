@@ -93,13 +93,14 @@ This module interacts specifically with the INA-219 on this hat.
 
 ## 3. Dependencies
 <br /><br />
-Currently for using the example in the ./Example folder and to run tests via Jest, There is included the i2c-bus library found [here](https://github.com/fivdi/i2c-bus). This module ( NI_INA219 ) is not meant to run on its own, but rather controlled via a parent application. Its more like an API exposing services and calls to other applications. When it is feature complete i2c-bus will be removed. Under normal situations the end user will provide the handle to the wire.
+Currently for using the example in the ./Example folder and to run tests via Jest, There is included the i2c-bus library found [here](https://github.com/fivdi/i2c-bus). This module ( NI_INA219 ) is not meant to run on its own, but rather controlled via a parent application. Its more like an API exposing services and calls to other applications. When it is feature complete i2c-bus will be removed. Under normal situations the end user will provide the handle to the wire. BigJS deals with issues arising from toFixed in floating point conversions. Not really that much of a problem in this module but nice to have when we are rounding properly for UI displays.
 <br /><br />
 ### 3.1 - 3rd Party Dependencies
 
 | name | description | version |
 | - | - | - |
 | ic2-bus | NodeJs interface to the I2C bus | ^5.2.2 |
+| big.js | Javascript lib to try and keep some fp precision | ^6.2.1 |
 
 ### 3.2 - Development Dependencies
 
