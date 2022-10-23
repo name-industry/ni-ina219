@@ -22,7 +22,6 @@ import i2c from 'i2c-bus';
 class I2CBus {
 
     constructor() {
-        console.log("HARDCODED CONSTRUCTOR I2CBus");
     }
 
     /**
@@ -43,7 +42,6 @@ class I2CBus {
         busNumber
     ) {
         let wire;
-        console.log("HARDCODED CONSTRUCTOR I2CBus INITIALIZE");
         try {
             wire = await i2c.openPromisified(busNumber).then(wire => wire);
         } catch (error) {

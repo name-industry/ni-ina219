@@ -13,6 +13,7 @@ import Utilities from "../Utilities/index.js";
 class BaseRegisterModel {
 
     constructor(registerName) {
+        /** @type {string} */
         this.registerName = registerName;
         /** @type {object | undefined} */
         this.currentRawData;
@@ -22,6 +23,8 @@ class BaseRegisterModel {
         this.language = "en";
         /** @type {boolean} */
         this.useFullReturn = false;
+        /** @type {integer} */
+        this.defaultPrecision = 4;
     }
 
     /**
@@ -64,7 +67,8 @@ class BaseRegisterModel {
         let calculatedValue = this.calculateValue(currentValue);
         this.currentFormattedData = {
             register: this.registerName,
-            value: calculatedValue,
+            valueRaw: calculatedValue.rawNumber,
+            valueString: calculatedValue.withPrecision,
             valueType: this.measurement[this.language]
         }
         if (this.useFullReturn === true) {

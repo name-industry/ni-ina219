@@ -14,6 +14,7 @@
  *  probably need board reset after seeing this
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import Big from 'big.js';
 
 class BusVoltageModel extends BaseRegisterModel {
 
@@ -70,7 +71,13 @@ class BusVoltageModel extends BaseRegisterModel {
      * Calculate the Bus voltage in volts
      */
     calculateValue = function (currentValue) {
-        return (currentValue >> 3) * 0.004;
+        let shifted = currentValue >> 3;
+        let calculation = shifted * 0.004;
+        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        return {
+            rawNumber: calculation,
+            withPrecision: formatted
+        }
     }
 }
 

@@ -38,7 +38,7 @@ const CONFIGURATION = {
         DIV_1_40MV: 0x00, // shunt prog. gain set to  1, 40 mV range
         DIV_2_80MV: 0x01, // shunt prog. gain set to /2, 80 mV range
         DIV_4_160MV: 0x02,// shunt prog. gain set to /4, 160 mV range
-        DIV_8_320MV: 0x03,// shunt prog. gain set to /8, 320 mV range
+        DIV_8_320MV: 0x03,// shunt prog. gain set to /8, 320 mV range (default)
     },
     BUS_ADC_RESOLUTION: {
         ADCRES_9BIT_1S: 0x00,    //  9bit,   1 sample,     84us
@@ -49,7 +49,7 @@ const CONFIGURATION = {
         ADCRES_12BIT_4S: 0x0A,   //  12 bit,  4 samples,  2.13ms
         ADCRES_12BIT_8S: 0x0B,   //  12bit,   8 samples,  4.26ms
         ADCRES_12BIT_16S: 0x0C,  //  12bit,  16 samples,  8.51ms
-        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms
+        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms (default)
         ADCRES_12BIT_64S: 0x0E,  //  12bit,  64 samples, 34.05ms
         ADCRES_12BIT_128S: 0x0F, //  12bit, 128 samples, 68.10ms
     },
@@ -62,7 +62,7 @@ const CONFIGURATION = {
         ADCRES_12BIT_4S: 0x0A,   //  12 bit,  4 samples,  2.13ms
         ADCRES_12BIT_8S: 0x0B,   //  12bit,   8 samples,  4.26ms
         ADCRES_12BIT_16S: 0x0C,  //  12bit,  16 samples,  8.51ms
-        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms
+        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms (default)
         ADCRES_12BIT_64S: 0x0E,  //  12bit,  64 samples, 34.05ms
         ADCRES_12BIT_128S: 0x0F, //  12bit, 128 samples, 68.10ms
     },
@@ -74,7 +74,7 @@ const CONFIGURATION = {
         ADCOFF: 0x04, // ADC off
         SVOLT_CONTINUOUS: 0x05, // shunt voltage continuous
         BVOLT_CONTINUOUS: 0x06, // bus voltage continuous
-        SANDBVOLT_CONTINUOUS: 0x07, // shunt and bus voltage continuous
+        SANDBVOLT_CONTINUOUS: 0x07, // shunt and bus voltage continuous (default)
     }
 }
 
@@ -84,11 +84,14 @@ const CONFIGURATION = {
 const CALIBRATION_TEMPLATES = {
     IDS: ["32V2A"],
     "32V2A": {
+        // todo remove these
         currentDivider_mA: 10,
         powerDivider_mW: 2,
+        // Req
         calValue: 4096,
         currentLSB: 0.1, // Current LSB = 100uA per bit
         powerLSB: 0.002, // Power LSB = 2mW per bit
+        // set bits
         config: CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
                 CONFIGURATION.GAIN.DIV_8_320MV << 11 |
                 CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
