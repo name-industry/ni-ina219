@@ -313,7 +313,7 @@ class NI_INA219 {
     getPower = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
         if (readResult.success === true) {
-            Models.power.hydrate(readResult.data, "en", true,{
+            Models.power.hydrate(readResult.data, "en", true, {
                 powerLSB: this.currentConfiguration.powerLSB
             });
             return outputAsJson(Models.power.getCurrentValues(), {});
@@ -346,6 +346,34 @@ class NI_INA219 {
         } else {
             return readResult;
         }
+    }
+
+    /**
+     * @method NI_INA219#getPowerSupplyVoltage
+     * 
+     * @summary
+     * Custom calculation based on demo code in WaveShare
+     * 
+     * @description
+     * In the WaveShare Wiki for this HAT there is a commented out measurement for 
+     * returning the PSU voltage. They calculate it as the Bus Voltage + Shunt Voltage.
+     * This method is here for functional parity. If not using this hat, can ignore.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     */
+    getPowerSupplyVoltage = async function () {
+        let busVoltage = await this.getBusVoltage();
+        let shuntVoltage = await this.getShuntVoltage();
+        Models.powerSupplyModel.hydrate(
+            {
+                busVoltage: busVoltage,
+                shuntVoltage: shuntVoltage
+            },
+            "en",
+            true
+        );
+        return outputAsJson(Models.powerSupplyModel.getCurrentValues(), {});
     }
 
 }
