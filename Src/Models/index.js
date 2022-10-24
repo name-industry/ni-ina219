@@ -24,6 +24,7 @@
  import PowerModel from "./PowerModel.js";
  import CurrentModel from "./CurrentModel.js";
  import PowerSupplyModel from "./PowerSupplyModel.js";
+ import ChargeRemainingModel from "./ChargeRemainingModel.js";
  
  export const Models = {
      configuration: ConfigurationModel,
@@ -32,5 +33,6 @@
      shuntVoltage: ShuntVoltageModel,
      power: PowerModel,
      current: CurrentModel,
-     powerSupplyModel: PowerSupplyModel
+     powerSupplyModel: PowerSupplyModel,
+     chargeRemainingModel: ChargeRemainingModel
  }

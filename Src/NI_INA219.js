@@ -376,6 +376,30 @@ class NI_INA219 {
         return outputAsJson(Models.powerSupplyModel.getCurrentValues(), {});
     }
 
+    /**
+     * @method NI_INA219#getChargeRemaining
+     * 
+     * @summary
+     * Custom calculation based on demo code in WaveShare
+     * 
+     * @description
+     * In the WaveShare Wiki for this HAT there is a commented out measurement for 
+     * returning the PSU voltage. They calculate it as the Bus Voltage + Shunt Voltage.
+     * This method is here for functional parity. If not using this hat, can ignore.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     */
+    getChargeRemaining = async function () {
+        let busVoltage = await this.getBusVoltage();
+        if (busVoltage.success === true) {
+            Models.chargeRemainingModel.hydrate(busVoltage.data, "en", true);
+            return outputAsJson(Models.chargeRemainingModel.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
+    }
+
 }
 
 export default new NI_INA219();
