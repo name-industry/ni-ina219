@@ -17,7 +17,7 @@
 
 <br />
 
-#### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embedded [TI INA219](https://www.waveshare.com/w/upload/1/10/Ina219.pdf)_sensor.
+#### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embedded [Texas Instruments INA219 sensor](https://www.ti.com/lit/ds/symlink/ina219.pdf).
 <br />
 
 <div align="center">
