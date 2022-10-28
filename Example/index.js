@@ -34,12 +34,12 @@ const initUPS = async function () {
         // DEBUG shows full return JSON object 
 
         // get the current active system configuration
-        // let CONFIGURATION = await NI_INA219.getConfiguration();
-        // console.log("CONFIGURATION", CONFIGURATION);
+        let CONFIGURATION = await NI_INA219.getConfiguration();
+        console.log("CONFIGURATION", CONFIGURATION);
         
         // get the current active calibration values
-        // let CALIBRATION = await NI_INA219.getCalibration();
-        // console.log("CALIBRATION", CALIBRATION);
+        let CALIBRATION = await NI_INA219.getCalibration();
+        console.log("CALIBRATION", CALIBRATION);
 
         // get the Bus voltage
         let BUS_VOLTAGE = await NI_INA219.getBusVoltage();
