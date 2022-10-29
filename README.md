@@ -36,11 +36,11 @@
 3. [Dependencies](#3-dependencies)
 4. [Documentation](#4-documentation)
 5. [Coverage & Tests](#5-coverage--tests)
-6. Examples
-7. Measurements
-8. Prior art
-9. Links to other NI modules
-10. Other links
+6. [Examples](#6-examples)
+7. [Measurements](#7-measurements)
+8. [Prior art](#8-prior-art)
+9. [Links to other NI modules](#9-links-to-other-ni-modules)
+10. [Other links](#10-other-links)
 
 <br />
 
@@ -48,26 +48,125 @@
 
 <br />
 
-```Javascript
-yarn install name-industry/ni-ina219
-```
+Create folder or ad to existing code.
+Make sure to have package.json set to module if using imports instead of require. This lib is only tested with imports ie:
 
-<br />
-
-```Javascript
-import NI_INA219 from "ni-ina219";
-
-let defaultIC2SensorAddress = 0x42;
-let initializeUPS = await NI_INA219.initialize(defaultIC2SensorAddress);
-
-if(initializeUPS.success === true) {
-  // Ready
-  console.log("Initialized sensor", initializeUPS);
-} else {
-  // there was an error with the bus and or writing/reading to the device
-  console.log("Initialized sensor error", initializeUPS);
+```json
+{
+  "main": "./index.js",
+  "type":"module",
+  "scripts": {
+    "start": "node ./index.js"
+  }
 }
 ```
+add module:
+
+```Javascript
+yarn add @name-industry/ni-ina219
+```
+
+in index.js copy this:
+
+
+```Javascript
+import NI_INA219 from "@name-industry/ni-ina219";
+
+const formattedOutput = function (valueObject) {
+    if (valueObject.success === true)
+        return valueObject.data.valueString + " " + valueObject.data.valueType.short;
+    else {
+        return "Error getting result";
+    }
+}
+
+const initUPS = async function () {
+    
+    // initialize the system
+    let started = await NI_INA219.initialize(0x42);
+    
+    if (started.success === true) {
+
+        // DEBUG shows full return JSON object 
+
+        // get the current active system configuration
+        let CONFIGURATION = await NI_INA219.getConfiguration();
+        console.log("CONFIGURATION", CONFIGURATION);
+        
+        // get the current active calibration values
+        let CALIBRATION = await NI_INA219.getCalibration();
+        console.log("CALIBRATION", CALIBRATION);
+
+        // Shows quasi formatted result of measurement
+
+        // get the Bus voltage
+        let BUS_VOLTAGE = await NI_INA219.getBusVoltage();
+        console.log("    BUS VOLTAGE          ", formattedOutput(BUS_VOLTAGE)); // load
+        
+        // get the Shunt voltage
+        let SHUNT_VOLTAGE = await NI_INA219.getShuntVoltage();
+        console.log("    SHUNT VOLTAGE        ", formattedOutput(SHUNT_VOLTAGE));
+        
+        // get the Current in Milliamps
+        let CURRENT_AMPS = await NI_INA219.getCurrent();
+        console.log("    CURRENT MILLIAMPS    ", formattedOutput(CURRENT_AMPS));
+       
+        // get the Power in Watts
+        let POWER_WATTS = await NI_INA219.getPower();
+        console.log("    POWER WATTS          ", formattedOutput(POWER_WATTS));
+        
+        // PSU voltage - Custom calc for WaveShare Hat only
+        let POWER_SUPPLY_VOLTAGE = await NI_INA219.getPowerSupplyVoltage();
+        console.log("    POWER SUPPLY VOLTAGE ", formattedOutput(POWER_SUPPLY_VOLTAGE));
+        
+        // Battery charge remaining - Custom calc for WaveShare Hat only
+        let CHARGE_REMAINING = await NI_INA219.getChargeRemaining();
+        console.log("    CHARGE REMAINING     ", formattedOutput(CHARGE_REMAINING));
+
+    } else {
+        console.log("STARTED SENSOR ERROR", started);
+    }
+}
+
+initUPS();
+```
+
+run from project terminal:
+
+```Javascript
+yarn start
+```
+
+example output for full json object. Note: [Array]  is the default terminal output for nested objects. To see the full terminal results you would need to update terminal settings. In code you will get back the full object/array of course:
+
+```json
+CONFIGURATION {
+  success: true,
+  msg: "Configuration",
+  data: {
+    register: "Configuration",
+    valueRaw: undefined,
+    valueString: undefined,
+    valueType: {},
+    extended: {
+      mappedLabelsAndBits: [Array],
+      registerAsBinaryString: "00111110 11101111"
+    }
+  }
+}
+```
+
+example output for quasi formatted results. Note: your results of course will vary ( values ) depending your device setup and battery charge:
+
+```terminal
+    BUS VOLTAGE           8.2360 V
+    SHUNT VOLTAGE         -0.0195 mV
+    CURRENT MILLIAMPS     -194.8000 mA
+    POWER WATTS           1.6020 W
+    POWER SUPPLY VOLTAGE  8.2045 V
+    CHARGE REMAINING      93 %
+```
+
 
 <br />
 
@@ -176,22 +275,38 @@ yarn test
 
 Running this will output coverage in the ./coverage folder by default. This will be hoisted into the ./Docs folder to be displayed alongside the main jsDocs.
 
+<br />
 
+## 6. Examples  
+<br />
+<p align="left">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=nodejs" />
+  </a>
+</p>
 
+Currently only the base example ( quick start is available ). Located in ./Example/index.js
 
+<br />
 
-<br /><br />
-<br /><br />
-<br /><br />
-<br /><br />
-(6) Prior Art
+## 7. Measurements  
+<br />
+
+## 8. Prior art
+<br />
 This library builds on these two versions:<br />
  <br />
- [WaveShare's Python demo code]{@link https://www.waveshare.com/wiki/UPS_HAT}<br />
-  [nodejs version by brettmarl on GitHub]{@link https://github.com/brettmarl/node-ina219}
+ [WaveShare's Python demo code](https://www.waveshare.com/wiki/UPS_HAT)<br />
+  [nodejs version by brettmarl on GitHub](https://github.com/brettmarl/node-ina219)
   <br />
   <br />
-  Uses [I2c-bus]{@link https://github.com/fivdi/i2c-bus} temporarily for developing - 
- but will be removed once complete as the module should be provided a promise-based bus 
+  Uses [I2c-bus](https://github.com/fivdi/i2c-bus) temporarily for developing - but will be removed once complete as the module should be provided a promise-based bus 
   on instantiation.<br /><br />
-  
+
+<br />
+
+## 9. Links to other NI modules
+<br />
+
+## 10. Other links 
+<br />
