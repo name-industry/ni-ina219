@@ -139,7 +139,7 @@ yarn start
 
 example output for full json object. Note: [Array]  is the default terminal output for nested objects. To see the full terminal results you would need to update terminal settings. In code you will get back the full object/array of course:
 
-```json
+```javascript
 CONFIGURATION {
   success: true,
   msg: "Configuration",
@@ -293,18 +293,14 @@ Currently only the base example ( quick start is available ). Located in ./Examp
 <br />
 
 ## 8. Prior art
-<br />
-This library builds on these two versions:<br />
- <br />
+
+This library builds on these two versions:
+ 
  [WaveShare's Python demo code](https://www.waveshare.com/wiki/UPS_HAT)<br />
-  [nodejs version by brettmarl on GitHub](https://github.com/brettmarl/node-ina219)
-  <br />
-  <br />
-  Uses [I2c-bus](https://github.com/fivdi/i2c-bus) temporarily for developing - but will be removed once complete as the module should be provided a promise-based bus 
-  on instantiation.<br /><br />
+ [nodejs version by brettmarl on GitHub](https://github.com/brettmarl/node-ina219)
 
-<br />
-
+ Uses [I2c-bus](https://github.com/fivdi/i2c-bus) temporarily for developing - but will be removed once complete as the module should be provided a promise-based bus on instantiation.
+  
 ## 9. Links to other NI modules
 <br />
 
