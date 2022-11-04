@@ -70,7 +70,7 @@ const CONFIGURATION = {
         ADCRES_12BIT_128S: 0x0F, //  12bit, 128 samples, 68.10ms
     },
     MODE: {
-        POWERDOWN: 0x00, // power down
+        POWERDOWN: 0x00, // power down apply it to bits 2,1,0 in the register 
         SVOLT_TRIGGERED: 0x01, // shunt voltage triggered
         BVOLT_TRIGGERED: 0x02, // bus voltage triggered
         SANDBVOLT_TRIGGERED: 0x03, // shunt and bus voltage triggered
@@ -84,26 +84,28 @@ const CONFIGURATION = {
 /**
  * Calibration Templates
  * Note: DEFAULT used for resetting the chip to defaults
- *       Is essentially the same as 32V2a.
+ *       same as power on values
  */
 const CALIBRATION_TEMPLATES = {
-    IDS: ["DEFAULT", "32V2A"],
-    "DEFAULT": {
-        // todo remove these
-        currentDivider_mA: 10,
-        powerDivider_mW: 2,
-        // Req
-        calValue: 4096,
-        currentLSB: 0.1, // Current LSB = 100uA per bit
-        powerLSB: 0.002, // Power LSB = 2mW per bit
-        // set bits
-        config: CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
-                CONFIGURATION.GAIN.DIV_8_320MV << 11 |
-                CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
-                CONFIGURATION.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
-                CONFIGURATION.MODE.SANDBVOLT_CONTINUOUS
+    "IDS": ["DEFAULT", "32V2A"],
+    "POWERED_DOWN": {
+        config: CONFIGURATION.MODE.POWERDOWN
     },
-    "32V2A": { // 00111110 11101111  -  00111001 10011111 
+    "DISABLED_ADC": {
+        config: CONFIGURATION.MODE.ADCOFF
+    },
+    "DEFAULT": { // 00111001 10011111
+        // todo remove these
+        currentDivider_mA: 10,
+        powerDivider_mW: 2,
+        // Req
+        calValue: 4096,
+        currentLSB: 0.1, // Current LSB = 100uA per bit
+        powerLSB: 0.002, // Power LSB = 2mW per bit
+        // set bits
+        config: CONFIGURATION.RESET.TRIGGER << 15
+    },
+    "32V2A": { // 00111110 11101111
         // todo remove these
         currentDivider_mA: 10,
         powerDivider_mW: 2,
@@ -113,10 +115,10 @@ const CALIBRATION_TEMPLATES = {
         powerLSB: 0.002, // Power LSB = 2mW per bit
         // set bits
         config: CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
-                CONFIGURATION.GAIN.DIV_8_320MV << 11 |
-                CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
-                CONFIGURATION.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
-                CONFIGURATION.MODE.SANDBVOLT_CONTINUOUS
+            CONFIGURATION.GAIN.DIV_8_320MV << 11 |
+            CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
+            CONFIGURATION.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
+            CONFIGURATION.MODE.SANDBVOLT_CONTINUOUS
     }
 }
 

@@ -197,11 +197,50 @@ class NI_INA219 {
      */
     resetConfiguration = async function () {
         // set bits
-        let config = Constants.CONFIGURATION.RESET.TRIGGER << 15
+        let config = Constants.CALIBRATION_TEMPLATES.DEFAULT.config;
         let resetResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
 
-        return await this.getConfiguration();
+        if (resetResults.success) {
+            let newConfiguration = await this.getConfiguration();
+            return newConfiguration;
+        } else {
+            return resetResults;
+        }
 
+    }
+
+    // Experimental
+    setModePowerDown = async function () {
+        let config = Constants.CALIBRATION_TEMPLATES.POWERED_DOWN.config;
+        let configResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
+        if (configResults.success) {
+            let newConfiguration = await this.getConfiguration();
+            return newConfiguration;
+        } else {
+            return configResults;
+        }
+    }
+
+    // Experimental
+    setModePowerUp = async function () {
+        // set new configuration to power up and set new settings
+    }
+
+    // Experimental
+    setModeDisableADC = async function () {
+        let config = Constants.CALIBRATION_TEMPLATES.DISABLED_ADC.config;
+        let configResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
+        if (configResults.success) {
+            let newConfiguration = await this.getConfiguration();
+            return newConfiguration;
+        } else {
+            return configResults;
+        }
+    }
+
+    // Experimental
+    setModeEnableADC = async function () {
+        // set new configuration to enable adc and set new settings
     }
 
     /**
