@@ -14,7 +14,7 @@
         "collapse": false
     },
     "opts": {
-        "destination": "./Docs/NI-INA219/",
+        "destination": "./Docs/",
         "encoding": "utf8",
         "private": true,
         "recurse": true,

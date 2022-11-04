@@ -183,6 +183,28 @@ class NI_INA219 {
     }
 
     /**
+     * @method NI_INA219#resetConfiguration
+     * 
+     * @summary
+     * Resets the configuration register to its default
+     * 
+     * @description
+     * Resets the INA219 to its default settings stored. 
+     * Binary default of the Configuration Register bits - 00111001 10011111
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     */
+    resetConfiguration = async function () {
+        // set bits
+        let config = Constants.CONFIGURATION.RESET.TRIGGER << 15
+        let resetResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
+
+        return await this.getConfiguration();
+
+    }
+
+    /**
      * @method NI_INA219#setCalibration
      * 
      * @summary

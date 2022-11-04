@@ -1,4 +1,4 @@
 import rimraf from 'rimraf';
-rimraf("./Docs/NI-INA219/*", (err) => {
+rimraf("./Docs/@name-industry/*", (err) => {
     console.log("res", err);
 });

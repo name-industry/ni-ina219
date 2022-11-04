@@ -30,6 +30,9 @@ const REGISTERS = {
 // ====================================================
 
 const CONFIGURATION = {
+    RESET: {
+        TRIGGER: 0x01 // self-clears
+    },
     BUS_VOLTAGE_RANGE: {
         RANGE_16V: 0x00, // set bus voltage range to 16V
         RANGE_32V: 0x01  // set bus voltage range to 32V (default)
@@ -78,12 +81,29 @@ const CONFIGURATION = {
     }
 }
 
-// Calibration Templates
-// ====================================================
-
+/**
+ * Calibration Templates
+ * Note: DEFAULT used for resetting the chip to defaults
+ *       Is essentially the same as 32V2a.
+ */
 const CALIBRATION_TEMPLATES = {
-    IDS: ["32V2A"],
-    "32V2A": {
+    IDS: ["DEFAULT", "32V2A"],
+    "DEFAULT": {
+        // todo remove these
+        currentDivider_mA: 10,
+        powerDivider_mW: 2,
+        // Req
+        calValue: 4096,
+        currentLSB: 0.1, // Current LSB = 100uA per bit
+        powerLSB: 0.002, // Power LSB = 2mW per bit
+        // set bits
+        config: CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
+                CONFIGURATION.GAIN.DIV_8_320MV << 11 |
+                CONFIGURATION.BUS_ADC_RESOLUTION.ADCRES_12BIT_32S << 7 |
+                CONFIGURATION.SHUNT_ADC_RESOLUTION.ADCRES_12BIT_32S << 3 |
+                CONFIGURATION.MODE.SANDBVOLT_CONTINUOUS
+    },
+    "32V2A": { // 00111110 11101111  -  00111001 10011111 
         // todo remove these
         currentDivider_mA: 10,
         powerDivider_mW: 2,

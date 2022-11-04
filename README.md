@@ -48,7 +48,7 @@
 
 <br />
 
-Create folder or ad to existing code.
+Create folder or add to existing code.
 Make sure to have package.json set to module if using imports instead of require. This lib is only tested with imports ie:
 
 ```json
@@ -291,6 +291,13 @@ Currently only the base example ( quick start is available ). Located in ./Examp
 
 ## 7. Measurements  
 <br />
+
+The INA219 sensor uses these for measuring and then calculating the values.
+
+The WaveShare UPS board has a 0.1 shunt Ohm resistor.
+
+ - R<sub>shunt</sub>
+ - Current_LSB
 
 ## 8. Prior art
 

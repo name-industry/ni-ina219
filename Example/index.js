@@ -25,10 +25,10 @@ const formattedOutput = function (valueObject) {
  */
 
 const initUPS = async function () {
-    
+
     // initialize the system
     let started = await NI_INA219.initialize(0x42);
-    
+
     if (started.success === true) {
 
         // DEBUG shows full return JSON object 
@@ -36,7 +36,7 @@ const initUPS = async function () {
         // get the current active system configuration
         let CONFIGURATION = await NI_INA219.getConfiguration();
         console.log("CONFIGURATION", CONFIGURATION);
-        
+
         // get the current active calibration values
         let CALIBRATION = await NI_INA219.getCalibration();
         console.log("CALIBRATION", CALIBRATION);
@@ -44,26 +44,37 @@ const initUPS = async function () {
         // get the Bus voltage
         let BUS_VOLTAGE = await NI_INA219.getBusVoltage();
         console.log("    BUS VOLTAGE          ", formattedOutput(BUS_VOLTAGE)); // load
-        
+
         // get the Shunt voltage
         let SHUNT_VOLTAGE = await NI_INA219.getShuntVoltage();
         console.log("    SHUNT VOLTAGE        ", formattedOutput(SHUNT_VOLTAGE));
-        
+
         // get the Current in Milliamps
         let CURRENT_AMPS = await NI_INA219.getCurrent();
         console.log("    CURRENT MILLIAMPS    ", formattedOutput(CURRENT_AMPS));
-       
+
         // get the Power in Watts
         let POWER_WATTS = await NI_INA219.getPower();
         console.log("    POWER WATTS          ", formattedOutput(POWER_WATTS));
-        
+
         // PSU voltage - Custom calc for WaveShare Hat only
         let POWER_SUPPLY_VOLTAGE = await NI_INA219.getPowerSupplyVoltage();
         console.log("    POWER SUPPLY VOLTAGE ", formattedOutput(POWER_SUPPLY_VOLTAGE));
-        
+
         // Battery charge remaining - Custom calc for WaveShare Hat only
         let CHARGE_REMAINING = await NI_INA219.getChargeRemaining();
         console.log("    CHARGE REMAINING     ", formattedOutput(CHARGE_REMAINING));
+
+        console.log("    ");
+        console.log("    ");
+        
+        // reset active system configuration to power on defaults
+        let RESET_CONFIGURATION = await NI_INA219.resetConfiguration();
+        console.log("RE-SETTING CONFIGURATION", RESET_CONFIGURATION);
+
+        // get the current active system configuration
+        let NEW_CONFIGURATION = await NI_INA219.getConfiguration();
+        console.log("NEW_CONFIGURATION", NEW_CONFIGURATION);
 
     } else {
         console.log("STARTED SENSOR ERROR", started);
