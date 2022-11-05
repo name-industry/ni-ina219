@@ -9,8 +9,8 @@
 <br />
 
 <div align="left">
-  <img src="https://img.shields.io/badge/version-v0.0.1-green" />
-  <img src="https://img.shields.io/badge/nodeJs-v15.14.0-yellowgreen" />
+  <img src="https://img.shields.io/badge/version-v0.0.6-green" />
+  <img src="https://img.shields.io/badge/nodeJs-v18.11.0-yellowgreen" />
   <img src="https://img.shields.io/badge/Raspberry--PI-v4b-FF69B4" />
   <img src="https://img.shields.io/badge/jsDocs-v3.5-yellow" />
 </div>
@@ -41,6 +41,7 @@
 8. [Prior art](#8-prior-art)
 9. [Links to other NI modules](#9-links-to-other-ni-modules)
 10. [Other links](#10-other-links)
+11. [Roadmap](#11-roadmap)
 
 <br />
 
@@ -311,5 +312,34 @@ This library builds on these two versions:
 ## 9. Links to other NI modules
 <br />
 
+| name | description | status | repo |
+| - | - | - | - |
+| NI-AM2315 | temperature / humidity i2c sensor | started | [NI-AM2315](https://github.com/name-industry/ni-am2315) |
+| NI-SHT30 | temperature / humidity i2c sensor | started | [NI-SHT30](https://github.com/name-industry/ni-sht30) |
+
+
+
 ## 10. Other links 
 <br />
+
+## 11. Roadmap
+<br />
+
+#note: regarding unit testing. I am not sure it will be 100% coverage ever as dealing with hardware there is potential problems with hitting it with totally incorrect values unless I mock up the board 100% which I would rather not do. ( Much rather be making a soft-synth than mocking up a voltage meter )
+
+- externalize the I2c bus for injection instead of default
+- add in default logger for example to show injection - PinoJS
+- add in architecture docs/charts ( the why of the folders/code structure )
+- make configuration templates external and loadable json files
+- expose system calculations to better work with PI
+- fix jsDoc Docs generation and local serving
+- complete Docs to 100%
+- set up coverage for return DTO values of all public methods, currently is not 100%
+- refactor for unit testing of internal methods currently 0% coverage
+- implement triggered mode
+- implement single trigger modes
+- implement single continuous modes
+- expose Configuration register as much as is viable
+- expose Calibration register as much as possible
+- namespace ina219 sensor methods and extended WaveShare board methods so that I can use this lib without the UPS in case I need to.
+- sadly -> the list can go on...........
