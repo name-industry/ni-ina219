@@ -37,6 +37,8 @@ const initUPS = async function () {
         let CONFIGURATION = await NI_INA219.getConfiguration();
         console.log("CONFIGURATION", CONFIGURATION);
 
+        console.log("    ");
+        
         // get the current active calibration values
         let CALIBRATION = await NI_INA219.getCalibration();
         console.log("CALIBRATION", CALIBRATION);
@@ -71,6 +73,8 @@ const initUPS = async function () {
         // reset active system configuration to power on defaults
         let RESET_CONFIGURATION = await NI_INA219.resetConfiguration();
         console.log("RE-SETTING CONFIGURATION", RESET_CONFIGURATION);
+        
+        console.log("    ");
 
         // get the current active system configuration
         let NEW_CONFIGURATION = await NI_INA219.getConfiguration();
@@ -78,51 +82,6 @@ const initUPS = async function () {
 
         console.log("    ");
         console.log("    ");
-
-        // power the sensor down by setting the powerDown bit in the
-        // configuration register
-        let MODE_POWER_DOWN = await NI_INA219.setModePowerDown();
-        console.log("MODE_POWER_DOWN", MODE_POWER_DOWN);
-
-        // power the sensor down by setting the powerDown bit in the
-        // configuration register
-        // let MODE_DISABLE_ADC = await NI_INA219.setModePowerDown();
-        // console.log("MODE_DISABLE_ADC", MODE_DISABLE_ADC);
-
-        console.log("    ");
-        console.log("    ");
-        console.log("----");
-        console.log("Try access with power down and adc off");
-
-        // get the Bus voltage
-        let BUS_VOLTAGE_TEST = await NI_INA219.getBusVoltage();
-        console.log("    BUS VOLTAGE          ", formattedOutput(BUS_VOLTAGE_TEST)); // load
-
-        // get the Current in Milliamps
-        let CURRENT_AMPS_TEST = await NI_INA219.getCurrent();
-        console.log("    CURRENT MILLIAMPS    ", formattedOutput(CURRENT_AMPS_TEST));
-
-        await new Promise(resolve => setTimeout(resolve, 5000));
-
-        // set the configuration
-        let SET_CONFIGURATION = await NI_INA219.setConfiguration();
-
-        console.log("    ");
-        console.log("    ");
-        console.log("----");
-        console.log("Try access with setting configuration to power up and enable");
-
-        // get the Bus voltage
-        let BUS_VOLTAGE_TEST_POST = await NI_INA219.getBusVoltage();
-        console.log("    BUS VOLTAGE          ", formattedOutput(BUS_VOLTAGE_TEST_POST)); // load
-
-        // get the Current in Milliamps
-        let CURRENT_AMPS_TEST_POST = await NI_INA219.getCurrent();
-        console.log("    CURRENT MILLIAMPS    ", formattedOutput(CURRENT_AMPS_TEST_POST));
-
-        console.log("    ");
-        console.log("    ");
-
 
     } else {
         console.log("STARTED SENSOR ERROR", started);

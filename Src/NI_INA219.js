@@ -61,7 +61,7 @@ class NI_INA219 {
      * @param {*} configurationTemplateId Configuring the sensor and calibration template Id
      * @param {*} useLogging Not implemented
      * @param {*} loggingType Not implemented
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
      */
     initialize = async function (
         i2cAddress = Constants.DEFAULT_I2C_ADDRESS,
@@ -109,7 +109,7 @@ class NI_INA219 {
      * 
      * @async
      * @param {Number} register Address in hex of the Register to be read ie: 0x2
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     readRegister = async function (register) {
         // trigger fresh calcs
@@ -135,7 +135,7 @@ class NI_INA219 {
      * @async
      * @param {Number} register Address in hex of the Register to write ie: 0x2
      * @param {*} value What to write to the Register
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     writeRegister = async function (register, value) {
         return await I2CBus.writeRegister(register, value);
@@ -155,7 +155,7 @@ class NI_INA219 {
      * @param {string} configurationTemplateId
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
      */
     setConfiguration = async function (configurationTemplateId = "32V2A") {
 
@@ -189,58 +189,73 @@ class NI_INA219 {
      * Resets the configuration register to its default
      * 
      * @description
-     * Resets the INA219 to its default settings stored. 
+     * Resets the INA219 to its default settings stored.
+     * #Note: this is actually a reset to power on defaults not simply a 
+     * reset to your last configuration or even the js modules default.
+     * The power on register is as follows -> 
      * Binary default of the Configuration Register bits - 00111001 10011111
      * 
+     * If you wish the reset to act as a reset to "your" config reset 
+     * the configuration then set it to your desired config with setConfiguration
+     * or re-init.
+     * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     resetConfiguration = async function () {
+
         // set bits
         let config = Constants.CALIBRATION_TEMPLATES.DEFAULT.config;
         let resetResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
 
-        if (resetResults.success) {
-            let newConfiguration = await this.getConfiguration();
-            return newConfiguration;
-        } else {
-            return resetResults;
-        }
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return resetResults;
 
     }
 
-    // Experimental
+    /**
+     * @method NI_INA219#setModePowerDown
+     * 
+     * @summary
+     * Experimental: Low power mode for the INA219.
+     * 
+     * @description
+     * I am not sure if this has any effect on the WaveShare UPS, 
+     * so consider this experimental !.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
     setModePowerDown = async function () {
         let config = Constants.CALIBRATION_TEMPLATES.POWERED_DOWN.config;
-        let configResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
-        if (configResults.success) {
-            let newConfiguration = await this.getConfiguration();
-            return newConfiguration;
-        } else {
-            return configResults;
-        }
+        let powerDownResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
+
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return powerDownResults;
     }
 
-    // Experimental
-    setModePowerUp = async function () {
-        // set new configuration to power up and set new settings
-    }
-
-    // Experimental
+    /**
+     * @method NI_INA219#setModeDisableADC
+     * 
+     * @summary
+     * Experimental: set mode for the INA219 to disable the ADC.
+     * 
+     * @description
+     * I am not sure if this has any effect on the WaveShare UPS, 
+     * so consider this experimental !.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
     setModeDisableADC = async function () {
         let config = Constants.CALIBRATION_TEMPLATES.DISABLED_ADC.config;
-        let configResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
-        if (configResults.success) {
-            let newConfiguration = await this.getConfiguration();
-            return newConfiguration;
-        } else {
-            return configResults;
-        }
-    }
+        let disableADCResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
 
-    // Experimental
-    setModeEnableADC = async function () {
-        // set new configuration to enable adc and set new settings
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return disableADCResults;
     }
 
     /**
@@ -257,7 +272,7 @@ class NI_INA219 {
      * to calculate fresh values.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setCalibration = async function () {
         return await I2CBus.writeRegister(Constants.REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
@@ -274,7 +289,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
      */
     getConfiguration = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.CONFIG_RW);
@@ -297,7 +312,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getCalibration = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.CALIBRATION_RW);
@@ -321,7 +336,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getBusVoltage = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.BUS_VOLTAGE_R);
@@ -345,7 +360,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getShuntVoltage = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.SHUNT_VOLTAGE_R);
@@ -369,7 +384,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getPower = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
@@ -395,7 +410,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getCurrent = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.CURRENT_R);
@@ -421,20 +436,27 @@ class NI_INA219 {
      * This method is here for functional parity. If not using this hat, can ignore.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getPowerSupplyVoltage = async function () {
         let busVoltage = await this.getBusVoltage();
         let shuntVoltage = await this.getShuntVoltage();
-        Models.powerSupplyModel.hydrate(
-            {
-                busVoltage: busVoltage,
-                shuntVoltage: shuntVoltage
-            },
-            "en",
-            true
-        );
-        return outputAsJson(Models.powerSupplyModel.getCurrentValues(), {});
+
+        if (busVoltage.success && shuntVoltage.success) {
+            Models.powerSupplyModel.hydrate(
+                {
+                    busVoltage: busVoltage,
+                    shuntVoltage: shuntVoltage
+                },
+                "en",
+                true
+            );
+            return outputAsJson(Models.powerSupplyModel.getCurrentValues(), {});
+        } else {
+            // return first error for now
+            // TODO: generate a compound error dto
+            return (busVoltage.success === true) ? shuntVoltage : busVoltage;
+        }
     }
 
     /**
@@ -449,7 +471,7 @@ class NI_INA219 {
      * This method is here for functional parity. If not using this hat, can ignore.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getChargeRemaining = async function () {
         let busVoltage = await this.getBusVoltage();
@@ -457,7 +479,7 @@ class NI_INA219 {
             Models.chargeRemainingModel.hydrate(busVoltage.data, "en", true);
             return outputAsJson(Models.chargeRemainingModel.getCurrentValues(), {});
         } else {
-            return readResult;
+            return busVoltage;
         }
     }
 

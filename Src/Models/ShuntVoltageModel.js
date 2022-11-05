@@ -108,6 +108,7 @@ class ShuntVoltageModel extends BaseRegisterModel {
     * 
     * @summary
     * Takes the raw register value and formats it
+    * +32767 and -32767
     * 
     * @description
     * Calculate the Shunt voltage in milli-volts

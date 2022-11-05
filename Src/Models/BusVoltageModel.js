@@ -66,6 +66,10 @@ class BusVoltageModel extends BaseRegisterModel {
      * 
      * @summary
      * Takes the raw register value and formats it
+     * Shift 3 bits for value since 
+     * bit 2 '-',
+     * bit 1 'CNVR',
+     * bit 0 'OVF'
      * 
      * @description
      * Calculate the Bus voltage in volts
