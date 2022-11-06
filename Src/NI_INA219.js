@@ -42,6 +42,9 @@ class NI_INA219 {
     /** @type {object | undefined} */
     currentConfiguration;
 
+    /** @type {boolean} */
+    isInitialized = false;
+
     /**
      * @method NI_INA219#initialize
      * 
@@ -86,12 +89,46 @@ class NI_INA219 {
         let writeCalibration = await this.setCalibration();
         if (writeCalibration.success === false) return writeCalibration;
 
+        this.isInitialized = true;
+
         return {
             success: true,
             msg: "[UPS BOARD] - Ready",
             data: {}
         }
 
+    }
+
+    getDeviceInformation = async function () {
+
+        let baseInformation = {
+            manufacturer: "WaveShare",
+            deviceName: "WaveShare UPS",
+            sensor: "ina219",
+            type: "Voltage reading"
+        }
+
+        if (this.isInitialized === true) {
+
+            let extendedInformation = baseInformation;
+            extendedInformation.isConnected = true;
+            extendedInformation.address = 0x21; // <- currently hardcoded
+            extendedInformation.busNumber = 1; // <- currently hardcoded
+            extendedInformation.currentConfiguration = this.currentConfiguration;
+
+            return {
+                success: true,
+                msg: "getDeviceInformation - isConnected",
+                data: extendedInformation
+            }
+
+        } else {
+            return {
+                success: true,
+                msg: "getDeviceInformation - not initialized",
+                data: baseInformation
+            }
+        }
     }
 
     /**
