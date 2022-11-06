@@ -17,7 +17,8 @@
     "start": "node ./Example/index.js",
     "docs-create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
     "docs-view": "http-server ./Docs/ -p 0 -o --log-ip",
-    "test": "jest"
+    "test": "jest",
+    "srcVersionBump": "node ./Scripts/BumpVersionJSDocs.js"
   },
   "dependencies": {
     "big.js": "^6.2.1",

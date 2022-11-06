@@ -3,7 +3,7 @@
  * @class NI_INA219
  * 
  * @summary 
- * (v.0.0.1) - WaveShare UPS Raspberry Pi Hat uses a Texas Instruments INA219_sensor
+ * (v.0.0.6) - WaveShare UPS Raspberry Pi Hat uses a Texas Instruments INA219_sensor
  * 
  * @description 
  * Texas Instruments INA219 Zero-Drift Bi-Directional Current/Power 
