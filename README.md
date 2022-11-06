@@ -1,9 +1,10 @@
 <br />
 <div align="left">
-  <img src="./Docs/img/830x80_NI_INA219_Light.png"
-       alt="header img"
-       width="830px"
-  />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./Docs/img/830x80_NI_INA219_Dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./Docs/img/830x80_NI_INA219_Light.png">
+  <img alt="header image" src="./Docs/img/830x80_NI_INA219_Light.png" width="830px">
+</picture>
 </div>
 
 <br />
