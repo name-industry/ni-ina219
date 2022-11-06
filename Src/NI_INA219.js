@@ -99,6 +99,21 @@ class NI_INA219 {
 
     }
 
+    /**
+     * @method NI_INA219#getDeviceInformation
+     * 
+     * @summary
+     * Device / Sensor information
+     * 
+     * @description 
+     * For parent application usage. Can request this to check on 
+     * status and current configuration or if not initialized and connected
+     * the retrieve some manufacturer and sensor information for ux/ui
+     * 
+     * @async 
+     * 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     */
     getDeviceInformation = async function () {
 
         let baseInformation = {
