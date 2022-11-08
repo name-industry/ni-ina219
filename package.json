@@ -1,5 +1,6 @@
 {
   "name": "@name-industry/ni-ina219",
+  "description": "Module for using the WaveShare UPS Raspberry Pi Hat that has an embedded Texas Instruments INA219 sensor.",
   "version": "0.0.7",
   "main": "index.js",
   "keywords": [
@@ -15,6 +16,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./Example/index.js",
+    "start:trigger": "node ./Example/triggerMode.js",
     "docs-create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
     "docs-view": "http-server ./Docs/ -p 0 -o --log-ip",
     "test": "jest",

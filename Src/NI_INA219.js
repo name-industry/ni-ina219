@@ -270,6 +270,37 @@ class NI_INA219 {
      * @method NI_INA219#setModePowerDown
      * 
      * @summary
+     * Experimental: Change the MODE to trigger.
+     * 
+     * @description
+     * This will update the configuration to use MODE: triggered.
+     * This alters the config to "Shunt and bus, triggered"
+     * bits set are [ 0, 1, 1 ] see page 20 table 6 in the PDF for ina219
+     * #to verify - Normally there is a time discrepancy between 
+     * Shunt and busVoltage captures.
+     * 
+     * #note - newConfig is just blunt forced calculated will move
+     * to proper place later.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+     setModeTrigger = async function () {
+        let oldConfig = this.currentConfiguration.config;
+        let newConfig = (( oldConfig >>> 3 ) << 3 ) | Constants.CALIBRATION_TEMPLATES.TRIGGERED_BOTH.config;
+        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        if(setNewConfigResults.success === true) {
+            this.currentConfiguration.config = newConfig;
+        }
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return setNewConfigResults;
+    }
+
+    /**
+     * @method NI_INA219#setModePowerDown
+     * 
+     * @summary
      * Experimental: Low power mode for the INA219.
      * 
      * @description
