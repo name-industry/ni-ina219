@@ -1,8 +1,7 @@
-<br />
 <div align="left">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./Docs/img/830x80_NI_INA219_Dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="./Docs/img/830x80_NI_INA219_Light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/name-industry/ni-ina219/HEAD/Docs/img/830x80_NI_INA219_Dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/name-industry/ni-ina219/HEAD/Docs/img/830x80_NI_INA219_Light.png">
   <img alt="header image" src="./Docs/img/830x80_NI_INA219_Light.png" width="830px">
 </picture>
 </div>
