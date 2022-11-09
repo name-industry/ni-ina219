@@ -32,6 +32,15 @@ import { Constants } from "../Constants/index.js";
 
 class ConfigurationModel extends BaseRegisterModel {
 
+    /** @type {object | undefined} */
+    lastConfiguration;
+
+    /** @type {object | undefined} */
+    currentConfiguration;
+
+    /** @type {boolean} */
+    isCustom = false;
+
     constructor() {
         super("Configuration");
     }
@@ -86,7 +95,8 @@ class ConfigurationModel extends BaseRegisterModel {
      */
     editConfigurationMode = function (oldConfiguration, mode) {
         let modeHexValue = Constants.CONFIGURATION.MODE[mode];
-        return (( oldConfiguration >>> modeHexValue ) << modeHexValue ) | oldConfiguration;
+        let newConfigBits = ((oldConfiguration >>> modeHexValue) << modeHexValue) | modeHexValue;
+        return newConfigBits;
     }
 
 }

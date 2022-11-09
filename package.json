@@ -16,9 +16,9 @@
   "type": "module",
   "scripts": {
     "start": "node ./Example/index.js",
-    "start:trigger": "node ./Example/triggerMode.js",
-    "docs-create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
-    "docs-view": "http-server ./Docs/ -p 0 -o --log-ip",
+    "start:setModes": "node ./Example/setModes.js",
+    "docs:create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
+    "docs:view": "http-server ./Docs/ -p 0 -o --log-ip",
     "test": "jest",
     "srcVersionBump": "node ./Scripts/BumpVersionJSDocs.js"
   },

@@ -293,10 +293,10 @@ class NI_INA219 {
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setMode = async function () {
+    setMode = async function (modeConstant) {
         let newConfig = Models.configuration.editConfigurationMode(
             this.currentConfiguration.config,
-            Constants.CONFIGURATION.MODE.SANDBVOLT_TRIGGERED);
+            modeConstant);
         let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
         if (setNewConfigResults.success === true) {
             this.currentConfiguration.config = newConfig;

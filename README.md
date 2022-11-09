@@ -9,10 +9,12 @@
 <br />
 
 <div align="left">
-  <img src="https://img.shields.io/badge/version-v0.0.6-green" />
-  <img src="https://img.shields.io/badge/nodeJs-v18.11.0-yellowgreen" />
-  <img src="https://img.shields.io/badge/Raspberry--PI-v4b-FF69B4" />
-  <img src="https://img.shields.io/badge/jsDocs-v3.5-yellow" />
+  <img src="https://img.shields.io/badge/version-v0.0.6-green?style=flat-square" />
+  <img src="https://img.shields.io/badge/nodeJs-v18.11.0-yellowgreen?style=flat-square" />
+  <img src="https://img.shields.io/badge/Raspberry--PI-v4b-FF69B4?style=flat-square" />
+  <img src="https://img.shields.io/badge/jsDocs-v3.5-yellow?style=flat-square" />
+  <a href="https://app.codecov.io/gh/name-industry/ni-ina219">
+  <img src="https://img.shields.io/codecov/c/github/name-industry/ni-ina219/coverage.svg?style=flat-square" /></a>
 </div>
 
 <br />

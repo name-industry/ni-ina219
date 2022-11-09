@@ -61,7 +61,7 @@ const getConfigurationHandler = async function () {
 const initUPS = async function () {
 
     // initialize the system
-    let initialized = await NI_INA219.initialize(0x42);
+    let initialized = await NI_INA219.initialize(0x42, 1, "32V2A");
 
     if (initialized.success === true) {
 
