@@ -82,7 +82,7 @@ class ConfigurationModel extends BaseRegisterModel {
      * 
      * @param {int} oldConfiguration the decimal value of the configuration register 
      * @param {string} mode the name of the mode in the Constants file
-     * @returns 
+     * @returns {number}  returns new config register as base 10 
      */
     editConfigurationMode = function (oldConfiguration, mode) {
         let modeHexValue = Constants.CONFIGURATION.MODE[mode];
