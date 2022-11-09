@@ -28,6 +28,7 @@
  * 
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import { Constants } from "../Constants/index.js";
 
 class ConfigurationModel extends BaseRegisterModel {
 
@@ -68,6 +69,24 @@ class ConfigurationModel extends BaseRegisterModel {
      */
     measurement = {
         en: {}
+    }
+
+    /**
+     * Heavy handed way to open up MODES in the configuration register
+     * by calculating a new config for the last 3 bits [x x x x x 2 1 0]
+     * Takes an oldConfiguration decimal value - stored in the main class
+     * after initializing or setting a new configuration by template.
+     * 
+     * Returns the new config decimal for use in writing the new config to
+     * the register
+     * 
+     * @param {int} oldConfiguration the decimal value of the configuration register 
+     * @param {string} mode the name of the mode in the Constants file
+     * @returns 
+     */
+    editConfigurationMode = function (oldConfiguration, mode) {
+        let modeHexValue = Constants.CONFIGURATION.MODE[mode];
+        return (( oldConfiguration >>> modeHexValue ) << modeHexValue ) | oldConfiguration;
     }
 
 }

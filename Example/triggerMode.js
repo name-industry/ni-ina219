@@ -83,7 +83,7 @@ const initUPS = async function () {
         console.log("    ");
 
         // change the MODE to trigger instead of continuous
-        await NI_INA219.setModeTrigger();
+        await NI_INA219.setMode("SANDBVOLT_TRIGGERED");
         console.log("Setting mode to trigger");
         console.log("    ");
 

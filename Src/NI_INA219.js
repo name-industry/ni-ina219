@@ -273,72 +273,38 @@ class NI_INA219 {
      * Experimental: Change the MODE to trigger.
      * 
      * @description
-     * This will update the configuration to use MODE: triggered.
-     * This alters the config to "Shunt and bus, triggered"
-     * bits set are [ 0, 1, 1 ] see page 20 table 6 in the PDF for ina219
-     * #to verify - Normally there is a time discrepancy between 
-     * Shunt and busVoltage captures.
+     * This will update the configuration to use any Mode available.
+     * Modes are found in ./Constants/index.js or through auto-complete
+     * via Constants.CONFIGURATION.MODE
+     * bits set are [ 2, 1, 0 ] see page 20 table 6 in the PDF for ina219 
      * 
-     * #note - newConfig is just blunt forced calculated will move
-     * to proper place later.
+     * POWERDOWN: 0x00, // power down apply it to bits 2,1,0 in the register 
+     * SVOLT_TRIGGERED: 0x01, // shunt voltage triggered
+     * BVOLT_TRIGGERED: 0x02, // bus voltage triggered 
+     * SANDBVOLT_TRIGGERED: 0x03, // shunt and bus voltage triggered
+     * ADCOFF: 0x04, // ADC off
+     * SVOLT_CONTINUOUS: 0x05, // shunt voltage continuous
+     * BVOLT_CONTINUOUS: 0x06, // bus voltage continuous
+     * SANDBVOLT_CONTINUOUS: 0x07, // shunt and bus voltage continuous (default)
+     * 
+     * TODO: map these to human readable constants 
+     *       then map it to internal constants
      * 
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-     setModeTrigger = async function () {
-        let oldConfig = this.currentConfiguration.config;
-        let newConfig = (( oldConfig >>> 3 ) << 3 ) | Constants.CALIBRATION_TEMPLATES.TRIGGERED_BOTH.config;
+    setMode = async function () {
+        let newConfig = Models.configuration.editConfigurationMode(
+            this.currentConfiguration.config,
+            Constants.CONFIGURATION.MODE.SANDBVOLT_TRIGGERED);
         let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
-        if(setNewConfigResults.success === true) {
+        if (setNewConfigResults.success === true) {
             this.currentConfiguration.config = newConfig;
         }
+
         // Should maybe return the new config - for userland comparisons or
         // testable stuff.
         return setNewConfigResults;
-    }
-
-    /**
-     * @method NI_INA219#setModePowerDown
-     * 
-     * @summary
-     * Experimental: Low power mode for the INA219.
-     * 
-     * @description
-     * I am not sure if this has any effect on the WaveShare UPS, 
-     * so consider this experimental !.
-     * 
-     * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
-     */
-    setModePowerDown = async function () {
-        let config = Constants.CALIBRATION_TEMPLATES.POWERED_DOWN.config;
-        let powerDownResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return powerDownResults;
-    }
-
-    /**
-     * @method NI_INA219#setModeDisableADC
-     * 
-     * @summary
-     * Experimental: set mode for the INA219 to disable the ADC.
-     * 
-     * @description
-     * I am not sure if this has any effect on the WaveShare UPS, 
-     * so consider this experimental !.
-     * 
-     * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
-     */
-    setModeDisableADC = async function () {
-        let config = Constants.CALIBRATION_TEMPLATES.DISABLED_ADC.config;
-        let disableADCResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return disableADCResults;
     }
 
     /**
