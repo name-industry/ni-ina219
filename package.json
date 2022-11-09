@@ -17,6 +17,7 @@
   "scripts": {
     "start": "node ./Example/index.js",
     "start:setModes": "node ./Example/setModes.js",
+    "start:setBRNG": "node ./Example/setBusVoltageRange.js",
     "docs:create": "node ./Scripts/CleanDocFolder.js && node_modules/.bin/jsdoc index.js --configure .jsDoc.json --verbose",
     "docs:view": "http-server ./Docs/ -p 0 -o --log-ip",
     "test": "jest",

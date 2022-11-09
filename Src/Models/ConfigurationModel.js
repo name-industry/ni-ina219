@@ -81,6 +81,12 @@ class ConfigurationModel extends BaseRegisterModel {
     }
 
     /**
+     * @method ConfigurationModel#editConfigurationMode
+     * 
+     * @summary
+     * Edit mode bits in configuration register
+     * 
+     * @description
      * Heavy handed way to open up MODES in the configuration register
      * by calculating a new config for the last 3 bits [x x x x x 2 1 0]
      * Takes an oldConfiguration decimal value - stored in the main class
@@ -96,6 +102,41 @@ class ConfigurationModel extends BaseRegisterModel {
     editConfigurationMode = function (oldConfiguration, mode) {
         let modeHexValue = Constants.CONFIGURATION.MODE[mode];
         let newConfigBits = ((oldConfiguration >>> modeHexValue) << modeHexValue) | modeHexValue;
+        return newConfigBits;
+    }
+
+    /**
+     * @method ConfigurationModel#editConfigurationBRNG
+     * 
+     * @summary
+     * Edit Bus-Voltage-Range bit in configuration register
+     * 
+     * @description
+     * Edit voltage amount in configuration calculating a new config for 
+     * the bit 13  [ x - 13 x, x x x x | x x x x, x x x x]
+     * Takes an oldConfiguration decimal value - stored in the main class
+     * after initializing or setting a new configuration by template.
+     * 
+     * only 2 values in ina219 -> 16V and 32V
+     * 
+     * Returns the new config decimal for use in writing the new config to
+     * the register
+     * 
+     * accepts:
+     * "RANGE_16V": 0x00
+     * "RANGE_32V": 0x01 
+     * 
+     * @param {int} oldConfiguration the decimal value of the configuration register 
+     * @param {string} mode the name of the bus voltage range key in the Constants file
+     * @returns {number}  returns new config register as base 10 
+     */
+    editConfigurationBRNG = function (oldConfiguration, range ) {
+        // mask and clear the bit
+        let mask = ~(1 << 13);
+        let clearedOldConfiguration = oldConfiguration & mask;
+        // set new value to that bit
+        let rangeHexValue = Constants.CONFIGURATION.BUS_VOLTAGE_RANGE[range];
+        let newConfigBits = clearedOldConfiguration | ( rangeHexValue << 13 );
         return newConfigBits;
     }
 

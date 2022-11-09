@@ -267,10 +267,10 @@ class NI_INA219 {
     }
 
     /**
-     * @method NI_INA219#setModePowerDown
+     * @method NI_INA219#setMode
      * 
      * @summary
-     * Experimental: Change the MODE to trigger.
+     * Change the MODE to trigger.
      * 
      * @description
      * This will update the configuration to use any Mode available.
@@ -297,6 +297,43 @@ class NI_INA219 {
         let newConfig = Models.configuration.editConfigurationMode(
             this.currentConfiguration.config,
             modeConstant);
+        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        if (setNewConfigResults.success === true) {
+            this.currentConfiguration.config = newConfig;
+        }
+
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return setNewConfigResults;
+    }
+
+    
+    /**
+     * @method NI_INA219#setBusVoltageRange
+     * 
+     * @summary
+     * Change the Bus Voltage Range.
+     * 
+     * @description
+     * This will update the configuration to make the sensor capture the
+     * Bus Voltage Range either 16V or 32V. Default is 32V.
+     * Ranges are found in ./Constants/index.js or through auto-complete
+     * via Constants.CONFIGURATION.BUS_VOLTAGE_RANGE
+     * bit position set is [ 13 ] see page 19 table 3 in the PDF for ina219 
+     * 
+     * RANGE_16V: 0x00, 
+     * RANGE_32V: 0x01
+     * 
+     * TODO: map these to human readable constants 
+     *       then map it to internal constants
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+    setBusVoltageRange = async function (rangeConstant = "RANGE_32V") {
+        let newConfig = Models.configuration.editConfigurationBRNG(
+            this.currentConfiguration.config,
+            rangeConstant);
         let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
         if (setNewConfigResults.success === true) {
             this.currentConfiguration.config = newConfig;
