@@ -345,6 +345,44 @@ class NI_INA219 {
     }
 
     /**
+     * @method NI_INA219#setPGA
+     * 
+     * @summary
+     * Change the PGA (Shunt Voltage Only) Gain and Range
+     * 
+     * @description
+     * This will update the configuration to make the sensor capture the
+     * Bus Voltage Range either 16V or 32V. Default is 32V.
+     * Ranges are found in ./Constants/index.js or through auto-complete
+     * via Constants.CONFIGURATION.GAIN
+     * bit position set is [ 12, 11 ] see page 19 table 4 in the PDF for ina219 
+     *
+     * DIV_1_40MV:  0x00, // shunt prog. gain set to  1, 40 mV range
+     * DIV_2_80MV:  0x01, // shunt prog. gain set to /2, 80 mV range
+     * DIV_4_160MV: 0x02, // shunt prog. gain set to /4, 160 mV range
+     * DIV_8_320MV: 0x03, // shunt prog. gain set to /8, 320 mV range (default)
+     * 
+     * TODO: map these to human readable constants 
+     *       then map it to internal constants
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+     setPGA = async function (gainConstant = "DIV_8_320MV") {
+        let newConfig = Models.configuration.editConfigurationPGain(
+            this.currentConfiguration.config,
+            gainConstant);
+        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        if (setNewConfigResults.success === true) {
+            this.currentConfiguration.config = newConfig;
+        }
+
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return setNewConfigResults;
+    }
+
+    /**
      * @method NI_INA219#setCalibration
      * 
      * @summary

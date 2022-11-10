@@ -140,6 +140,44 @@ class ConfigurationModel extends BaseRegisterModel {
         return newConfigBits;
     }
 
+    /**
+     * @method ConfigurationModel#editConfigurationPGain
+     * 
+     * @summary
+     * Edit PG-Gain bits in configuration register
+     * 
+     * PGA (Shunt Voltage Only)
+Bits 11, 12 Sets PGA gain and range. Note that the PGA defaults to ÷8 (320mV range). Table 4 shows the gain and range for
+the various product gain settings.
+     * 
+     * @description
+     * PGA (Shunt Voltage Only)
+     * Edit PGA gain and range amount in configuration. 
+     * The bits 11 -> 12  [ x - x 12, 11 x x x | x x x x, x x x x]
+     * Takes an oldConfiguration decimal value - stored in the main class
+     * after initializing or setting a new configuration by template.
+     * 
+     * Returns the new config decimal for use in writing the new config to
+     * the register
+     * 
+     * accepts:
+     * "RANGE_16V": 0x00
+     * "RANGE_32V": 0x01 
+     * 
+     * @param {int} oldConfiguration the decimal value of the configuration register 
+     * @param {string} gain the name of the GAIN key in the Constants file
+     * @returns {number}  returns new config register as base 10 
+     */
+     editConfigurationPGain = function (oldConfiguration, gain ) {
+        // mask and clear the bits
+        let mask = ( 1 << 2 ) - 1;
+        let clearedOldConfiguration = oldConfiguration & ~(mask << 11);
+        // set new value to that bit
+        let gainHexValue = Constants.CONFIGURATION.GAIN[gain];
+        let newConfigBits = clearedOldConfiguration | ( gainHexValue << 11 );
+        return newConfigBits;
+    }
+
 }
 
 export default new ConfigurationModel();
