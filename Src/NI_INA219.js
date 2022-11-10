@@ -307,7 +307,7 @@ class NI_INA219 {
         return setNewConfigResults;
     }
 
-    
+
     /**
      * @method NI_INA219#setBusVoltageRange
      * 
@@ -368,10 +368,78 @@ class NI_INA219 {
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-     setPGA = async function (gainConstant = "DIV_8_320MV") {
+    setPGA = async function (gainConstant = "DIV_8_320MV") {
         let newConfig = Models.configuration.editConfigurationPGain(
             this.currentConfiguration.config,
             gainConstant);
+        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        if (setNewConfigResults.success === true) {
+            this.currentConfiguration.config = newConfig;
+        }
+
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return setNewConfigResults;
+    }
+
+    /**
+     * @method NI_INA219#setBADC
+     * 
+     * @summary
+     * Change BADC Bus ADC Resolution/Averaging
+     * 
+     * @description
+     * Change the Bus ADC resolution (9-, 10-, 11-, or 12-bit) 
+     * or set the number of samples used when averaging results assuming
+     * it uses 12bit resolution after when specifying averaging amounts.
+     * Ranges are found in ./Constants/index.js or through auto-complete
+     * via Constants.CONFIGURATION.BUS_ADC_RESOLUTION
+     * bit positions set is [ 10, 9, 8, 7 ] see page 20 table 5 in the PDF for ina219
+     * 
+     * TODO: map these to human readable constants 
+     *       then map it to internal constants
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+    setBADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
+        let newConfig = Models.configuration.editConfigurationBADC(
+            this.currentConfiguration.config,
+            bADCConstant);
+        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        if (setNewConfigResults.success === true) {
+            this.currentConfiguration.config = newConfig;
+        }
+
+        // Should maybe return the new config - for userland comparisons or
+        // testable stuff.
+        return setNewConfigResults;
+    }
+
+    /**
+     * @method NI_INA219#setSADC
+     * 
+     * @summary
+     * Change SADC Shunt ADC Resolution/Averaging
+     * 
+     * @description
+     * Change the Shunt ADC resolution (9-, 10-, 11-, or 12-bit) 
+     * or set the number of samples used when averaging results assuming
+     * it uses 12bit resolution after when specifying averaging amounts.
+     * Ranges are found in ./Constants/index.js or through auto-complete
+     * via Constants.CONFIGURATION.SHUNT_ADC_RESOLUTION
+     * bit positions set is [ 6, 5, 4, 3 ] see page 20 table 5 in the PDF for ina219
+     * 
+     * TODO: map these to human readable constants 
+     *       then map it to internal constants
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+    setSADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
+        let newConfig = Models.configuration.editConfigurationSADC(
+            this.currentConfiguration.config,
+            bADCConstant);
         let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
         if (setNewConfigResults.success === true) {
             this.currentConfiguration.config = newConfig;

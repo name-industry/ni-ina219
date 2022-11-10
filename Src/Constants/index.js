@@ -43,31 +43,47 @@ const CONFIGURATION = {
         DIV_4_160MV: 0x02,// shunt prog. gain set to /4, 160 mV range
         DIV_8_320MV: 0x03,// shunt prog. gain set to /8, 320 mV range (default)
     },
+    // Edited and cross checked 11/10/2022 PDF revised DEC 2015
+    // x - denotes not counted can be set to anything
     BUS_ADC_RESOLUTION: {
-        ADCRES_9BIT_1S: 0x00,    //  9bit,   1 sample,     84us
-        ADCRES_10BIT_1S: 0x01,   //  10bit,   1 sample,    148us
-        ADCRES_11BIT_1S: 0x02,   //  11 bit,  1 sample,    276us
-        ADCRES_12BIT_1S: 0x03,   //  12 bit,  1 sample,    532us
-        ADCRES_12BIT_2S: 0x09,   //  12 bit,  2 samples,  1.06ms
-        ADCRES_12BIT_4S: 0x0A,   //  12 bit,  4 samples,  2.13ms
-        ADCRES_12BIT_8S: 0x0B,   //  12bit,   8 samples,  4.26ms
-        ADCRES_12BIT_16S: 0x0C,  //  12bit,  16 samples,  8.51ms
-        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms (default)
-        ADCRES_12BIT_64S: 0x0E,  //  12bit,  64 samples, 34.05ms
-        ADCRES_12BIT_128S: 0x0F, //  12bit, 128 samples, 68.10ms
+        // Mode - resolution
+        ADCRES_9BIT_1S:    0x00,  //  9  bit,  1 sample,     84us [0 x 0 0]
+        ADCRES_10BIT_1S:   0x01,  //  10 bit,  1 sample,    148us [0 x 0 1]
+        ADCRES_11BIT_1S:   0x02,  //  11 bit,  1 sample,    276us [0 x 1 0]
+        // - next 2 are same according to PDF pg 20 table 5 
+        // ADCRES_12BIT_XS is not in other libs 
+        ADCRES_12BIT_1S:   0x03,  //  12 bit,  1 sample,    532us [0 x 1 1]
+        ADCRES_12BIT_XS:   0x08,  //  12 bit,  ? samples,   532us [1 0 0 0]
+        // Samples - assumed 12bit ?
+        ADCRES_12BIT_2S:   0x09,  //  12 bit,   2 samples,  1.06ms [1 0 0 1]
+        ADCRES_12BIT_4S:   0x0A,  //  12 bit,   4 samples,  2.13ms [1 0 1 0]
+        ADCRES_12BIT_8S:   0x0B,  //  12 bit,   8 samples,  4.26ms [1 0 1 1]
+        ADCRES_12BIT_16S:  0x0C,  //  12 bit,  16 samples,  8.51ms [1 1 0 0]
+        ADCRES_12BIT_32S:  0x0D,  //  12 bit,  32 samples, 17.02ms [1 1 0 1] (default)
+        ADCRES_12BIT_64S:  0x0E,  //  12 bit,  64 samples, 34.05ms [1 1 1 0]
+        ADCRES_12BIT_128S: 0x0F,  //  12 bit, 128 samples, 68.10ms [1 1 1 1]
     },
+    // Note: same values and table for shunt values
+    //       duplicated just for completion
+    // Edited and cross checked 11/10/2022 PDF revised DEC 2015
+    // x - denotes not counted can be set to anything
     SHUNT_ADC_RESOLUTION: {
-        ADCRES_9BIT_1S: 0x00,    //  9bit,   1 sample,     84us
-        ADCRES_10BIT_1S: 0x01,   //  10bit,   1 sample,    148us
-        ADCRES_11BIT_1S: 0x02,   //  11 bit,  1 sample,    276us
-        ADCRES_12BIT_1S: 0x03,   //  12 bit,  1 sample,    532us
-        ADCRES_12BIT_2S: 0x09,   //  12 bit,  2 samples,  1.06ms
-        ADCRES_12BIT_4S: 0x0A,   //  12 bit,  4 samples,  2.13ms
-        ADCRES_12BIT_8S: 0x0B,   //  12bit,   8 samples,  4.26ms
-        ADCRES_12BIT_16S: 0x0C,  //  12bit,  16 samples,  8.51ms
-        ADCRES_12BIT_32S: 0x0D,  //  12bit,  32 samples, 17.02ms (default)
-        ADCRES_12BIT_64S: 0x0E,  //  12bit,  64 samples, 34.05ms
-        ADCRES_12BIT_128S: 0x0F, //  12bit, 128 samples, 68.10ms
+        // Mode - resolution
+        ADCRES_9BIT_1S:    0x00,  //  9  bit,  1 sample,     84us [0 x 0 0]
+        ADCRES_10BIT_1S:   0x01,  //  10 bit,  1 sample,    148us [0 x 0 1]
+        ADCRES_11BIT_1S:   0x02,  //  11 bit,  1 sample,    276us [0 x 1 0]
+        // - next 2 are same according to PDF pg 20 table 5 
+        // ADCRES_12BIT_XS is not in other libs 
+        ADCRES_12BIT_1S:   0x03,  //  12 bit,  1 sample,    532us [0 x 1 1]
+        ADCRES_12BIT_XS:   0x08,  //  12 bit,  ? samples,   532us [1 0 0 0]
+        // Samples - assumed 12bit ?
+        ADCRES_12BIT_2S:   0x09,  //  12 bit,   2 samples,  1.06ms [1 0 0 1]
+        ADCRES_12BIT_4S:   0x0A,  //  12 bit,   4 samples,  2.13ms [1 0 1 0]
+        ADCRES_12BIT_8S:   0x0B,  //  12 bit,   8 samples,  4.26ms [1 0 1 1]
+        ADCRES_12BIT_16S:  0x0C,  //  12 bit,  16 samples,  8.51ms [1 1 0 0]
+        ADCRES_12BIT_32S:  0x0D,  //  12 bit,  32 samples, 17.02ms [1 1 0 1] (default)
+        ADCRES_12BIT_64S:  0x0E,  //  12 bit,  64 samples, 34.05ms [1 1 1 0]
+        ADCRES_12BIT_128S: 0x0F,  //  12 bit, 128 samples, 68.10ms [1 1 1 1]
     },
     MODE: {
         POWERDOWN: 0x00, // power down apply it to bits 2,1,0 in the register 

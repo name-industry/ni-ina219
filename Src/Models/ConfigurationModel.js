@@ -117,13 +117,13 @@ class ConfigurationModel extends BaseRegisterModel {
      * @param {string} mode the name of the bus voltage range key in the Constants file
      * @returns {number}  returns new config register as base 10 
      */
-    editConfigurationBRNG = function (oldConfiguration, range ) {
+    editConfigurationBRNG = function (oldConfiguration, range) {
         // mask and clear the bit
         let mask = ~(1 << 13);
         let clearedOldConfiguration = oldConfiguration & mask;
         // set new value to that bit
         let rangeHexValue = Constants.CONFIGURATION.BUS_VOLTAGE_RANGE[range];
-        let newConfigBits = clearedOldConfiguration | ( rangeHexValue << 13 );
+        let newConfigBits = clearedOldConfiguration | (rangeHexValue << 13);
         return newConfigBits;
     }
 
@@ -132,10 +132,6 @@ class ConfigurationModel extends BaseRegisterModel {
      * 
      * @summary
      * Edit PG-Gain bits in configuration register
-     * 
-     * PGA (Shunt Voltage Only)
-Bits 11, 12 Sets PGA gain and range. Note that the PGA defaults to ÷8 (320mV range). Table 4 shows the gain and range for
-the various product gain settings.
      * 
      * @description
      * PGA (Shunt Voltage Only)
@@ -155,13 +151,73 @@ the various product gain settings.
      * @param {string} gain the name of the GAIN key in the Constants file
      * @returns {number}  returns new config register as base 10 
      */
-     editConfigurationPGain = function (oldConfiguration, gain ) {
+    editConfigurationPGain = function (oldConfiguration, gain) {
         // mask and clear the bits
-        let mask = ( 1 << 2 ) - 1;
+        let mask = (1 << 2) - 1;
         let clearedOldConfiguration = oldConfiguration & ~(mask << 11);
         // set new value to that bit
         let gainHexValue = Constants.CONFIGURATION.GAIN[gain];
-        let newConfigBits = clearedOldConfiguration | ( gainHexValue << 11 );
+        let newConfigBits = clearedOldConfiguration | (gainHexValue << 11);
+        return newConfigBits;
+    }
+
+    /**
+     * @method ConfigurationModel#editConfigurationBADC
+     * 
+     * @summary
+     * Edit Bus ADC bits in configuration register
+     * 
+     * @description
+     * Edit Bus ADC Resolution/Averaging amount in the configuration
+     * register. 
+     * The bits 7 -> 10  [ x - x x, x 10 9 8 | 7 x x x, x x x x]
+     * Takes an oldConfiguration decimal value - stored in the main class
+     * after initializing or setting a new configuration by template.
+     * 
+     * Returns the new config decimal for use in writing the new config to
+     * the register
+     * 
+     * @param {int} oldConfiguration the decimal value of the configuration register 
+     * @param {string} bADCConstant the name of the BUS_ADC_RESOLUTION key in the Constants file
+     * @returns {number}  returns new config register as base 10 
+     */
+    editConfigurationBADC = function (oldConfiguration, bADCConstant) {
+        // mask and clear the bits
+        let mask = (1 << 4) - 1;
+        let clearedOldConfiguration = oldConfiguration & ~(mask << 7);
+        // set new value to that bit
+        let bADCHexValue = Constants.CONFIGURATION.BUS_ADC_RESOLUTION[bADCConstant];
+        let newConfigBits = clearedOldConfiguration | (bADCHexValue << 7);
+        return newConfigBits;
+    }
+
+    /**
+     * @method ConfigurationModel#editConfigurationSADC
+     * 
+     * @summary
+     * Edit Shunt ADC bits in configuration register
+     * 
+     * @description
+     * Edit Shunt ADC Resolution/Averaging amount in the configuration
+     * register. 
+     * The bits 3 -> 6  [ x - x x, x x x x | x 6 5 4, 3 x x x]
+     * Takes an oldConfiguration decimal value - stored in the main class
+     * after initializing or setting a new configuration by template.
+     * 
+     * Returns the new config decimal for use in writing the new config to
+     * the register
+     * 
+     * @param {int} oldConfiguration the decimal value of the configuration register 
+     * @param {string} sADCConstant the name of the SHUNT_ADC_RESOLUTION key in the Constants file
+     * @returns {number}  returns new config register as base 10 
+     */
+     editConfigurationSADC = function (oldConfiguration, sADCConstant) {
+        // mask and clear the bits
+        let mask = (1 << 4) - 1;
+        let clearedOldConfiguration = oldConfiguration & ~(mask << 3);
+        // set new value to that bit
+        let sADCHexValue = Constants.CONFIGURATION.SHUNT_ADC_RESOLUTION[sADCConstant];
+        let newConfigBits = clearedOldConfiguration | (sADCHexValue << 3);
         return newConfigBits;
     }
 
