@@ -68,19 +68,6 @@ class ConfigurationModel extends BaseRegisterModel {
     ];
 
     /**
-     * @type {object}
-     * 
-     * @summary
-     * the type of value in the register
-     * 
-     * @description
-     * Currently only english language value types
-     */
-    measurement = {
-        en: {}
-    }
-
-    /**
      * @method ConfigurationModel#editConfigurationMode
      * 
      * @summary
