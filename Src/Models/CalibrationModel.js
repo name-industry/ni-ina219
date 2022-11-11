@@ -14,6 +14,7 @@
  */
 
 import BaseRegisterModel from "./BaseRegisterModel.js";
+import { Constants } from "../Constants/index.js";
 
 class CalibrationModel extends BaseRegisterModel {
 
@@ -50,6 +51,79 @@ class CalibrationModel extends BaseRegisterModel {
      */
     measurement = {
         en: {}
+    }
+
+    /**
+     * @method CalibrationModel#setCalibrationValues
+     * 
+     * @summary
+     * EXPERIMENTAL: calculate system calc values
+     * 
+     * @description
+     * Expose shunt value and calculation values to tune
+     * system measurements.
+     * 
+     * @param {*} busVoltageMax 
+     * @param {*} shuntResistanceOhms 
+     * @param {*} gainVoltage 
+     * @param {*} currentMaxExpected 
+     */
+    setCalibrationValues = function (
+        busVoltageMax,
+        shuntResistanceOhms,
+        gainVoltage,
+        currentMaxExpected
+    ) {
+
+        // BUS_VOLTAGE_RANGE as Volts
+        // RANGE_16V || RANGE_32V
+        // 16 || 32
+        // - busVoltageMax;
+
+        // SHUNT_VALUE as OHMS passed in by hand not in config
+        // 0.1
+        // - shuntResistanceOhms;
+
+        // GAIN as Volts
+        // DIV_1_40MV || DIV_2_80MV || DIV_4_160MV || DIV_8_320MV
+        // 0.04 || 0.08 || 0.16 || 0.32
+        // - gainVoltage
+
+        // Maximum current calc
+        let currentMax = gainVoltage / shuntResistanceOhms;
+
+        // Minimum LSB 15 bits 
+        // results in uA per bit
+        let minimumLSB = currentMaxExpected / Math.pow(2,15);
+
+        // Maximum LSB 12 bit
+        // results in uA per bit
+        let maximumLSB = currentMaxExpected / Math.pow(2,12);
+
+        // page 12 in the ina219 pdf "8.5.1 Programming the Calibration Register"
+        // ...While this value yields the highest resolution, 
+        // it is common to select a value for the Current_LSB to 
+        // the nearest round number above this value to simplify the 
+        // conversion of the Current Register (04h) and 
+        // Power Register (03h) to amperes and watts respectively
+
+        // I am not rounding it here. 1 way to round it is look at
+        // maximumLSB and round up
+        let currentLSB = currentMaxExpected / Math.pow(2,15);
+
+        // trunc prior to assign
+        // #note: 0.04096 is an internal fixed value in ina219
+        let calculationValue = 0.04096 / ( currentLSB *  shuntResistanceOhms);
+
+        // 20 is an internal fixed value in ina219
+        let powerLSB = currentLSB * 20;
+
+        return {
+            currentLSB,
+            powerLSB,
+            calculationValue
+        }
+
     }
 
 }
