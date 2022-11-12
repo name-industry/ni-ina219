@@ -18,6 +18,15 @@ import { Constants } from "../Constants/index.js";
 
 class CalibrationModel extends BaseRegisterModel {
 
+    /** @type {number} */
+    currentLSB = 0;
+    
+    /** @type {number} */
+    powerLSB = 0;
+
+    /** @type {number} */
+    calculationValue = 0;
+
     constructor() {
         super("Calibration");
     }
@@ -63,10 +72,10 @@ class CalibrationModel extends BaseRegisterModel {
      * Expose shunt value and calculation values to tune
      * system measurements.
      * 
-     * @param {*} busVoltageMax 
-     * @param {*} shuntResistanceOhms 
-     * @param {*} gainVoltage 
-     * @param {*} currentMaxExpected 
+     * @param {number} busVoltageMax 
+     * @param {number} shuntResistanceOhms 
+     * @param {number} gainVoltage 
+     * @param {number} currentMaxExpected 
      */
     setCalibrationValues = function (
         busVoltageMax,
@@ -94,11 +103,11 @@ class CalibrationModel extends BaseRegisterModel {
 
         // Minimum LSB 15 bits 
         // results in uA per bit
-        let minimumLSB = currentMaxExpected / Math.pow(2,15);
+        let minimumLSB = currentMaxExpected / Math.pow(2, 15);
 
         // Maximum LSB 12 bit
         // results in uA per bit
-        let maximumLSB = currentMaxExpected / Math.pow(2,12);
+        let maximumLSB = currentMaxExpected / Math.pow(2, 12);
 
         // page 12 in the ina219 pdf "8.5.1 Programming the Calibration Register"
         // ...While this value yields the highest resolution, 
@@ -109,15 +118,21 @@ class CalibrationModel extends BaseRegisterModel {
 
         // I am not rounding it here. 1 way to round it is look at
         // maximumLSB and round up
-        let currentLSB = currentMaxExpected / Math.pow(2,15);
+        let currentLSB = currentMaxExpected / Math.pow(2, 15);
 
         // trunc prior to assign
         // #note: 0.04096 is an internal fixed value in ina219
-        let calculationValue = 0.04096 / ( currentLSB *  shuntResistanceOhms);
+        let calculationValue = 0.04096 / (currentLSB * shuntResistanceOhms);
 
         // 20 is an internal fixed value in ina219
         let powerLSB = currentLSB * 20;
 
+        // update internal values
+        this.currentLSB = currentLSB;
+        this.powerLSB = powerLSB;
+        this.calculationValue = calculationValue;
+
+        // send back results in case needed
         return {
             currentLSB,
             powerLSB,
