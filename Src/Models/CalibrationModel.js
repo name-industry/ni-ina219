@@ -15,12 +15,16 @@
 
 import BaseRegisterModel from "./BaseRegisterModel.js";
 import { Constants } from "../Constants/index.js";
+import Big from "big.js";
 
 class CalibrationModel extends BaseRegisterModel {
 
     /** @type {number} */
     currentLSB = 0;
-    
+
+    /** @type {number} */
+    currentLSB_R = 0;
+
     /** @type {number} */
     powerLSB = 0;
 
@@ -63,7 +67,29 @@ class CalibrationModel extends BaseRegisterModel {
     }
 
     /**
-     * @method CalibrationModel#setCalibrationValues
+     * @method CalibrationModel#setCustomCalibrationValues
+     * 
+     * @summary
+     * EXPERIMENTAL: calculate system calc values
+     * 
+     * @description
+     * Expose shunt value and calculation values to tune
+     * system measurements.
+     * 
+     * @returns {Object} returns calibration values
+     */
+    getCalibrationValues = function () {
+        return {
+            currentLSB: this.currentLSB,
+            currentLSB_R: this.currentLSB_R,
+            powerLSB: this.powerLSB,
+            calculationValue: this.calculationValue,
+            calculationValue_R: this.calculationValue_R
+        }
+    }
+
+    /**
+     * @method CalibrationModel#setCustomCalibrationValues
      * 
      * @summary
      * EXPERIMENTAL: calculate system calc values
@@ -76,13 +102,22 @@ class CalibrationModel extends BaseRegisterModel {
      * @param {number} shuntResistanceOhms 
      * @param {number} gainVoltage 
      * @param {number} currentMaxExpected 
+     * 
+     * @returns {Object} returns calibration values
      */
-    setCalibrationValues = function (
+    setCustomCalibrationValues = function (
         busVoltageMax,
         shuntResistanceOhms,
         gainVoltage,
         currentMaxExpected
     ) {
+
+        // Convert all values to High Resolution Big-Js number objects;
+        let gainVoltageHR = new Big(gainVoltage);
+        let shuntResistanceOhmsHR = new Big(shuntResistanceOhms);
+        let currentMaxExpectedHR = new Big(currentMaxExpected);
+        let max15BitValue = new Big(2).pow(15);
+        let max12BitValue = new Big(2).pow(12);
 
         // BUS_VOLTAGE_RANGE as Volts
         // RANGE_16V || RANGE_32V
@@ -99,15 +134,21 @@ class CalibrationModel extends BaseRegisterModel {
         // - gainVoltage
 
         // Maximum current calc
-        let currentMax = gainVoltage / shuntResistanceOhms;
+        // gainVoltage / shuntResistanceOhms
+        let currentMax = gainVoltageHR.div(shuntResistanceOhmsHR).toNumber();
 
+        // For tuning should be rounding between these two values.
+        // ----------------------------------
         // Minimum LSB 15 bits 
         // results in uA per bit
-        let minimumLSB = currentMaxExpected / Math.pow(2, 15);
+        // currentMaxExpected / Math.pow(2,15)
+        let minimumLSB = currentMaxExpectedHR.div(max15BitValue).toNumber();
 
         // Maximum LSB 12 bit
         // results in uA per bit
-        let maximumLSB = currentMaxExpected / Math.pow(2, 12);
+        // currentMaxExpected / Math.pow(2,12)
+        let maximumLSB = currentMaxExpectedHR.div(max12BitValue).toNumber();
+        // ----------------------------------
 
         // page 12 in the ina219 pdf "8.5.1 Programming the Calibration Register"
         // ...While this value yields the highest resolution, 
@@ -117,26 +158,34 @@ class CalibrationModel extends BaseRegisterModel {
         // Power Register (03h) to amperes and watts respectively
 
         // I am not rounding it here. 1 way to round it is look at
-        // maximumLSB and round up
-        let currentLSB = currentMaxExpected / Math.pow(2, 15);
+        // maximumLSB and round up - all other libs seem to use 0.1
+        // this is essentially minimumLSB
+        let currentLSB = currentMaxExpectedHR.div(max15BitValue).toNumber();
+        
+        // Attempt at rounding the currentLSB
+        let currentLSB_R = new Big(currentLSB).round(5, 1).toNumber(); 
 
         // trunc prior to assign
         // #note: 0.04096 is an internal fixed value in ina219
-        let calculationValue = 0.04096 / (currentLSB * shuntResistanceOhms);
+        let calculationValue = new Big(0.04096 / (currentLSB * shuntResistanceOhmsHR)).round(0,0).toNumber();
+        let calculationValue_R = new Big(0.04096 / (currentLSB_R * shuntResistanceOhmsHR)).round(0,0).toNumber();
 
         // 20 is an internal fixed value in ina219
         let powerLSB = currentLSB * 20;
 
         // update internal values
         this.currentLSB = currentLSB;
+        this.currentLSB_R = currentLSB_R;
         this.powerLSB = powerLSB;
         this.calculationValue = calculationValue;
 
         // send back results in case needed
         return {
             currentLSB,
+            currentLSB_R,
             powerLSB,
-            calculationValue
+            calculationValue,
+            calculationValue_R
         }
 
     }

@@ -235,6 +235,29 @@ class NI_INA219 {
     }
 
     /**
+     * @method NI_INA219#getConfiguration
+     * 
+     * @summary
+     * Read UPS Board's settings register
+     * 
+     * @description
+     * Read the INA219 sensor chip settings from the I2c bus on the UPS board.
+     * This is a method an external program would call.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     */
+    getConfiguration = async function () {
+        let readResult = await this.readRegister(Constants.REGISTERS.CONFIG_RW);
+        if (readResult.success === true) {
+            Models.configuration.hydrate(readResult.data, "en", true);
+            return outputAsJson(Models.configuration.getCurrentValues(), {});
+        } else {
+            return readResult;
+        }
+    }
+
+    /**
      * @method NI_INA219#resetConfiguration
      * 
      * @summary
@@ -471,26 +494,37 @@ class NI_INA219 {
     }
 
     /**
-     * @method NI_INA219#getConfiguration
+     * @method NI_INA219#setCustomCalibration
      * 
      * @summary
-     * Read UPS Board's settings register
+     * EXPERIMENTAL: Custom calibration values 
      * 
      * @description
-     * Read the INA219 sensor chip settings from the I2c bus on the UPS board.
-     * This is a method an external program would call.
+     * Fully exposing the calibration calculation register.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    getConfiguration = async function () {
-        let readResult = await this.readRegister(Constants.REGISTERS.CONFIG_RW);
-        if (readResult.success === true) {
-            Models.configuration.hydrate(readResult.data, "en", true);
-            return outputAsJson(Models.configuration.getCurrentValues(), {});
-        } else {
-            return readResult;
-        }
+
+    setCustomCalibration = async function (
+        busVoltageMax,
+        shuntResistanceOhms,
+        gainVoltage,
+        currentMaxExpected
+    ) {
+        let newCalibration = Models.calibration.setCustomCalibrationValues(
+            busVoltageMax,
+            shuntResistanceOhms,
+            gainVoltage,
+            currentMaxExpected
+        );
+
+        // TODO: move config and cal value into models properly
+        // update local config
+        this.currentConfiguration.calValue = newCalibration.calculationValue_R;
+
+        let result = await this.writeRegister(Constants.REGISTERS.CALIBRATION_RW, newCalibration.calculationValue_R);
+        return result;
     }
 
     /**

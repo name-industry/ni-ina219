@@ -65,17 +65,35 @@ class BusVoltageModel extends BaseRegisterModel {
      * @method BusVoltageModel#calculateValue
      * 
      * @summary
-     * Takes the raw register value and formats it
-     * Shift 3 bits for value since 
+     * Get the Bus voltage. Takes the raw register value and formats it
+     * 
+     * @description
+     * Calculates the Bus voltage in volts
+     * The BusVoltage is set with the configuration register to be 
+     * either 16v or 32v this means the Full Scale Range to try and 
+     * store in bits 15 -> 3
+     *  
+     * Bus voltage LSB is 4mV at both 32V and 16V settings.
+     * 
+     * see pg 23 in PDF of ina219, 8.6.3.2 Bus Voltage Register (address = 02h)
+     * 
+     * Note: the register value is shifted 3 bits to the left
      * bit 2 '-',
      * bit 1 'CNVR',
      * bit 0 'OVF'
      * 
-     * @description
-     * Calculate the Bus voltage in volts
+     * TODO: Check if value is correct via bit 0
+     * POST-IT: Need to play with with this to see what if anything changes
+     * internally when it captures the bus voltage.
+     * 
+     * @param {number} currentValue the current measurement in the register 
+     * 
+     * @returns {object} returns calculated values
      */
     calculateValue = function (currentValue) {
+        // get bits 15 to 3
         let shifted = currentValue >> 3;
+        // multiply by 4mV per bit
         let calculation = shifted * 0.004;
         let formatted = new Big(calculation).toFixed(this.defaultPrecision);
         return {
