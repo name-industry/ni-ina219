@@ -31,6 +31,9 @@ class CalibrationModel extends BaseRegisterModel {
     /** @type {number} */
     calculationValue = 0;
 
+    /** @type {number} */
+    calculationValue_R = 0;
+
     constructor() {
         super("Calibration");
     }
@@ -178,6 +181,7 @@ class CalibrationModel extends BaseRegisterModel {
         this.currentLSB_R = currentLSB_R;
         this.powerLSB = powerLSB;
         this.calculationValue = calculationValue;
+        this.calculationValue_R = calculationValue_R;
 
         // send back results in case needed
         return {

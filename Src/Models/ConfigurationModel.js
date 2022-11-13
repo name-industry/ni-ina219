@@ -28,7 +28,7 @@
  * 
  */
 import BaseRegisterModel from "./BaseRegisterModel.js";
-import { Constants } from "../Constants/index.js";
+import { Constants, Templates } from "../Constants/index.js";
 
 class ConfigurationModel extends BaseRegisterModel {
 
@@ -66,6 +66,44 @@ class ConfigurationModel extends BaseRegisterModel {
         'SADC4', 'SADC3', 'SADC2', 'SADC1',
         'MODE3', 'MODE2', 'MODE1'
     ];
+
+    /**
+     * @method ConfigurationModel#setCurrentConfiguration
+     * 
+     * @summary
+     * 
+     * @description
+     * 
+     * @param {number} newConfiguration configuration register as an int
+     * @returns {object} last and current configuration values as int
+     */
+    setCurrentConfiguration = function ( newConfiguration ) {
+        this.lastConfiguration = this.currentConfiguration;
+        this.currentConfiguration = newConfiguration;
+        return {
+            lastConfiguration: this.lastConfiguration,
+            currentConfiguration: this.currentConfiguration
+        }
+    }
+
+    mapConfigurationToValues = function () {
+        let configurationRegisterAsDecimal = this.currentConfiguration;
+        // we want FSR 16V or 32V bit 13 0 === 16 1 === 32
+        let BRNG = 32; 
+    }
+
+    /**
+     * @method ConfigurationModel#getCurrentConfiguration
+     * 
+     * @summary
+     * 
+     * @description
+     * 
+     * @returns {number} configuration as an int
+     */
+    getCurrentConfiguration = function () {
+        return this.currentConfiguration;
+    }
 
     /**
      * @method ConfigurationModel#editConfigurationMode

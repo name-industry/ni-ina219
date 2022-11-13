@@ -39,9 +39,6 @@ import I2CBus from "./Bus/I2C/index.js";
 
 class NI_INA219 {
 
-    /** @type {object | undefined} */
-    currentConfiguration;
-
     /** @type {boolean} */
     isInitialized = false;
 
@@ -82,14 +79,22 @@ class NI_INA219 {
         let writeConfiguration = await this.setConfiguration(configurationTemplateId);
         if (writeConfiguration.success === false) return writeConfiguration;
 
-        // update class
-        this.currentConfiguration = writeConfiguration.data;
+        let templateConfiguration = Constants.CALIBRATION_TEMPLATES[configurationTemplateId];
+        // Update calibration model based on config ( hardcoded at the moment )
+        Models.calibration.setCustomCalibrationValues(
+            templateConfiguration.busVoltageMax,
+            templateConfiguration.shuntResistanceOhms,
+            templateConfiguration.gainVoltage,
+            templateConfiguration.currentMaxExpected
+        );
 
         // write calibration values to the chip register
         let writeCalibration = await this.setCalibration();
         if (writeCalibration.success === false) return writeCalibration;
 
         this.isInitialized = true;
+        this.i2cAddress = i2cAddress;
+        this.busNumber = busNumber;
 
         return {
             success: true,
@@ -125,11 +130,13 @@ class NI_INA219 {
 
         if (this.isInitialized === true) {
 
+            let currentConfiguration = Models.configuration.getCurrentConfiguration();
+
             let extendedInformation = baseInformation;
             extendedInformation.isConnected = true;
-            extendedInformation.address = 0x21; // <- currently hardcoded
-            extendedInformation.busNumber = 1; // <- currently hardcoded
-            extendedInformation.currentConfiguration = this.currentConfiguration;
+            extendedInformation.address = this.i2cAddress;
+            extendedInformation.busNumber = this.I2CBus;
+            extendedInformation.currentConfiguration = currentConfiguration;
 
             return {
                 success: true,
@@ -224,14 +231,26 @@ class NI_INA219 {
                     requestedId: configurationTemplateId
                 }
             };
-        } else {
-            writeResult = await I2CBus.writeRegister(
-                registerAddress,
-                allTemplates[configurationTemplateId].config);
         }
 
-        writeResult.data = (writeResult.success) ? allTemplates[configurationTemplateId] : writeResult.data;
-        return writeResult;
+        writeResult = await this.writeRegister(
+            registerAddress,
+            allTemplates[configurationTemplateId].config);
+
+        if (writeResult.success === true) {
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                allTemplates[configurationTemplateId].config
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // Error writing register return dto
+            return writeResult;
+        }
+
     }
 
     /**
@@ -279,13 +298,22 @@ class NI_INA219 {
      */
     resetConfiguration = async function () {
 
-        // set bits
-        let config = Constants.CALIBRATION_TEMPLATES.DEFAULT.config;
-        let resetResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, config);
+        let newConfigurationValue = Constants.CALIBRATION_TEMPLATES.DEFAULT.config;
+        let resetResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
 
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return resetResults;
+        if (resetResults.success === true) {
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return resetResults;
+        }
 
     }
 
@@ -317,17 +345,23 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setMode = async function (modeConstant) {
-        let newConfig = Models.configuration.editConfigurationMode(
-            this.currentConfiguration.config,
+        let newConfigurationValue = Models.configuration.editConfigurationMode(
+            Models.configuration.getCurrentConfiguration(),
             modeConstant);
-        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
         if (setNewConfigResults.success === true) {
-            this.currentConfiguration.config = newConfig;
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return setNewConfigResults;
         }
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return setNewConfigResults;
     }
 
 
@@ -354,17 +388,23 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setBusVoltageRange = async function (rangeConstant = "RANGE_32V") {
-        let newConfig = Models.configuration.editConfigurationBRNG(
-            this.currentConfiguration.config,
+        let newConfigurationValue = Models.configuration.editConfigurationBRNG(
+            Models.configuration.getCurrentConfiguration(),
             rangeConstant);
-        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
         if (setNewConfigResults.success === true) {
-            this.currentConfiguration.config = newConfig;
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return setNewConfigResults;
         }
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return setNewConfigResults;
     }
 
     /**
@@ -392,17 +432,23 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setPGA = async function (gainConstant = "DIV_8_320MV") {
-        let newConfig = Models.configuration.editConfigurationPGain(
-            this.currentConfiguration.config,
+        let newConfigurationValue = Models.configuration.editConfigurationPGain(
+            Models.configuration.getCurrentConfiguration(),
             gainConstant);
-        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
         if (setNewConfigResults.success === true) {
-            this.currentConfiguration.config = newConfig;
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return setNewConfigResults;
         }
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return setNewConfigResults;
     }
 
     /**
@@ -426,17 +472,23 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setBADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
-        let newConfig = Models.configuration.editConfigurationBADC(
-            this.currentConfiguration.config,
+        let newConfigurationValue = Models.configuration.editConfigurationBADC(
+            Models.configuration.getCurrentConfiguration(),
             bADCConstant);
-        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
         if (setNewConfigResults.success === true) {
-            this.currentConfiguration.config = newConfig;
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return setNewConfigResults;
         }
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return setNewConfigResults;
     }
 
     /**
@@ -460,17 +512,23 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setSADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
-        let newConfig = Models.configuration.editConfigurationSADC(
-            this.currentConfiguration.config,
+        let  newConfigurationValue = Models.configuration.editConfigurationSADC(
+            Models.configuration.getCurrentConfiguration(),
             bADCConstant);
-        let setNewConfigResults = await I2CBus.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfig);
+        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
         if (setNewConfigResults.success === true) {
-            this.currentConfiguration.config = newConfig;
+            let updatedValues = Models.configuration.setCurrentConfiguration(
+                newConfigurationValue
+            );
+            return {
+                success: true,
+                msg: "Configuration register updated",
+                data: updatedValues
+            }
+        } else {
+            // error writing register
+            return setNewConfigResults;
         }
-
-        // Should maybe return the new config - for userland comparisons or
-        // testable stuff.
-        return setNewConfigResults;
     }
 
     /**
@@ -490,7 +548,8 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
     setCalibration = async function () {
-        return await I2CBus.writeRegister(Constants.REGISTERS.CALIBRATION_RW, this.currentConfiguration.calValue);
+        let calValues = Models.calibration.getCalibrationValues();
+        return await this.writeRegister(Constants.REGISTERS.CALIBRATION_RW, calValues.calculationValue_R);
     }
 
     /**
@@ -615,8 +674,9 @@ class NI_INA219 {
     getPower = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.POWER_R);
         if (readResult.success === true) {
+            let calculationValues = Models.calibration.getCalibrationValues();
             Models.power.hydrate(readResult.data, "en", true, {
-                powerLSB: this.currentConfiguration.powerLSB
+                powerLSB: calculationValues.powerLSB
             });
             return outputAsJson(Models.power.getCurrentValues(), {});
         } else {
@@ -641,8 +701,9 @@ class NI_INA219 {
     getCurrent = async function () {
         let readResult = await this.readRegister(Constants.REGISTERS.CURRENT_R);
         if (readResult.success === true) {
+            let calculationValues = Models.calibration.getCalibrationValues();
             Models.current.hydrate(readResult.data, "en", true, {
-                currentLSB: this.currentConfiguration.currentLSB
+                currentLSB: calculationValues.currentLSB
             });
             return outputAsJson(Models.current.getCurrentValues(), {});
         } else {

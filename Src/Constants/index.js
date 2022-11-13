@@ -102,28 +102,21 @@ const CONFIGURATION = {
  * Note: DEFAULT used for resetting the chip to defaults
  *       same as power on values
  */
-const CALIBRATION_TEMPLATES = {
+const TEMPLATES = {
     "IDS": ["DEFAULT", "32V2A"],
     "DEFAULT": { // 00111001 10011111
-        // todo remove these
-        currentDivider_mA: 10,
-        powerDivider_mW: 2,
-        // Req
-        calValue: 4096,
-        currentLSB: 0.1, // Current LSB = 100uA per bit
-        powerLSB: 0.002, // Power LSB = 2mW per bit
+        busVoltageMax: 32,
+        shuntResistanceOhms: 0.1,
+        gainVoltage: 0.32,
+        currentMaxExpected: 3.2,
         // set bits
         config: CONFIGURATION.RESET.TRIGGER << 15
     },
     "32V2A": { // 00111110 11101111
-        // todo remove these
-        currentDivider_mA: 10,
-        powerDivider_mW: 2,
-        // Req
-        calValue: 4096,
-        currentLSB: 0.1, // Current LSB = 100uA per bit
-        powerLSB: 0.002, // Power LSB = 2mW per bit
-        // set bits
+        busVoltageMax: 32,
+        shuntResistanceOhms: 0.1,
+        gainVoltage: 0.32,
+        currentMaxExpected: 3.2,
         config: 
             CONFIGURATION.BUS_VOLTAGE_RANGE.RANGE_32V << 13 |
             CONFIGURATION.GAIN.DIV_8_320MV << 11 |
@@ -133,10 +126,12 @@ const CALIBRATION_TEMPLATES = {
     }
 }
 
+export const Templates = TEMPLATES;
+
 export const Constants = {
     DEFAULT_I2C_ADDRESS: DEFAULT_I2C_ADDRESS,
     DEFAULT_I2C_BUS: DEFAULT_I2C_BUS,
     REGISTERS: REGISTERS,
     CONFIGURATION: CONFIGURATION,
-    CALIBRATION_TEMPLATES: CALIBRATION_TEMPLATES
+    CALIBRATION_TEMPLATES: TEMPLATES
 }

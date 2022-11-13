@@ -70,18 +70,6 @@ const initUPS = async function () {
         console.log("    ");
         console.log("    ");
 
-        // reset active system configuration to power on defaults
-        let RESET_CONFIGURATION = await NI_INA219.resetConfiguration();
-        console.log("RE-SETTING CONFIGURATION", RESET_CONFIGURATION);
-        
-        console.log("    ");
-
-        // get the current active system configuration
-        let NEW_CONFIGURATION = await NI_INA219.getConfiguration();
-        console.log("NEW_CONFIGURATION", NEW_CONFIGURATION);
-
-        console.log("    ");
-        console.log("    ");
 
     } else {
         console.log("STARTED SENSOR ERROR", started);
