@@ -1,7 +1,7 @@
 {
   "name": "@name-industry/ni-ina219",
   "description": "Module for using the WaveShare UPS Raspberry Pi Hat that has an embedded Texas Instruments INA219 sensor.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "index.js",
   "keywords": [
     "ina219",
