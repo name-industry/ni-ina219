@@ -23,9 +23,9 @@
 <br />
 
 <div align="center">
-  <img src="./Docs/img/UPS-HAT-details-3.jpg" width="30%">
-  <img src="./Docs/img/UPS-HAT-details-9.jpg" width="31.8%">
-  <img src="./Docs/img/UPS-HAT-details-size.jpg" width="34.8%">
+  <img src="https://raw.githubusercontent.com/name-industry/ni-ina219/HEAD/Docs/img/UPS-HAT-details-3.jpg" width="30%">
+  <img src="https://raw.githubusercontent.com/name-industry/ni-ina219/HEAD/Docs/img/UPS-HAT-details-9.jpg" width="31.8%">
+  <img src="https://raw.githubusercontent.com/name-industry/ni-ina219/HEAD/Docs/img/UPS-HAT-details-size.jpg" width="34.8%">
 </div>
 
 <br />
