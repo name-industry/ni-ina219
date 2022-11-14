@@ -13,7 +13,7 @@
  *  OVF is set when Power or Current calculations are out of range
  *  probably need board reset after seeing this
  */
-import BaseRegisterModel from "./BaseRegisterModel.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 import Big from 'big.js';
 
 class BusVoltageModel extends BaseRegisterModel {

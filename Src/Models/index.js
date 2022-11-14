@@ -17,22 +17,22 @@
  * Bit order is 15 -> 0
  */
 
- import ConfigurationModel from "./ConfigurationModel.js";
- import CalibrationModel from "./CalibrationModel.js";
- import BusVoltageModel from "./BusVoltageModel.js";
- import ShuntVoltageModel from "./ShuntVoltageModel.js";
- import PowerModel from "./PowerModel.js";
- import CurrentModel from "./CurrentModel.js";
+ // import ConfigurationModel from "./ConfigurationModel.js";
+ // import CalibrationModel from "./CalibrationModel.js";
+ // import BusVoltageModel from "./BusVoltageModel.js";
+ // import ShuntVoltageModel from "./ShuntVoltageModel.js";
+ // import PowerModel from "./PowerModel.js";
+ // import CurrentModel from "./CurrentModel.js";
  import PowerSupplyModel from "./PowerSupplyModel.js";
  import ChargeRemainingModel from "./ChargeRemainingModel.js";
  
  export const Models = {
-     configuration: ConfigurationModel,
-     calibration: CalibrationModel,
-     busVoltage: BusVoltageModel,
-     shuntVoltage: ShuntVoltageModel,
-     power: PowerModel,
-     current: CurrentModel,
+     // configuration: ConfigurationModel,
+     // calibration: CalibrationModel,
+     // busVoltage: BusVoltageModel,
+     // shuntVoltage: ShuntVoltageModel,
+     // power: PowerModel,
+     // current: CurrentModel,
      powerSupplyModel: PowerSupplyModel,
      chargeRemainingModel: ChargeRemainingModel
  }

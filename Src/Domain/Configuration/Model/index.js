@@ -27,19 +27,12 @@
  *  defaults to continuous shunt and bus measurement mode 
  * 
  */
-import BaseRegisterModel from "./BaseRegisterModel.js";
-import { Constants, Templates } from "../Constants/index.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 
 class ConfigurationModel extends BaseRegisterModel {
 
     /** @type {object | undefined} */
-    lastConfiguration;
-
-    /** @type {object | undefined} */
-    currentConfiguration;
-
-    /** @type {boolean} */
-    isCustom = false;
+    activeTemplate;
 
     constructor() {
         super("Configuration");
@@ -68,28 +61,28 @@ class ConfigurationModel extends BaseRegisterModel {
     ];
 
     /**
-     * @method ConfigurationModel#setCurrentConfiguration
+     * @method ConfigurationModel#setActiveTemplate
      * 
      * @summary
      * 
      * @description
      * 
-     * @param {number} newConfiguration configuration register as an int
-     * @returns {object} last and current configuration values as int
+     * @param {number} newActiveTemplate 
+     * @returns {object} activeTemplate
      */
-    setCurrentConfiguration = function ( newConfiguration ) {
-        this.lastConfiguration = this.currentConfiguration;
-        this.currentConfiguration = newConfiguration;
-        return {
-            lastConfiguration: this.lastConfiguration,
-            currentConfiguration: this.currentConfiguration
+     setActiveTemplate = function (template) {
+        if (template !== undefined) {
+            this.activeTemplate = template;
+        } else {
+            this.activeTemplate = undefined; // unset
         }
+        return this.activeTemplate || {}
     }
 
     mapConfigurationToValues = function () {
         let configurationRegisterAsDecimal = this.currentConfiguration;
         // we want FSR 16V or 32V bit 13 0 === 16 1 === 32
-        let BRNG = 32; 
+        let BRNG = 32;
     }
 
     /**
@@ -249,7 +242,7 @@ class ConfigurationModel extends BaseRegisterModel {
      * @param {string} sADCConstant the name of the SHUNT_ADC_RESOLUTION key in the Constants file
      * @returns {number}  returns new config register as base 10 
      */
-     editConfigurationSADC = function (oldConfiguration, sADCConstant) {
+    editConfigurationSADC = function (oldConfiguration, sADCConstant) {
         // mask and clear the bits
         let mask = (1 << 4) - 1;
         let clearedOldConfiguration = oldConfiguration & ~(mask << 3);

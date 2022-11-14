@@ -1,21 +1,20 @@
 /**
- * @class CurrentModel
+ * @class PowerModel
  * 
  * @summary
- * CURRENT REGISTER: PDF REF: Figure 26 pg. 23
+ * POWER REGISTER: PDF REF: Figure 25 pg. 23
  * 
  * @description
- * The value of the Current register is calculated by multiplying 
- * the value in the Shunt Voltage register with the value in 
- * the Calibration register
+ * The Power register records power in watts by multiplying 
+ * the values of the current with the value of the bus voltage
  */
-import BaseRegisterModel from "./BaseRegisterModel.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 import Big from "big.js";
 
-class CurrentModel extends BaseRegisterModel {
+class PowerModel extends BaseRegisterModel {
 
     constructor() {
-        super("Current");
+        super("PowerVoltage");
     }
 
     /**
@@ -31,9 +30,8 @@ class CurrentModel extends BaseRegisterModel {
      * register will be matched.
      */
     bitLabels = [
-        'CSIGN',
-        'CD14', 'CD13', 'CD12', 'CD11', 'CD10', 'CD9', 'CD8', 'CD7', 'CD6',
-        'CD5', 'CD4', 'CD3', 'CD2', 'CD1', 'CD0'
+        'PD15', 'PD14', 'PD13', 'PD12', 'PD11', 'PD10', 'PD9',
+        'PD8', 'PD7', 'PD6', 'PD5', 'PD4', 'PD3', 'PD2', 'PD1', 'PD0'
     ];
 
     /**
@@ -47,24 +45,23 @@ class CurrentModel extends BaseRegisterModel {
      */
     measurement = {
         en: {
-            full: "milliamp",
-            plural: "milliamps",
-            short: "mA"
+            full: "watt",
+            plural: "watts",
+            short: "W"
         }
     }
 
     /**
-    * @method CurrentModel#calculateValue
+    * @method PowerModel#calculateValue
     * 
     * @summary
     * Takes the raw register value and formats it
-    * +32767 and -32767
     * 
     * @description
-    * Calculate the Current in amps
+    * Calculate the Power in volts
     */
     calculateValue = function (currentValue) {
-        let calculation = currentValue * this.options.currentLSB;
+        let calculation = currentValue * this.options.powerLSB;
         let formatted = new Big(calculation).toFixed(this.defaultPrecision);
         return {
             rawNumber: calculation,
@@ -73,4 +70,4 @@ class CurrentModel extends BaseRegisterModel {
     }
 }
 
-export default new CurrentModel();
+export default new PowerModel();

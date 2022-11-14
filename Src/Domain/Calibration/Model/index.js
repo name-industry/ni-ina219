@@ -13,11 +13,13 @@
  *  Full scale range, LSB or current and power, and overall system calibration
  */
 
-import BaseRegisterModel from "./BaseRegisterModel.js";
-import { Constants } from "../Constants/index.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 import Big from "big.js";
 
 class CalibrationModel extends BaseRegisterModel {
+
+    /** @type {object | undefined} */
+    activeTemplate;
 
     /** @type {number} */
     currentLSB = 0;
@@ -70,7 +72,7 @@ class CalibrationModel extends BaseRegisterModel {
     }
 
     /**
-     * @method CalibrationModel#setCustomCalibrationValues
+     * @method CalibrationModel#getCalibrationValues
      * 
      * @summary
      * EXPERIMENTAL: calculate system calc values
@@ -88,6 +90,33 @@ class CalibrationModel extends BaseRegisterModel {
             powerLSB: this.powerLSB,
             calculationValue: this.calculationValue,
             calculationValue_R: this.calculationValue_R
+        }
+    }
+
+    /**
+     * @method CalibrationModel#setActiveTemplate
+     * 
+     * @summary
+     * 
+     * @description
+     * 
+     * @param {number} newCalibration calibration register as an int
+     * @returns {object} currently active template
+     */
+    setActiveTemplate = function (template) {
+        if (template !== undefined) {
+            this.activeTemplate = template;
+        } else {
+            this.activeTemplate = undefined; // unset
+        }
+        return {
+            activeTemplate: this.activeTemplate || {}
+        }
+    }
+
+    getActiveTemplate = function () {
+        return {
+            activeTemplate: this.activeTemplate || {}
         }
     }
 
@@ -164,14 +193,14 @@ class CalibrationModel extends BaseRegisterModel {
         // maximumLSB and round up - all other libs seem to use 0.1
         // this is essentially minimumLSB
         let currentLSB = currentMaxExpectedHR.div(max15BitValue).toNumber();
-        
+
         // Attempt at rounding the currentLSB
-        let currentLSB_R = new Big(currentLSB).round(5, 1).toNumber(); 
+        let currentLSB_R = new Big(currentLSB).round(5, 1).toNumber();
 
         // trunc prior to assign
         // #note: 0.04096 is an internal fixed value in ina219
-        let calculationValue = new Big(0.04096 / (currentLSB * shuntResistanceOhmsHR)).round(0,0).toNumber();
-        let calculationValue_R = new Big(0.04096 / (currentLSB_R * shuntResistanceOhmsHR)).round(0,0).toNumber();
+        let calculationValue = new Big(0.04096 / (currentLSB * shuntResistanceOhmsHR)).round(0, 0).toNumber();
+        let calculationValue_R = new Big(0.04096 / (currentLSB_R * shuntResistanceOhmsHR)).round(0, 0).toNumber();
 
         // 20 is an internal fixed value in ina219
         let powerLSB = currentLSB * 20;

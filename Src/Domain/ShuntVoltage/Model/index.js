@@ -8,7 +8,7 @@
  * Depends on PGA settings<br />
  * default is +8 (320mV range) see PDF pg.19 Table 4. PG Bit Settings
  */
-import BaseRegisterModel from "./BaseRegisterModel.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 import Big from "big.js";
 
 class ShuntVoltageModel extends BaseRegisterModel {
