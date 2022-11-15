@@ -84,18 +84,16 @@ class NI_INA219 {
         let initI2cBus = await Device.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) return initI2cBus;
 
-        // write the configuration to the chip register
-        let configurationUpdated = await Configuration.setConfigurationByTemplateId(configurationTemplateId);
-        if (configurationUpdated.success === false) return configurationUpdated;
+        let updateSensorSettings = await this.setConfigurationByTemplateId(configurationTemplateId);
+        if (updateSensorSettings.success === false) return updateSensorSettings;
 
-        let calibrationUpdated = await Calibration.setCalibrationByTemplateId(configurationTemplateId);
-        if (calibrationUpdated.success === false) return calibrationUpdated;
-
-        return {
+        let result = {
             success: true,
             msg: "[UPS BOARD] - Ready",
-            data: {}
+            data: updateSensorSettings.data
         }
+
+        return outputAsJson(result, { passThrough: true });
 
     }
 
@@ -122,6 +120,45 @@ class NI_INA219 {
     }
 
     /**
+     * @method NI_INA219#setConfigurationByTemplateId
+     * 
+     * @summary
+     * Use a template Id to set a configuration profile
+     * 
+     * @description
+     * Sets the Configuration Register & the Calibration Register,
+     * via a Template. Currently templates are located in the Constants
+     * file but will be removed to external loaded JSON files.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     */
+    setConfigurationByTemplateId = async function (configurationTemplateId = "32V2A") {
+
+        // Hook - Pre-Action
+
+        // write the configuration to the chip register
+        let configurationUpdated = await Configuration.setConfigurationByTemplateId(configurationTemplateId);
+        if (configurationUpdated.success === false) return configurationUpdated;
+
+        // based on the configuration template update the calibration values
+        let calibrationUpdated = await Calibration.setCalibrationByTemplateId(configurationTemplateId);
+        if (calibrationUpdated.success === false) return calibrationUpdated;
+
+        let result = {
+            success: true,
+            msg: "[Update] - Configuration and Calibration updated",
+            data: {
+                configuration: configurationUpdated.data,
+                calibration: calibrationUpdated.data.calculationValues
+            }
+        }
+
+        // Hook - Post-Action
+        return outputAsJson(result, { passThrough: true });
+    }
+
+    /**
      * @method NI_INA219#getConfiguration
      * 
      * @summary
@@ -138,7 +175,7 @@ class NI_INA219 {
         // Hook - Pre-Action
         let result = await Configuration.getConfiguration();
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        return outputAsJson(result.data, {});
     }
 
     /**
@@ -178,7 +215,8 @@ class NI_INA219 {
         // Hook - Pre-Action
         let result = await Calibration.getCalibration();
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        let output = outputAsJson(result.data, {});
+        return output;
     }
 
     /**

@@ -4,32 +4,57 @@ import I2CBus from "../Src/Bus/I2C/index.js";
 // Mocking the I2C bus wrapper for the 3rd party module
 jest.mock('../Src/Bus/I2C/index.js');
 
+// Mocking Actions layer
+import Device from "../Src/Actions/Device/index.js";
+import Configuration from "../Src/Actions/Configuration/index.js";
+import Calibration from "../Src/Actions/Calibration/index.js";
+
+jest.mock("../Src/Actions/Device/index.js");
+jest.mock("../Src/Actions/Configuration/index.js");
+jest.mock("../Src/Actions/Calibration/index.js");
+
 describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
 
-    /*
     beforeEach(() => {
     });
 
     afterEach(() => {
+        // jest.clearAllMocks();
         jest.restoreAllMocks();
     })
-    */
 
     test("- method: initialize", async () => {
-        const InitResultTrue = {
-            success: true,
-            msg: "[I2c] - Bus initialized at address",
-            data: []
-        };
-        const WriteRegisterTrue = {
+
+        Device.initialize.mockResolvedValue({
             success: true,
             msg: "[I2c Bus] - Bytes written",
             data: {
                 bytesWritten: 2
             }
-        }
-        I2CBus.initialize.mockResolvedValue(InitResultTrue);
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterTrue);
+        });
+
+        const setConfigurationByTemplateIdSpy = jest.spyOn(NI_INA219, "setConfigurationByTemplateId");
+        setConfigurationByTemplateIdSpy.mockReturnValue({
+            success: true,
+            msg: "[Update] - Configuration and Calibration updated",
+            data: {
+                configuration: {
+                    busVoltageMax: 32,
+                    shuntResistanceOhms: 0.1,
+                    gainVoltage: 0.32,
+                    currentMaxExpected: 3.2,
+                    registerAsDecimal: 16111,
+                    config: 16111
+                },
+                calibration: {
+                    currentLSB: 0.00009765625,
+                    currentLSB_R: 0.0001,
+                    powerLSB: 0.001953125,
+                    calculationValue: 4194,
+                    calculationValue_R: 4096
+                }
+            }
+        });
 
         const initializeSpy = jest.spyOn(NI_INA219, "initialize");
         const result = await NI_INA219.initialize();
@@ -42,94 +67,43 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
 
-        I2CBus.initialize.mockClear();
-        I2CBus.writeRegister.mockClear();
-        initializeSpy.mockClear();
     });
 
+    test("- method: initialize ERROR. Bus", async () => {
 
-    test("- method: readRegister", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
-
-        const readRegisterSpy = jest.spyOn(NI_INA219, "readRegister");
-        const result = await NI_INA219.readRegister(0x05);
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        readRegisterSpy.mockClear();
-    });
-
-    test("- method: writeRegister", async () => {
-        const WriteRegisterTrue = {
-            success: true,
+        Device.initialize.mockResolvedValue({
+            success: false,
             msg: "[I2c Bus] - Bytes written",
             data: {
                 bytesWritten: 2
             }
-        }
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterTrue);
+        });
 
-        const writeRegisterSpy = jest.spyOn(NI_INA219, "writeRegister");
-        const result = await NI_INA219.writeRegister(0x05, 4096);
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.writeRegister.mockClear();
-        writeRegisterSpy.mockClear();
-    });
-
-    test("- method: setConfiguration", async () => {
-        const WriteRegisterTrue = {
+        const setConfigurationByTemplateIdSpy = jest.spyOn(NI_INA219, "setConfigurationByTemplateId");
+        setConfigurationByTemplateIdSpy.mockReturnValue({
             success: true,
-            msg: "[I2c Bus] - Bytes written",
+            msg: "[Update] - Configuration and Calibration updated",
             data: {
-                bytesWritten: 2
+                configuration: {
+                    busVoltageMax: 32,
+                    shuntResistanceOhms: 0.1,
+                    gainVoltage: 0.32,
+                    currentMaxExpected: 3.2,
+                    registerAsDecimal: 16111,
+                    config: 16111
+                },
+                calibration: {
+                    currentLSB: 0.00009765625,
+                    currentLSB_R: 0.0001,
+                    powerLSB: 0.001953125,
+                    calculationValue: 4194,
+                    calculationValue_R: 4096
+                }
             }
-        }
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterTrue);
+        });
 
-        const setConfigurationSpy = jest.spyOn(NI_INA219, "setConfiguration");
-        const result = await NI_INA219.setConfiguration("32V2A");
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.writeRegister.mockClear();
-        setConfigurationSpy.mockClear();
-    });
-
-    test("- method: setConfiguration - ERROR missing template ID", async () => {
-
-        const setConfigurationSpy = jest.spyOn(NI_INA219, "setConfiguration");
-        const result = await NI_INA219.setConfiguration("WRONG");
+        const initializeSpy = jest.spyOn(NI_INA219, "initialize");
+        const result = await NI_INA219.initialize();
 
         // check if its an object
         expect(result).toBeInstanceOf(Object);
@@ -138,74 +112,30 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('success', false);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
-
-        setConfigurationSpy.mockClear();
     });
 
-    test("- method: setConfiguration - ERROR with write", async () => {
-        const WriteRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Write Error",
-            data: {
-                errorName: "",
-                errorMessage: ""
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(WriteRegisterFalse);
+    test("- method: initialize ERROR. Update Configuration", async () => {
 
-        const setConfigurationSpy = jest.spyOn(NI_INA219, "setConfiguration");
-        const result = await NI_INA219.setConfiguration("32V2A");
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.writeRegister.mockClear();
-        setConfigurationSpy.mockClear();
-    });
-
-    test("- method: resetConfiguration", async () => {
-        const WriteRegisterTrue = {
+        Device.initialize.mockResolvedValue({
             success: true,
             msg: "[I2c Bus] - Bytes written",
             data: {
                 bytesWritten: 2
             }
-        }
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterTrue);
+        });
 
-        const setConfigurationSpy = jest.spyOn(NI_INA219, "resetConfiguration");
-        const result = await NI_INA219.resetConfiguration();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.writeRegister.mockClear();
-        setConfigurationSpy.mockClear();
-    });
-
-    test("- method: resetConfiguration - ERROR with write", async () => {
-        const WriteRegisterFalse = {
+        const setConfigurationByTemplateIdSpy = jest.spyOn(NI_INA219, "setConfigurationByTemplateId");
+        setConfigurationByTemplateIdSpy.mockResolvedValue({
             success: false,
             msg: "[I2c Bus] - Write Error",
             data: {
                 errorName: "",
                 errorMessage: ""
             }
-        }
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterFalse);
+        });
 
-        const setConfigurationSpy = jest.spyOn(NI_INA219, "resetConfiguration");
-        const result = await NI_INA219.resetConfiguration();
+        const initializeSpy = jest.spyOn(NI_INA219, "initialize");
+        const result = await NI_INA219.initialize();
 
         // check if its an object
         expect(result).toBeInstanceOf(Object);
@@ -214,23 +144,41 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('success', false);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
-
-        I2CBus.writeRegister.mockClear();
-        setConfigurationSpy.mockClear();
     });
 
-    test("- method: setCalibration", async () => {
-        const WriteRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesWritten: 2
-            }
-        }
-        I2CBus.writeRegister.mockResolvedValue(WriteRegisterTrue);
+    test("- method: getDeviceInformation", async () => {
 
-        const setCalibrationSpy = jest.spyOn(NI_INA219, "setCalibration");
-        const result = await NI_INA219.setCalibration();
+        Device.getDeviceInformation.mockResolvedValue({
+            success: true,
+            msg: 'getDeviceInformation - isConnected',
+            data: {
+                manufacturer: 'WaveShare',
+                deviceName: 'WaveShare UPS',
+                sensor: 'ina219',
+                type: 'Voltage reading',
+                isConnected: true,
+                address: '0x42',
+                busNumber: 1,
+                configuration: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '00111110 11101111'
+                },
+                calibration: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '00010000 00000000'
+                },
+                calculationValues: {
+                    currentLSB: 0.00009765625,
+                    currentLSB_R: 0.0001,
+                    powerLSB: 0.001953125,
+                    calculationValue: 4194,
+                    calculationValue_R: 4096
+                }
+            }
+        });
+
+        const getDeviceInformationSpy = jest.spyOn(NI_INA219, "getDeviceInformation");
+        const result = await NI_INA219.getDeviceInformation();
 
         // check if its an object
         expect(result).toBeInstanceOf(Object);
@@ -239,23 +187,125 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
+    });
 
-        I2CBus.writeRegister.mockClear();
-        setCalibrationSpy.mockClear();
+    test("- method: getDeviceInformation Not Initialized", async () => {
+
+        Device.getDeviceInformation.mockResolvedValue({
+            success: true,
+            msg: 'getDeviceInformation - isConnected',
+            data: {
+                manufacturer: 'WaveShare',
+                deviceName: 'WaveShare UPS',
+                sensor: 'ina219',
+                type: 'Voltage reading',
+                isConnected: true
+            }
+        });
+
+        const getDeviceInformationSpy = jest.spyOn(NI_INA219, "getDeviceInformation");
+        const result = await NI_INA219.getDeviceInformation();
+
+        // check if its an object
+        expect(result).toBeInstanceOf(Object);
+
+        // check if each property is found on the return
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('msg');
+        expect(result).toHaveProperty('data');
+    });
+
+    test("- method: getDeviceInformation ERROR. Bus", async () => {
+
+        Device.getDeviceInformation.mockResolvedValue({
+            success: false,
+            msg: "[I2c Bus] - Write Error",
+            data: {
+                errorName: "",
+                errorMessage: ""
+            }
+        });
+
+        const getDeviceInformationSpy = jest.spyOn(NI_INA219, "getDeviceInformation");
+        const result = await NI_INA219.getDeviceInformation();
+
+        // check if its an object
+        expect(result).toBeInstanceOf(Object);
+
+        // check if each property is found on the return
+        expect(result).toHaveProperty('success', false);
+        expect(result).toHaveProperty('msg');
+        expect(result).toHaveProperty('data');
+    });
+
+    test("- method: setConfigurationByTemplateId", async () => {
+
+        const setConfigurationByTemplateIdSpy = jest.spyOn(Configuration, "setConfigurationByTemplateId");
+        setConfigurationByTemplateIdSpy.mockResolvedValue({
+            success: true,
+            msg: 'Configuration register updated',
+            data: {
+                busVoltageMax: 32,
+                shuntResistanceOhms: 0.1,
+                gainVoltage: 0.32,
+                currentMaxExpected: 3.2,
+                registerAsDecimal: 16111,
+                config: 16111
+            }
+        });
+
+        const setCalibrationByTemplateIdSpy = jest.spyOn(Calibration, "setCalibrationByTemplateId");
+        setCalibrationByTemplateIdSpy.mockResolvedValue({
+            success: true,
+            msg: 'Calibration register updated',
+            data: {
+                template: {
+                    busVoltageMax: 32,
+                    shuntResistanceOhms: 0.1,
+                    gainVoltage: 0.32,
+                    currentMaxExpected: 3.2,
+                    registerAsDecimal: 16111,
+                    config: 16111
+                },
+                calculationValues: {
+                    currentLSB: 0.00009765625,
+                    currentLSB_R: 0.0001,
+                    powerLSB: 0.001953125,
+                    calculationValue: 4194,
+                    calculationValue_R: 4096
+                }
+            }
+        });
+
+        const INA219_setConfigurationByTemplateIdSpy = jest.spyOn(NI_INA219, "setConfigurationByTemplateId");
+
+        const result = await NI_INA219.setConfigurationByTemplateId();
+
+        // check if its an object
+        expect(result).toBeInstanceOf(Object);
+
+        // check if each property is found on the return
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('msg');
+        expect(result).toHaveProperty('data');
     });
 
     test("- method: getConfiguration", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
+
+        Configuration.getConfiguration.mockResolvedValue({
             success: true,
-            msg: "[I2c Bus] - Bytes written",
+            msg: 'Configuration',
             data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
+                register: 'Configuration',
+                valueRaw: undefined,
+                valueString: undefined,
+                valueType: {},
+                extended: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '00111110 11101111'
+                }
             }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
+        });
 
         const getConfigurationSpy = jest.spyOn(NI_INA219, "getConfiguration");
         const result = await NI_INA219.getConfiguration();
@@ -267,49 +317,49 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getConfigurationSpy.mockClear();
     });
 
-    test("- method: getConfiguration - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
+    test("- method: setCustomCalibration", async () => {
 
-        const getConfigurationSpy = jest.spyOn(NI_INA219, "getConfiguration");
-        const result = await NI_INA219.getConfiguration();
+        Calibration.setCustomCalibration.mockResolvedValue({
+            success: true,
+            msg: "Calibration register updated",
+            data: {
+                template: undefined,
+                calculationValues: {}
+            }
+        });
+
+        const setCustomCalibrationSpy = jest.spyOn(NI_INA219, "setCustomCalibration");
+        const result = await NI_INA219.setCustomCalibration(
+            32, 0.1, 0.32, 3.2
+        );
 
         // check if its an object
         expect(result).toBeInstanceOf(Object);
 
         // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
+        expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getConfigurationSpy.mockClear();
     });
 
     test("- method: getCalibration", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
+
+        Calibration.getCalibration.mockResolvedValue({
             success: true,
-            msg: "[I2c Bus] - Bytes written",
+            msg: 'Calibration',
             data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
+                register: 'Calibration',
+                valueRaw: undefined,
+                valueString: undefined,
+                valueType: {},
+                extended: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '00010000 00000000'
+                }
             }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
+        });
 
         const getCalibrationSpy = jest.spyOn(NI_INA219, "getCalibration");
         const result = await NI_INA219.getCalibration();
@@ -321,415 +371,6 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('success', true);
         expect(result).toHaveProperty('msg');
         expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getCalibrationSpy.mockClear();
-    });
-
-    test("- method: getCalibration - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
-
-        const getCalibrationSpy = jest.spyOn(NI_INA219, "getCalibration");
-        const result = await NI_INA219.getCalibration();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getCalibrationSpy.mockClear();
-    });
-
-    test("- method: getBusVoltage", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        const result = await NI_INA219.getBusVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getBusVoltageSpy.mockClear();
-    });
-
-    test("- method: getBusVoltage - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        const result = await NI_INA219.getBusVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getBusVoltageSpy.mockClear();
-    });
-
-    test("- method: getShuntVoltage", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
-
-        const getShuntVoltageSpy = jest.spyOn(NI_INA219, "getShuntVoltage");
-        const result = await NI_INA219.getShuntVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getShuntVoltageSpy.mockClear();
-    });
-
-    test("- method: getShuntVoltage - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
-
-        const getShuntVoltageSpy = jest.spyOn(NI_INA219, "getShuntVoltage");
-        const result = await NI_INA219.getShuntVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getShuntVoltageSpy.mockClear();
-    });
-
-    test("- method: getPower", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
-
-        const getPowerSpy = jest.spyOn(NI_INA219, "getPower");
-        const result = await NI_INA219.getPower();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getPowerSpy.mockClear();
-    });
-
-    test("- method: getPower - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
-
-        const getPowerSpy = jest.spyOn(NI_INA219, "getPower");
-        const result = await NI_INA219.getPower();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getPowerSpy.mockClear();
-    });
-
-    test("- method: getCurrent", async () => {
-        const mockReadBuffer = Buffer.alloc(2, 0, "utf-8");
-        const ReadRegisterTrue = {
-            success: true,
-            msg: "[I2c Bus] - Bytes written",
-            data: {
-                bytesRead: 2,
-                buffer: mockReadBuffer,
-                payload: mockReadBuffer.readInt16BE(0, 2)
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterTrue);
-
-        const getCurrentSpy = jest.spyOn(NI_INA219, "getCurrent");
-        const result = await NI_INA219.getCurrent();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getCurrentSpy.mockClear();
-    });
-
-    test("- method: getCurrent - ERROR with read", async () => {
-        const ReadRegisterFalse = {
-            success: false,
-            msg: "[I2c Bus] - Read Error",
-            data: {
-                errorName: "Error name",
-                errorMessage: "Error in underlying lib"
-            }
-        }
-        I2CBus.readRegister.mockResolvedValue(ReadRegisterFalse);
-
-        const getCurrentSpy = jest.spyOn(NI_INA219, "getCurrent");
-        const result = await NI_INA219.getCurrent();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        I2CBus.readRegister.mockClear();
-        getCurrentSpy.mockClear();
-    });
-
-    test("- method: getPowerSupplyVoltage", async () => {
-
-        // Mock BV
-        const BusVoltageReadRegisterTrue = {
-            success: true,
-            msg: 'BusVoltage',
-            data: {
-                register: 'BusVoltage',
-                valueRaw: 8.396,
-                valueString: '8.3960',
-                valueType: { full: 'volt', plural: 'volts', short: 'V' },
-                extended: {
-                    mappedLabelsAndBits: [],
-                    registerAsBinaryString: '01000001 10011000'
-                }
-            }
-        }
-
-        // Mock SV
-        const ShuntVoltageReadRegisterTrue = {
-            success: true,
-            msg: 'ShuntVoltage',
-            data: {
-                register: 'ShuntVoltage',
-                valueRaw: 0.00002,
-                valueString: '0.0000',
-                valueType: { full: 'milli-volt', plural: 'milli-volts', short: 'mV' },
-                extended: {
-                    mappedLabelsAndBits: [],
-                    registerAsBinaryString: '00000000 00000010'
-                }
-            }
-        }
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        getBusVoltageSpy.mockReturnValue(BusVoltageReadRegisterTrue);
-
-        const getShuntVoltageSpy = jest.spyOn(NI_INA219, "getShuntVoltage");
-        getShuntVoltageSpy.mockReturnValue(ShuntVoltageReadRegisterTrue);
-
-        const getPowerSupplyVoltage = jest.spyOn(NI_INA219, "getPowerSupplyVoltage");
-        const result = await NI_INA219.getPowerSupplyVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        getPowerSupplyVoltage.mockClear();
-        getBusVoltageSpy.mockClear();
-        getShuntVoltageSpy.mockClear();
-    });
-
-    test("- method: getPowerSupplyVoltage - ERROR with read", async () => {
-        // Mock BV
-        const BusVoltageReadRegisterFalse = {
-            success: false,
-            msg: 'BusVoltage',
-            data: {}
-        }
-
-        // Mock SV
-        const ShuntVoltageReadRegisterTrue = {
-            success: true,
-            msg: 'ShuntVoltage',
-            data: {
-                register: 'ShuntVoltage',
-                valueRaw: 0.00002,
-                valueString: '0.0000',
-                valueType: { full: 'milli-volt', plural: 'milli-volts', short: 'mV' },
-                extended: {
-                    mappedLabelsAndBits: [],
-                    registerAsBinaryString: '00000000 00000010'
-                }
-            }
-        }
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        getBusVoltageSpy.mockReturnValue(BusVoltageReadRegisterFalse);
-
-        const getShuntVoltageSpy = jest.spyOn(NI_INA219, "getShuntVoltage");
-        getShuntVoltageSpy.mockReturnValue(ShuntVoltageReadRegisterTrue);
-
-        const getPowerSupplyVoltage = jest.spyOn(NI_INA219, "getPowerSupplyVoltage");
-        const result = await NI_INA219.getPowerSupplyVoltage();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        getPowerSupplyVoltage.mockClear();
-        getBusVoltageSpy.mockClear();
-        getShuntVoltageSpy.mockClear();
-    });
-
-    test("- method: getChargeRemaining", async () => {
-
-        // Mock BV
-        const BusVoltageReadRegisterTrue = {
-            success: true,
-            msg: 'BusVoltage',
-            data: {
-                register: 'BusVoltage',
-                valueRaw: 8.396,
-                valueString: '8.3960',
-                valueType: { full: 'volt', plural: 'volts', short: 'V' },
-                extended: {
-                    mappedLabelsAndBits: [],
-                    registerAsBinaryString: '01000001 10011000'
-                }
-            }
-        }
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        getBusVoltageSpy.mockReturnValue(BusVoltageReadRegisterTrue);
-
-        const getChargeRemaining = jest.spyOn(NI_INA219, "getChargeRemaining");
-        const result = await NI_INA219.getChargeRemaining();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', true);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        getChargeRemaining.mockClear();
-        getBusVoltageSpy.mockClear();
-    });
-
-    test("- method: getChargeRemaining - ERROR with read", async () => {
-        // Mock BV
-        const BusVoltageReadRegisterFalse = {
-            success: false,
-            msg: 'BusVoltage',
-            data: {}
-        }
-
-        const getBusVoltageSpy = jest.spyOn(NI_INA219, "getBusVoltage");
-        getBusVoltageSpy.mockReturnValue(BusVoltageReadRegisterFalse);
-
-        const getChargeRemaining = jest.spyOn(NI_INA219, "getChargeRemaining");
-        const result = await NI_INA219.getChargeRemaining();
-
-        // check if its an object
-        expect(result).toBeInstanceOf(Object);
-
-        // check if each property is found on the return
-        expect(result).toHaveProperty('success', false);
-        expect(result).toHaveProperty('msg');
-        expect(result).toHaveProperty('data');
-
-        getChargeRemaining.mockClear();
-        getBusVoltageSpy.mockClear();
     });
 
 })

@@ -70,7 +70,11 @@ class Configuration {
         let readResult = await ConfigurationService.readRegister();
         if (readResult.success === true) {
             ConfigurationModel.hydrate(readResult.data, "en", true);
-            return ConfigurationModel.getCurrentValues();
+            return {
+                success: true,
+                msg: "Calibration",
+                data: ConfigurationModel.getCurrentValues()
+            }
         } else {
             return readResult;
         }

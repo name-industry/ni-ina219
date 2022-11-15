@@ -27,9 +27,12 @@ const formattedOutput = function (valueObject) {
 const initUPS = async function () {
 
     // initialize the system
-    let started = await NI_INA219.initialize(0x42);
+    let INIT = await NI_INA219.initialize(0x42);
 
-    if (started.success === true) {
+    console.log("INIT", INIT);
+    console.log("    ");
+
+    if (INIT.success === true) {
 
         // Device info available
         let DEVICE = await NI_INA219.getDeviceInformation();

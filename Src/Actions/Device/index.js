@@ -36,13 +36,20 @@ class Device {
             manufacturer: "WaveShare",
             deviceName: "WaveShare UPS",
             sensor: "ina219",
-            type: "Voltage reading"
+            type: "Voltage reading",
+            isConnected: false
         }
 
         if (this.isInitialized === true) {
 
+            // exit on first error and bubble up error
             let currentConfiguration = await Configuration.getConfiguration();
+            if (currentConfiguration.success === false) return currentConfiguration;
+
             let currentCalibration = await Calibration.getCalibration();
+            if (currentCalibration.success === false) return currentCalibration;
+
+            // If above is true then we have calculation values
             let currentCalculationValues = await Calibration.getCalculationValues();
 
             let extendedInformation = baseInformation;

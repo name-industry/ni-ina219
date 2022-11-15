@@ -144,7 +144,11 @@ class Calibration {
         let readResult = await CalibrationService.readRegister();
         if (readResult.success === true) {
             CalibrationModel.hydrate(readResult.data, "en", true);
-            return CalibrationModel.getCurrentValues();
+            return {
+                success: true,
+                msg: "Calibration",
+                data: CalibrationModel.getCurrentValues()
+            }
         } else {
             return readResult;
         }
