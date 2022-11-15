@@ -1,24 +1,26 @@
 /**
- * @class PowerSupplyModel
+ * @class ChargeRemainingModel
  * 
  * @summary
- * POWER Supply Model
+ * Charge Remaining Model
  * 
  * @description
- * The WaveShare UPS Hat, calculates the PSU Voltage
- * by adding the bus voltage and the shunt voltage.
+ * The WaveShare UPS Hat, calculates the battery charge
+ * remaining by using the Bus Voltage and calculating 
+ * with some "magic numbers". Not actually sure how this is 
+ * derived.
  */
-import BaseRegisterModel from "./BaseRegisterModel.js";
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
 import Big from "big.js";
 
-class PowerSupplyModel extends BaseRegisterModel {
+class ChargeRemainingModel extends BaseRegisterModel {
 
     constructor() {
-        super("PowerSupplyVoltage");
+        super("ChargeRemainingModel");
     }
 
     /**
-     * @method PowerSupplyModel#formatData
+     * @method ChargeRemainingModel#formatData
      * 
      * @summary
      * Overrides - This model is a calculation only model no registers
@@ -28,7 +30,7 @@ class PowerSupplyModel extends BaseRegisterModel {
      * where data is not applicable while retaining the method return
      * fingerprint.
      */
-     formatData = function () {
+    formatData = function () {
         let calculatedValue = this.calculateValue();
         this.currentFormattedData = {
             register: this.registerName,
@@ -55,26 +57,27 @@ class PowerSupplyModel extends BaseRegisterModel {
      */
     measurement = {
         en: {
-            full: "volt",
-            plural: "volts",
-            short: "V"
+            full: "percent",
+            plural: "percent",
+            short: "%"
         }
     }
 
     /**
-    * @method PowerSupplyModel#calculateValue
+    * @method ChargeRemainingModel#calculateValue
     * 
     * @summary
-    * Requires results from BusVoltage and ShuntVoltage
+    * Requires results from BusVoltage
     * 
     * @description
-    * Calculate the PowerSupply voltage
+    * Calculate the battery charge remaining in %. Note: I have no
+    * idea what 6 or 2.4 is ion regards to.
     */
     calculateValue = function () {
-        let busVoltage = this.currentRawData.busVoltage.data.valueRaw;
-        let shuntVoltage = this.currentRawData.shuntVoltage.data.valueRaw;
-        let calculation =  busVoltage + shuntVoltage;
-        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        let calculation = (this.currentRawData.valueRaw - 6) / 2.4 * 100;
+        if (calculation > 100) calculation = 100;
+        if (calculation < 0) calculation = 0;
+        let formatted = new Big(calculation).toFixed(0);
         return {
             rawNumber: calculation,
             withPrecision: formatted
@@ -82,4 +85,4 @@ class PowerSupplyModel extends BaseRegisterModel {
     }
 }
 
-export default new PowerSupplyModel();
+export default new ChargeRemainingModel();

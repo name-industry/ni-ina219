@@ -64,11 +64,11 @@ const initUPS = async function () {
         console.log("    POWER WATTS          ", formattedOutput(POWER_WATTS));
 
         // PSU voltage - Custom calc for WaveShare Hat only
-        let POWER_SUPPLY_VOLTAGE = await NI_INA219.getPowerSupplyVoltage();
+        let POWER_SUPPLY_VOLTAGE = await NI_INA219.getPowerSupplyVoltageWS();
         console.log("    POWER SUPPLY VOLTAGE ", formattedOutput(POWER_SUPPLY_VOLTAGE));
 
         // Battery charge remaining - Custom calc for WaveShare Hat only
-        let CHARGE_REMAINING = await NI_INA219.getChargeRemaining();
+        let CHARGE_REMAINING = await NI_INA219.getChargeRemainingWS();
         console.log("    CHARGE REMAINING     ", formattedOutput(CHARGE_REMAINING));
 
         console.log("    ");

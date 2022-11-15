@@ -31,7 +31,6 @@
  */
 
 import { Constants } from "./Constants/index.js";
-import { Models } from "./Models/index.js";
 
 // Actions/Domains
 import Device from "./Actions/Device/index.js";
@@ -41,6 +40,10 @@ import BusVoltage from "./Actions/BusVoltage/index.js";
 import ShuntVoltage from "./Actions/ShuntVoltage/index.js";
 import Power from "./Actions/Power/index.js";
 import Current from "./Actions/Current/index.js";
+
+// Action/Domains -> WaveShare UPS Hat.
+import WSpowerSupplyVoltage from "./Actions/WSpowerSupplyVoltage/index.js";
+import WSchargeRemaining from "./Actions/WSchargeRemaining/index.js";
 
 // Temp responder in input file
 // TODO: move into Action files 
@@ -115,7 +118,7 @@ class NI_INA219 {
         // Hook - Pre-Action
         let result = await Device.getDeviceInformation(Configuration, Calibration);
         // Hook - Post-Action
-        return outputAsJson(result, {passThrough: true});
+        return outputAsJson(result, { passThrough: true });
     }
 
     /**
@@ -278,20 +281,17 @@ class NI_INA219 {
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
-    getPowerSupplyVoltage = async function () {
+    getPowerSupplyVoltageWS = async function () {
+
+        // Hook - Pre-Action
+
         let busVoltage = await this.getBusVoltage();
         let shuntVoltage = await this.getShuntVoltage();
 
         if (busVoltage.success && shuntVoltage.success) {
-            Models.powerSupplyModel.hydrate(
-                {
-                    busVoltage: busVoltage,
-                    shuntVoltage: shuntVoltage
-                },
-                "en",
-                true
-            );
-            return outputAsJson(Models.powerSupplyModel.getCurrentValues(), {});
+            let result = await WSpowerSupplyVoltage.getPSUVoltage(busVoltage, shuntVoltage);
+            // Hook - Post-Action
+            return outputAsJson(result, {});
         } else {
             // return first error for now
             // TODO: generate a compound error dto
@@ -313,11 +313,11 @@ class NI_INA219 {
      * @async
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
-    getChargeRemaining = async function () {
+    getChargeRemainingWS = async function () {
         let busVoltage = await this.getBusVoltage();
         if (busVoltage.success === true) {
-            Models.chargeRemainingModel.hydrate(busVoltage.data, "en", true);
-            return outputAsJson(Models.chargeRemainingModel.getCurrentValues(), {});
+            let result = await WSchargeRemaining.getChargeRemaining(busVoltage.data);
+            return outputAsJson(result, {});
         } else {
             return busVoltage;
         }
