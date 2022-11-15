@@ -1,7 +1,11 @@
 export const outputAsJson = function (data, options) {
-    return {
-        success: true,
-        msg: data.register,
-        data: data
-    };
+    if (options.passThrough) {
+        return data;
+    } else {
+        return {
+            success: true,
+            msg: data.register,
+            data: data
+        }
+    }
 }

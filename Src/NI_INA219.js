@@ -33,10 +33,8 @@
 import { Constants } from "./Constants/index.js";
 import { Models } from "./Models/index.js";
 
-// Wrapper for I2c npm package
-import I2CBus from "./Bus/I2C/index.js";
-
 // Actions/Domains
+import Device from "./Actions/Device/index.js";
 import Configuration from "./Actions/Configuration/index.js";
 import Calibration from "./Actions/Calibration/index.js";
 import BusVoltage from "./Actions/BusVoltage/index.js";
@@ -49,9 +47,6 @@ import Current from "./Actions/Current/index.js";
 import { outputAsJson } from "./Responder/index.js";
 
 class NI_INA219 {
-
-    /** @type {boolean} */
-    isInitialized = false;
 
     /**
      * @method NI_INA219#initialize
@@ -83,7 +78,7 @@ class NI_INA219 {
     ) {
 
         // get handle to I2c bus and sensor
-        let initI2cBus = await I2CBus.initialize(i2cAddress, busNumber);
+        let initI2cBus = await Device.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) return initI2cBus;
 
         // write the configuration to the chip register
@@ -92,10 +87,6 @@ class NI_INA219 {
 
         let calibrationUpdated = await Calibration.setCalibrationByTemplateId(configurationTemplateId);
         if (calibrationUpdated.success === false) return calibrationUpdated;
-
-        this.isInitialized = true;
-        this.i2cAddress = i2cAddress;
-        this.busNumber = busNumber;
 
         return {
             success: true,
@@ -121,37 +112,10 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
      */
     getDeviceInformation = async function () {
-
-        let baseInformation = {
-            manufacturer: "WaveShare",
-            deviceName: "WaveShare UPS",
-            sensor: "ina219",
-            type: "Voltage reading"
-        }
-
-        if (this.isInitialized === true) {
-
-            let currentConfiguration = Configuration.getConfiguration();
-
-            let extendedInformation = baseInformation;
-            extendedInformation.isConnected = true;
-            extendedInformation.address = this.i2cAddress;
-            extendedInformation.busNumber = this.I2CBus;
-            extendedInformation.currentConfiguration = currentConfiguration;
-
-            return {
-                success: true,
-                msg: "getDeviceInformation - isConnected",
-                data: extendedInformation
-            }
-
-        } else {
-            return {
-                success: true,
-                msg: "getDeviceInformation - not initialized",
-                data: baseInformation
-            }
-        }
+        // Hook - Pre-Action
+        let result = await Device.getDeviceInformation(Configuration, Calibration);
+        // Hook - Post-Action
+        return outputAsJson(result, {passThrough: true});
     }
 
     /**
@@ -170,29 +134,6 @@ class NI_INA219 {
     getConfiguration = async function () {
         // Hook - Pre-Action
         let result = await Configuration.getConfiguration();
-        // Hook - Post-Action
-        return outputAsJson(result, {});
-    }
-
-    /**
-     * @method NI_INA219#triggerCalibration
-     * 
-     * @summary
-     * Write the calibration value the the Chip register 
-     * 
-     * @description
-     * When the system board settings are saved in the configuration 
-     * register, we get back calibration and measurement values that
-     * we can use to calibrate the results. This method also can be 
-     * used along with reading Power to trigger the main read register
-     * to calculate fresh values.
-     * 
-     * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
-     */
-    triggerCalibration = async function (trigger, options) {
-        // Hook - Pre-Action
-        let result = await Calibration.triggerCalibration();
         // Hook - Post-Action
         return outputAsJson(result, {});
     }

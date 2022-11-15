@@ -22,6 +22,8 @@ import i2c from 'i2c-bus';
 class I2CBus {
 
     constructor() {
+        this.i2cAddressAsHex = 0x00;
+        this.busNumber = -1;
     }
 
     /**
@@ -65,14 +67,15 @@ class I2CBus {
             }
         } else {
 
-            this.setCurrentBusData(i2cAddress, wire);
+            this.setCurrentBusData(i2cAddress, wire, busNumber, "0x" + i2cAddress.toString(16));
 
             return {
                 success: true,
                 msg: "[I2c] - Ready",
                 data: {
                     wire: wire,
-                    i2cAddressRequested: "0x" + i2cAddress.toString(16),
+                    busNumber: busNumber,
+                    i2cAddressAsHex: "0x" + i2cAddress.toString(16),
                     allAddresses: allAddressesFound.map((v, i) => { return "0x" + v.toString(16) })
                 }
             }
@@ -88,9 +91,11 @@ class I2CBus {
      * @param {Number} i2cAddress 
      * @param {Promise<Object>} wire 
      */
-    setCurrentBusData = function (i2cAddress, wire) {
+    setCurrentBusData = function (i2cAddress, wire, busNumber, i2cAddressAsHex) {
         this.i2cAddress = i2cAddress;
         this.wire = wire;
+        this.busNumber = busNumber;
+        this.i2cAddressAsHex = i2cAddressAsHex;
     }
 
     /**

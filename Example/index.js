@@ -31,12 +31,16 @@ const initUPS = async function () {
 
     if (started.success === true) {
 
+        // Device info available
+        let DEVICE = await NI_INA219.getDeviceInformation();
+        console.log("DEVICE", DEVICE);
+        console.log("    ");
+
         // DEBUG shows full return JSON object 
 
         // get the current active system configuration
         let CONFIGURATION = await NI_INA219.getConfiguration();
         console.log("CONFIGURATION", CONFIGURATION);
-
         console.log("    ");
         
         // get the current active calibration values
