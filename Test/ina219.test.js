@@ -518,4 +518,101 @@ describe("[./Src/NI_INA.js] Suite - Method return shape testing", () => {
         expect(result).toHaveProperty('data');
     });
 
+    test("- method: getPowerSupplyVoltageWS", async () => {
+
+        BusVoltage.getBusVoltage.mockResolvedValue({
+            success: true,
+            msg: 'Bus Voltage',
+            data: {
+                register: 'BusVoltage',
+                valueRaw: 8.396,
+                valueString: '8.3960',
+                valueType: { full: 'volt', plural: 'volts', short: 'V' },
+                extended: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '01000001 10011000'
+                }
+            }
+        });
+
+        ShuntVoltage.getShuntVoltage.mockResolvedValue({
+            success: true,
+            msg: 'Shunt Voltage',
+            data: {
+                register: 'ShuntVoltage',
+                valueRaw: 0.000030000000000000004,
+                valueString: '0.0000',
+                valueType: { full: 'milli-volt', plural: 'milli-volts', short: 'mV' },
+                extended: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '00000000 00000011'
+                }
+            }
+        });
+
+        WSpowerSupplyVoltage.getPSUVoltage.mockResolvedValue({
+            success: true,
+            msg: 'PSU Supply Voltage',
+            data: {
+                register: 'PowerSupplyVoltage',
+                valueRaw: 0,
+                valueString: '8.3960',
+                valueType: { full: 'volt', plural: 'volts', short: 'V' },
+                extended: { mappedLabelsAndBits: [], registerAsBinaryString: '' }
+            }
+        });
+
+        const getPowerSupplyVoltageWSSpy = jest.spyOn(NI_INA219, "getPowerSupplyVoltageWS");
+        const result = await NI_INA219.getPowerSupplyVoltageWS();
+
+        // check if its an object
+        expect(result).toBeInstanceOf(Object);
+
+        // check if each property is found on the return
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('msg');
+        expect(result).toHaveProperty('data');
+    });
+
+    test("- method: getChargeRemainingWS", async () => {
+
+        BusVoltage.getBusVoltage.mockResolvedValue({
+            success: true,
+            msg: 'Bus Voltage',
+            data: {
+                register: 'BusVoltage',
+                valueRaw: 8.396,
+                valueString: '8.3960',
+                valueType: { full: 'volt', plural: 'volts', short: 'V' },
+                extended: {
+                    mappedLabelsAndBits: {},
+                    registerAsBinaryString: '01000001 10011000'
+                }
+            }
+        });
+
+        WSchargeRemaining.getChargeRemaining.mockResolvedValue({
+            success: true,
+            msg: 'PowerSupplyVoltage',
+            data: {
+                register: 'ChargeRemainingModel',
+                valueRaw: 0,
+                valueString: '100',
+                valueType: { full: 'percent', plural: 'percent', short: '%' },
+                extended: { mappedLabelsAndBits: [], registerAsBinaryString: '' }
+            }
+        });
+
+        const getPowerSupplyVoltageWSSpy = jest.spyOn(NI_INA219, "getChargeRemainingWS");
+        const result = await NI_INA219.getChargeRemainingWS();
+
+        // check if its an object
+        expect(result).toBeInstanceOf(Object);
+
+        // check if each property is found on the return
+        expect(result).toHaveProperty('success', true);
+        expect(result).toHaveProperty('msg');
+        expect(result).toHaveProperty('data');
+    });
+
 })

@@ -323,18 +323,18 @@ class NI_INA219 {
 
         // Hook - Pre-Action
 
-        let busVoltage = await this.getBusVoltage();
-        let shuntVoltage = await this.getShuntVoltage();
+        let busVoltage = await BusVoltage.getBusVoltage();
+        if (!busVoltage.success) return busVoltage;
 
-        if (busVoltage.success && shuntVoltage.success) {
-            let result = await WSpowerSupplyVoltage.getPSUVoltage(busVoltage, shuntVoltage);
-            // Hook - Post-Action
-            return outputAsJson(result, {});
-        } else {
-            // return first error for now
-            // TODO: generate a compound error dto
-            return (busVoltage.success === true) ? shuntVoltage : busVoltage;
-        }
+        let shuntVoltage = await ShuntVoltage.getShuntVoltage();
+        if (!shuntVoltage.success) return shuntVoltage;
+
+        let result = await WSpowerSupplyVoltage.getPSUVoltage(busVoltage, shuntVoltage);
+        if (!result.success) return result;
+
+        // Hook - Post-Action
+
+        return outputAsJson(result.data, {});
     }
 
     /**
@@ -352,13 +352,18 @@ class NI_INA219 {
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     getChargeRemainingWS = async function () {
-        let busVoltage = await this.getBusVoltage();
-        if (busVoltage.success === true) {
-            let result = await WSchargeRemaining.getChargeRemaining(busVoltage.data);
-            return outputAsJson(result, {});
-        } else {
-            return busVoltage;
-        }
+
+        // Hook - Pre-Action
+
+        let busVoltage = await BusVoltage.getBusVoltage();
+        if (!busVoltage.success) return busVoltage;
+
+        let result = await WSchargeRemaining.getChargeRemaining(busVoltage.data);
+        if (!result.success) return result;
+
+        // Hook - Post-Action
+
+        return outputAsJson(result.data, {});
     }
 
 }

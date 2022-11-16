@@ -20,7 +20,11 @@ class WSchargeRemaining {
             "en",
             true
         );
-        return WSchargeRemainingModel.getCurrentValues();
+        return {
+            success: true,
+            msg: "PowerSupplyVoltage",
+            data: WSchargeRemainingModel.getCurrentValues()
+        }
     }
 }
 

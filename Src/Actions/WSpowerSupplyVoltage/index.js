@@ -15,6 +15,7 @@ class WSpowerSupplyVoltage {
     constructor() { };
 
     getPSUVoltage = async function (busVoltage, shuntVoltage) {
+
         WSpowerSupplyVoltageModel.hydrate(
             {
                 busVoltage: busVoltage,
@@ -23,7 +24,11 @@ class WSpowerSupplyVoltage {
             "en",
             true
         );
-        return WSpowerSupplyVoltageModel.getCurrentValues();
+        return {
+            success: true,
+            msg: "PowerSupplyVoltage",
+            data: WSpowerSupplyVoltageModel.getCurrentValues()
+        }
     }
 }
 

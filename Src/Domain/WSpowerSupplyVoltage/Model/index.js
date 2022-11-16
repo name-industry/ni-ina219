@@ -28,11 +28,11 @@ class PowerSupplyModel extends BaseRegisterModel {
      * where data is not applicable while retaining the method return
      * fingerprint.
      */
-     formatData = function () {
+    formatData = function () {
         let calculatedValue = this.calculateValue();
         this.currentFormattedData = {
             register: this.registerName,
-            valueRaw: 0,
+            valueRaw: calculatedValue.rawNumber,
             valueString: calculatedValue.withPrecision,
             valueType: this.measurement[this.language]
         }
@@ -73,7 +73,7 @@ class PowerSupplyModel extends BaseRegisterModel {
     calculateValue = function () {
         let busVoltage = this.currentRawData.busVoltage.data.valueRaw;
         let shuntVoltage = this.currentRawData.shuntVoltage.data.valueRaw;
-        let calculation =  busVoltage + shuntVoltage;
+        let calculation = busVoltage + shuntVoltage;
         let formatted = new Big(calculation).toFixed(this.defaultPrecision);
         return {
             rawNumber: calculation,

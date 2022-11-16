@@ -34,7 +34,7 @@ class ChargeRemainingModel extends BaseRegisterModel {
         let calculatedValue = this.calculateValue();
         this.currentFormattedData = {
             register: this.registerName,
-            valueRaw: 0,
+            valueRaw: calculatedValue.rawNumber,
             valueString: calculatedValue.withPrecision,
             valueType: this.measurement[this.language]
         }
