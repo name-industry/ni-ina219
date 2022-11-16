@@ -1,8 +1,4 @@
 import NI_INA219 from "../index";
-import I2CBus from "../Src/Bus/I2C/index.js";
-
-// Mocking the I2C bus wrapper for the 3rd party module
-jest.mock('../Src/Bus/I2C/index.js');
 
 // Mocking Actions layer
 import Device from "../Src/Actions/Device/index.js";

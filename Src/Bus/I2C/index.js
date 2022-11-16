@@ -21,10 +21,17 @@ import i2c from 'i2c-bus';
 
 class I2CBus {
 
-    constructor() {
-        this.i2cAddressAsHex = 0x00;
-        this.busNumber = -1;
-    }
+    /** @type {Number} */
+    i2cAddress = 66; // UPS Hat address
+
+    /** @type {Object | Undefined} */
+    wire = undefined;
+    
+    /** @type {Number} */
+    busNumber = 1; // default on PI "/dev/i2c-1"
+    
+    /** @type {String} */
+    i2cAddressAsHex = "0x42"; // UPS Hat address
 
     /**
      * @method I2cBus#initialize
@@ -35,28 +42,44 @@ class I2CBus {
      * bus object does not fail/error on "open" of an arbitrary
      * hardware bus line.
      * 
-     * @param {Number} i2cAddress Address in hex of the sensor ie: 0x24
+     * @param {Number} i2cAddress Address in hex of the sensor ie: 0x42 || 66 
      * @param {Number} busNumber The Bus address as an integer ie: 1 ( for PI ) 
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
     initialize = async function (
-        i2cAddress,
-        busNumber
+        i2cAddress = 0x42, // note: JS passes around and displays Decimal
+        busNumber = 1,
+        options = {}
     ) {
         let wire;
         try {
-            wire = await i2c.openPromisified(busNumber).then(wire => wire);
+            wire = await i2c.openPromisified(busNumber, options).then(wire => wire);
         } catch (error) {
             return {
                 success: false,
-                msg: "[I2c] - Error on Open",
-                data: error
+                msg: "[I2c] - Error on open I2CBus",
+                data: {
+                    errorMessage: error.stack.split("\n")[0],
+                    errorStack: error
+                }
             }
         }
 
-        let allAddressesFound = await wire.scan();
+        // I2C_Bus docs do not say anything about scan being Promises
+        // but wire.scan returns a promise.
+        // TODO: set timer prior to calling this.
+        //       on occasion the bus hangs the underlying request 
+        //       can lock up the program ( PI )
+        let addressFound = await wire.scan(i2cAddress);
 
-        if (allAddressesFound.length === 0) {
+        // delay
+
+        // Sometimes a sensor is in sleep mode ( not the UPS Hat )
+        // so we can pause and re-scan again ( a scan can trigger a wake up 
+        // making the sensor visible on I2c )
+        addressFound = await wire.scan(i2cAddress);
+
+        if (addressFound.length === 0) {
             return {
                 success: false,
                 msg: "[I2c] - No device found",
@@ -75,8 +98,7 @@ class I2CBus {
                 data: {
                     wire: wire,
                     busNumber: busNumber,
-                    i2cAddressAsHex: "0x" + i2cAddress.toString(16),
-                    allAddresses: allAddressesFound.map((v, i) => { return "0x" + v.toString(16) })
+                    i2cAddressAsHex: "0x" + i2cAddress.toString(16)
                 }
             }
         }
@@ -89,7 +111,9 @@ class I2CBus {
      * Class setter for keeping track of the current bus settings
      * 
      * @param {Number} i2cAddress 
-     * @param {Promise<Object>} wire 
+     * @param {Object} wire 
+     * @param {Number} busNumber 
+     * @param {String} i2cAddressAsHex 
      */
     setCurrentBusData = function (i2cAddress, wire, busNumber, i2cAddressAsHex) {
         this.i2cAddress = i2cAddress;
@@ -99,17 +123,38 @@ class I2CBus {
     }
 
     /**
-     * @method I2cBus#removeBus
+     * @method I2cBus#getConnectedDevices
      * 
      * @summary 
-     * Class setter for keeping track of the current bus settings
+     * Expose bus scan in the odd case its needed
      * 
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
-    removeBus = function () {
-        // shutdown gracefully
-        // return promise when complete
-    };
+    getConnectedDevices = async function () {
+        // active + asleep
+        let allAddressesFound = await wire.scan();
+        
+        // delay
+
+        // active ( waking up asleep )
+        allAddressesFound = await wire.scan();
+
+        if (allAddressesFound.length === 0) {
+            return {
+                success: false,
+                msg: "[I2c] - No devices found",
+                data: {}
+            }
+        } else {
+            return {
+                success: true,
+                msg: "[I2c] - All devices on bus",
+                data: {
+                    allAddresses: allAddressesFound.map((v, i) => { return "0x" + v.toString(16) })
+                }
+            }
+        }
+    }
 
     /**
      * @method I2cBus#readRegister
@@ -121,7 +166,7 @@ class I2CBus {
      * Registers are 16 bits. 2 bytes.
      * Requires the I2c register address in Hex to read from
      * 
-     * @param {Number} the address in hex of the register to read from ie: 0x24 
+     * @param {Number} register address in hex of the register to read from ie: 0x01 
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns value object 
      */
     readRegister = async function (register) {
@@ -156,8 +201,8 @@ class I2CBus {
     /**
      * @method I2cBus#writeRegister 
      * 
-     * @param {Number} register 
-     * @param {Number} value 
+     * @param {Number} register address in hex of the register to write to ie: 0x04 
+     * @param {Number} value the new value to be written to the register
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
      */
     writeRegister = async function (register, value) {
@@ -185,7 +230,8 @@ class I2CBus {
             success: true,
             msg: "[I2c Bus] - Bytes written",
             data: {
-                bytesWritten: data
+                register: register,
+                value: value
             }
         }
     }
