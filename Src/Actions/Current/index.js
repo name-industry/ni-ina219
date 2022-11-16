@@ -22,7 +22,11 @@ class Current {
             CurrentModel.hydrate(readResult.data, "en", true, {
                 currentLSB: currentLSB
             });
-            return CurrentModel.getCurrentValues();
+            return {
+                success: true,
+                msg: "Power",
+                data: CurrentModel.getCurrentValues()
+            }
         } else {
             return readResult;
         }

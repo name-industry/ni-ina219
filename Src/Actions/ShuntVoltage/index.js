@@ -20,7 +20,11 @@
          let readResult = await ShuntVoltageService.readRegister();
          if (readResult.success === true) {
              ShuntVoltageModel.hydrate(readResult.data, "en", true);
-             return ShuntVoltageModel.getCurrentValues();
+             return {
+                success: true,
+                msg: "Shunt Voltage",
+                data: ShuntVoltageModel.getCurrentValues()
+            }
          } else {
              return readResult;
          }

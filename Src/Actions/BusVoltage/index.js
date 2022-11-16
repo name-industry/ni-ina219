@@ -20,7 +20,11 @@ class BusVoltage {
         let readResult = await BusVoltageService.readRegister();
         if (readResult.success === true) {
             BusVoltageModel.hydrate(readResult.data, "en", true);
-            return BusVoltageModel.getCurrentValues();
+            return {
+                success: true,
+                msg: "Bus Voltage",
+                data: BusVoltageModel.getCurrentValues()
+            }
         } else {
             return readResult;
         }

@@ -237,7 +237,7 @@ class NI_INA219 {
         // Hook - Pre-Action
         let result = await BusVoltage.getBusVoltage();
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        return outputAsJson(result.data, {});
     }
 
     /**
@@ -258,7 +258,7 @@ class NI_INA219 {
         // Hook - Pre-Action
         let result = await ShuntVoltage.getShuntVoltage();
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        return outputAsJson(result.data, {});
     }
 
     /**
@@ -280,7 +280,7 @@ class NI_INA219 {
         let calculationValues = Calibration.getCalculationValues();
         let result = await Power.getPower(calculationValues.powerLSB);
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        return outputAsJson(result.data, {});
     }
 
     /**
@@ -302,7 +302,7 @@ class NI_INA219 {
         let calculationValues = Calibration.getCalculationValues();
         let result = await Current.getCurrent(calculationValues.currentLSB);
         // Hook - Post-Action
-        return outputAsJson(result, {});
+        return outputAsJson(result.data, {});
     }
 
     /**

@@ -22,7 +22,11 @@ class Power {
             PowerModel.hydrate(readResult.data, "en", true, {
                 powerLSB: powerLSB
             });
-            return PowerModel.getCurrentValues();
+            return {
+                success: true,
+                msg: "Power",
+                data: PowerModel.getCurrentValues()
+            }
         } else {
             return readResult;
         }
