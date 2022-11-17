@@ -40,25 +40,30 @@ class Device {
             isConnected: false
         }
 
-        if (this.isInitialized === true) {
+        if (this.isInitialized ) {
 
             // exit on first error and bubble up error
             let currentConfiguration = await Configuration.getConfiguration();
-            if (currentConfiguration.success === false) return currentConfiguration;
+            if ( !currentConfiguration.success ) return currentConfiguration;
 
             let currentCalibration = await Calibration.getCalibration();
-            if (currentCalibration.success === false) return currentCalibration;
+            if ( !currentCalibration.success ) return currentCalibration;
 
             // If above is true then we have calculation values
             let currentCalculationValues = await Calibration.getCalculationValues();
+
+            // extra bus data
+            let foundDeviceAddresses = await I2CBus.getConnectedDevices();
+            if( !foundDeviceAddresses.success ) return foundDeviceAddresses;
 
             let extendedInformation = baseInformation;
             extendedInformation.isConnected = true;
             extendedInformation.address = I2CBus.i2cAddressAsHex;
             extendedInformation.busNumber = I2CBus.busNumber;
-            extendedInformation.configuration = currentConfiguration.extended;
-            extendedInformation.calibration = currentCalibration.extended;
+            extendedInformation.configuration = currentConfiguration.data.extended;
+            extendedInformation.calibration = currentCalibration.data.extended;
             extendedInformation.calculationValues = currentCalculationValues;
+            extendedInformation.busScan = foundDeviceAddresses.data.allAddresses;
             return {
                 success: true,
                 msg: "getDeviceInformation - isConnected",

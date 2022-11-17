@@ -21,18 +21,19 @@ import i2c from 'i2c-bus';
 
 class I2CBus {
 
-    /** @type {Number} */
-    i2cAddress = 66; // UPS Hat address
+    constructor() {
+        /** @type {Number} */
+        this.i2cAddress = 66; // UPS Hat address
 
-    /** @type {Object | Undefined} */
-    wire = undefined;
-    
-    /** @type {Number} */
-    busNumber = 1; // default on PI "/dev/i2c-1"
-    
-    /** @type {String} */
-    i2cAddressAsHex = "0x42"; // UPS Hat address
+        /** @type {Object | Undefined} */
+        this.wire = undefined;
 
+        /** @type {Number} */
+        this.busNumber = 1; // default on PI "/dev/i2c-1"
+
+        /** @type {String} */
+        this.i2cAddressAsHex = "0x42"; // UPS Hat address
+    }
     /**
      * @method I2cBus#initialize
      * 
@@ -52,6 +53,7 @@ class I2CBus {
         options = {}
     ) {
         let wire;
+
         try {
             wire = await i2c.openPromisified(busNumber, options).then(wire => wire);
         } catch (error) {
@@ -79,7 +81,7 @@ class I2CBus {
         // making the sensor visible on I2c )
         addressFound = await wire.scan(i2cAddress);
 
-        if (addressFound.length === 0) {
+        if (addressFound.length === 0 || addressFound[0] !== i2cAddress) {
             return {
                 success: false,
                 msg: "[I2c] - No device found",
@@ -90,7 +92,7 @@ class I2CBus {
             }
         } else {
 
-            this.setCurrentBusData(i2cAddress, wire, busNumber, "0x" + i2cAddress.toString(16));
+            this.updateState(i2cAddress, wire, busNumber, "0x" + i2cAddress.toString(16));
 
             return {
                 success: true,
@@ -105,17 +107,17 @@ class I2CBus {
     }
 
     /**
-     * @method I2cBus#setCurrentBusData
+     * @method I2cBus#updateState
      * 
      * @summary 
-     * Class setter for keeping track of the current bus settings
+     * Update class instance variables
      * 
      * @param {Number} i2cAddress 
      * @param {Object} wire 
      * @param {Number} busNumber 
      * @param {String} i2cAddressAsHex 
      */
-    setCurrentBusData = function (i2cAddress, wire, busNumber, i2cAddressAsHex) {
+    updateState = function (i2cAddress, wire, busNumber, i2cAddressAsHex) {
         this.i2cAddress = i2cAddress;
         this.wire = wire;
         this.busNumber = busNumber;
@@ -132,12 +134,12 @@ class I2CBus {
      */
     getConnectedDevices = async function () {
         // active + asleep
-        let allAddressesFound = await wire.scan();
-        
+        let allAddressesFound = await this.wire.scan();
+
         // delay
 
         // active ( waking up asleep )
-        allAddressesFound = await wire.scan();
+        allAddressesFound = await this.wire.scan();
 
         if (allAddressesFound.length === 0) {
             return {
@@ -201,13 +203,17 @@ class I2CBus {
     /**
      * @method I2cBus#writeRegister 
      * 
+     * @summary
+     * 
+     * @description
+     * 
      * @param {Number} register address in hex of the register to write to ie: 0x04 
      * @param {Number} value the new value to be written to the register
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns value object 
      */
     writeRegister = async function (register, value) {
 
-        let bytes = Buffer.alloc(22, 0, "utf-8"); // why is this not "binary"
+        let bytes = Buffer.alloc(2, 0, "utf-8"); // why is this not "binary" 22
         bytes[0] = (value >> 8) & 0xFF;
         bytes[1] = value & 0xFF;
 
