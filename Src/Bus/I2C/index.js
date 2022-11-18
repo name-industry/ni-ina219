@@ -191,7 +191,7 @@ class I2CBus {
 
         return {
             success: true,
-            msg: "[I2c Bus] - Bytes written",
+            msg: "[I2c Bus] - Bytes read",
             data: {
                 bytesRead: data.bytesRead,
                 buffer: data.buffer,

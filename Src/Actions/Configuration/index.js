@@ -6,7 +6,7 @@
  * Configuration Actions
  * 
  * @description 
- * Actions for the Configuration register on the INA219 
+ * Actions for the Configuration register on the INA219
  */
 
 import { TEMPLATES } from "../../Constants/index.js";
@@ -14,9 +14,65 @@ import { TEMPLATES } from "../../Constants/index.js";
 import ConfigurationModel from "../../Domain/Configuration/Model/index.js";
 import ConfigurationService from "../../Domain/Configuration/Service/index.js";
 
-
 class Configuration {
-    constructor() { };
+
+    /**
+     * @method Configuration#getConfiguration
+     * 
+     * @summary
+     * Main get configuration action
+     * 
+     * @description
+     * Uses the Configuration Service to Read the configuration register 
+     * and then populate the model with the data.
+     * Returns back the DTO with optional extended data.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
+     */
+    getConfiguration = async function (language = "en", extendedData = true) {
+        let readResult = await ConfigurationService.readRegister();
+        if (!readResult.success) return readResult;
+
+        ConfigurationModel.hydrate(readResult.data, language, extendedData);
+
+        return {
+            success: true,
+            msg: "Configuration",
+            data: ConfigurationModel.getCurrentValues()
+        }
+    }
+
+
+    /**
+     * @method Configuration#setConfiguration
+     * 
+     * @summary
+     * Raw sets INA219 Configuration by its entire register value
+     * 
+     * @description
+     * Use exposed INA219 Constants to generate a totally custom register value
+     * and set it as the configuration 
+     * 
+     * @async
+     * @param {Number} configAsDecimal decimal version of configuration register
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     */
+    setConfiguration = async function (configAsDecimal) {
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(configAsDecimal);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
+        }
+    }
 
     /**
      * @method Configuration#setConfigurationByTemplate
@@ -30,6 +86,7 @@ class Configuration {
      * templateId is provided the default template "32V2A" is used 
      * which is a slight change from th INA219 Power on defaults.
      * 
+     * @async
      * @param {String} templateId the templateId from Constants ie: "32V2A"
      * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
      */
@@ -48,53 +105,26 @@ class Configuration {
 
         // update Register
         let configurationUpdated = await ConfigurationService.writeRegister(TEMPLATES[templateId].config);
+        if (!configurationUpdated.success) return configurationUpdated;
 
-        if (configurationUpdated.success === true) {
-            // update model values and return them
-            let updatedTemplate = ConfigurationModel.setActiveTemplate(
-                TEMPLATES[templateId]
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedTemplate
-            }
-        } else {
-            // Error writing register return dto
-            return configurationUpdated;
+        // update model values and return them
+        let updatedTemplate = ConfigurationModel.setActiveTemplate(
+            TEMPLATES[templateId]
+        );
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: updatedTemplate
         }
 
     }
-
-    getConfiguration = async function () {
-        let readResult = await ConfigurationService.readRegister();
-        if (readResult.success === true) {
-            ConfigurationModel.hydrate(readResult.data, "en", true);
-            return {
-                success: true,
-                msg: "Calibration",
-                data: ConfigurationModel.getCurrentValues()
-            }
-        } else {
-            return readResult;
-        }
-    }
-
-    // Collection modes and sensor state
-    setConfigurationModes = async function () { }
-
-    // Individual config elements
-    setConfigurationBRNG = async function () { }
-    setConfigurationPGA = async function () { }
-    setConfigurationBADC = async function () { }
-    setConfigurationSADC = async function () { }
-
 
     /**
-     * @method NI_INA219#setMode
+     * @method Configuration#setConfigurationMode
      * 
      * @summary
-     * Change the MODE to trigger.
+     * Set sensor operational mode
      * 
      * @description
      * This will update the configuration to use any Mode available.
@@ -111,41 +141,43 @@ class Configuration {
      * BVOLT_CONTINUOUS: 0x06, // bus voltage continuous
      * SANDBVOLT_CONTINUOUS: 0x07, // shunt and bus voltage continuous (default)
      * 
-     * TODO: map these to human readable constants 
-     *       then map it to internal constants
-     * 
      * @async
+     * @param {String} modeConstant Constants.CONFIGURATION.MODE
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setMode = async function (modeConstant) {
-        let newConfigurationValue = Models.configuration.editConfigurationMode(
-            Models.configuration.getCurrentConfiguration(),
-            modeConstant);
-        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
-        if (setNewConfigResults.success === true) {
-            let updatedValues = Models.configuration.setCurrentConfiguration(
-                newConfigurationValue
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedValues
-            }
-        } else {
-            // error writing register
-            return setNewConfigResults;
+    setConfigurationMode = async function (modeConstant = "SANDBVOLT_CONTINUOUS") {
+
+        // calculates new configuration registry value
+        // TODO: should be moved to ConfigurationService
+        let newConfiguration = ConfigurationModel.editConfigurationMode(
+            ConfigurationModel.getCurrentConfiguration(),
+            modeConstant
+        );
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(newConfiguration);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
         }
+
     }
 
-
     /**
-     * @method NI_INA219#setBusVoltageRange
+     * @method Configuration#setConfigurationMode
      * 
      * @summary
-     * Change the Bus Voltage Range.
+     * Set sensor FSR / BusVoltage Range
      * 
      * @description
-     * This will update the configuration to make the sensor capture the
+     * INA219 actually works only up to 26V so I am not sure what the 
+     * deal is with 32V being available to set.
      * Bus Voltage Range either 16V or 32V. Default is 32V.
      * Ranges are found in ./Constants/index.js or through auto-complete
      * via Constants.CONFIGURATION.BUS_VOLTAGE_RANGE
@@ -154,34 +186,35 @@ class Configuration {
      * RANGE_16V: 0x00, 
      * RANGE_32V: 0x01
      * 
-     * TODO: map these to human readable constants 
-     *       then map it to internal constants
-     * 
      * @async
+     * @param {String} rangeConstant Constants.CONFIGURATION.BUS_VOLTAGE_RANGE
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setBusVoltageRange = async function (rangeConstant = "RANGE_32V") {
-        let newConfigurationValue = Models.configuration.editConfigurationBRNG(
-            Models.configuration.getCurrentConfiguration(),
-            rangeConstant);
-        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
-        if (setNewConfigResults.success === true) {
-            let updatedValues = Models.configuration.setCurrentConfiguration(
-                newConfigurationValue
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedValues
-            }
-        } else {
-            // error writing register
-            return setNewConfigResults;
+    setConfigurationBRNG = async function (rangeConstant = "RANGE_32V") {
+
+        // calculates new configuration registry value
+        // TODO: should be moved to ConfigurationService
+        let newConfiguration = ConfigurationModel.editConfigurationBRNG(
+            ConfigurationModel.getCurrentConfiguration(),
+            rangeConstant
+        );
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(newConfiguration);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
         }
     }
 
     /**
-     * @method NI_INA219#setPGA
+     * @method Configuration#setConfigurationPGA
      * 
      * @summary
      * Change the PGA (Shunt Voltage Only) Gain and Range
@@ -198,34 +231,36 @@ class Configuration {
      * DIV_4_160MV: 0x02, // shunt prog. gain set to /4, 160 mV range
      * DIV_8_320MV: 0x03, // shunt prog. gain set to /8, 320 mV range (default)
      * 
-     * TODO: map these to human readable constants 
-     *       then map it to internal constants
-     * 
      * @async
+     * @param {String} gainConstant Constants.CONFIGURATION.GAIN
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setPGA = async function (gainConstant = "DIV_8_320MV") {
-        let newConfigurationValue = Models.configuration.editConfigurationPGain(
-            Models.configuration.getCurrentConfiguration(),
-            gainConstant);
-        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
-        if (setNewConfigResults.success === true) {
-            let updatedValues = Models.configuration.setCurrentConfiguration(
-                newConfigurationValue
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedValues
-            }
-        } else {
-            // error writing register
-            return setNewConfigResults;
+    setConfigurationPGA = async function (gainConstant = "DIV_8_320MV") {
+
+        // calculates new configuration registry value
+        // TODO: should be moved to ConfigurationService
+        let newConfiguration = ConfigurationModel.editConfigurationPGain(
+            ConfigurationModel.getCurrentConfiguration(),
+            gainConstant
+        );
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(newConfiguration);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
         }
     }
 
+
     /**
-     * @method NI_INA219#setBADC
+     * @method Configuration#setConfigurationBADC
      * 
      * @summary
      * Change BADC Bus ADC Resolution/Averaging
@@ -238,34 +273,35 @@ class Configuration {
      * via Constants.CONFIGURATION.BUS_ADC_RESOLUTION
      * bit positions set is [ 10, 9, 8, 7 ] see page 20 table 5 in the PDF for ina219
      * 
-     * TODO: map these to human readable constants 
-     *       then map it to internal constants
-     * 
      * @async
+     * @param {String} bADCConstant Constants.CONFIGURATION.BUS_ADC_RESOLUTION
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setBADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
-        let newConfigurationValue = Models.configuration.editConfigurationBADC(
-            Models.configuration.getCurrentConfiguration(),
-            bADCConstant);
-        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
-        if (setNewConfigResults.success === true) {
-            let updatedValues = Models.configuration.setCurrentConfiguration(
-                newConfigurationValue
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedValues
-            }
-        } else {
-            // error writing register
-            return setNewConfigResults;
+    setConfigurationBADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
+
+        // calculates new configuration registry value
+        // TODO: should be moved to ConfigurationService
+        let newConfiguration = ConfigurationModel.editConfigurationBADC(
+            ConfigurationModel.getCurrentConfiguration(),
+            bADCConstant
+        );
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(newConfiguration);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
         }
     }
 
     /**
-     * @method NI_INA219#setSADC
+     * @method Configuration#setConfigurationSADC
      * 
      * @summary
      * Change SADC Shunt ADC Resolution/Averaging
@@ -278,29 +314,30 @@ class Configuration {
      * via Constants.CONFIGURATION.SHUNT_ADC_RESOLUTION
      * bit positions set is [ 6, 5, 4, 3 ] see page 20 table 5 in the PDF for ina219
      * 
-     * TODO: map these to human readable constants 
-     *       then map it to internal constants
-     * 
      * @async
+     * @param {String} sADCConstant Constants.CONFIGURATION.SHUNT_ADC_RESOLUTION
      * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto 
      */
-    setSADC = async function (bADCConstant = "ADCRES_12BIT_32S") {
-        let newConfigurationValue = Models.configuration.editConfigurationSADC(
-            Models.configuration.getCurrentConfiguration(),
-            bADCConstant);
-        let setNewConfigResults = await this.writeRegister(Constants.REGISTERS.CONFIG_RW, newConfigurationValue);
-        if (setNewConfigResults.success === true) {
-            let updatedValues = Models.configuration.setCurrentConfiguration(
-                newConfigurationValue
-            );
-            return {
-                success: true,
-                msg: "Configuration register updated",
-                data: updatedValues
-            }
-        } else {
-            // error writing register
-            return setNewConfigResults;
+    setConfigurationSADC = async function (sADCConstant = "ADCRES_12BIT_32S") {
+
+        // calculates new configuration registry value
+        // TODO: should be moved to ConfigurationService
+        let newConfiguration = ConfigurationModel.editConfigurationSADC(
+            ConfigurationModel.getCurrentConfiguration(),
+            sADCConstant
+        );
+
+        // update Register
+        let configurationUpdated = await ConfigurationService.writeRegister(newConfiguration);
+        if (!configurationUpdated.success) return configurationUpdated;
+
+        let readResult = this.getConfiguration();
+        if (!readResult.success) return readResult;
+
+        return {
+            success: true,
+            msg: "Configuration register updated",
+            data: readResult.data
         }
     }
 
