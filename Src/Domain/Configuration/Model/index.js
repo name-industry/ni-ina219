@@ -64,8 +64,10 @@ class ConfigurationModel extends BaseRegisterModel {
      * @method ConfigurationModel#setActiveTemplate
      * 
      * @summary
+     * Sets active Template 
      * 
      * @description
+     * Set the active template internally if using templates.
      * 
      * @param {number} newActiveTemplate 
      * @returns {object} activeTemplate
@@ -89,8 +91,11 @@ class ConfigurationModel extends BaseRegisterModel {
      * @method ConfigurationModel#getCurrentConfiguration
      * 
      * @summary
+     * Gets the currant live Configuration
      * 
      * @description
+     * Gets the value of the current live COnfiguration register. This is cached
+     * and updated only on change ( write ) of register.
      * 
      * @returns {number} configuration as an int
      */

@@ -1,4 +1,51 @@
-// V@ts-check <- has problems with 'this' in the init method for some reason
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>NI_INA219.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseRegisterModel.html">BaseRegisterModel</a><ul class='methods'><li data-type='method'><a href="BaseRegisterModel.html#.formatData#formatData">formatData</a></li><li data-type='method'><a href="BaseRegisterModel.html#.getCurrentValues#getCurrentValues">getCurrentValues</a></li><li data-type='method'><a href="BaseRegisterModel.html#.getCurrentValues#getCurrentValues">getCurrentValues</a></li><li data-type='method'><a href="BaseRegisterModel.html#.hydrate#hydrate">hydrate</a></li></ul></li><li><a href="BusVoltage.html">BusVoltage</a></li><li><a href="BusVoltageModel.html">BusVoltageModel</a><ul class='methods'><li data-type='method'><a href="BusVoltageModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Calibration.html">Calibration</a><ul class='methods'><li data-type='method'><a href="Calibration.html#.getCalculationValues#getCalculationValues">getCalculationValues</a></li><li data-type='method'><a href="Calibration.html#.getCalibration#getCalibration">getCalibration</a></li><li data-type='method'><a href="Calibration.html#.setCalibrationByTemplate#setCalibrationByTemplate">setCalibrationByTemplate</a></li><li data-type='method'><a href="Calibration.html#.setCustomCalibration#setCustomCalibration">setCustomCalibration</a></li><li data-type='method'><a href="Calibration.html#.triggerCalibration#triggerCalibration">triggerCalibration</a></li></ul></li><li><a href="CalibrationModel.html">CalibrationModel</a><ul class='methods'><li data-type='method'><a href="CalibrationModel.html#.getCalibrationValues#getCalibrationValues">getCalibrationValues</a></li><li data-type='method'><a href="CalibrationModel.html#.setActiveTemplate#setActiveTemplate">setActiveTemplate</a></li><li data-type='method'><a href="CalibrationModel.html#.setCustomCalibrationValues#setCustomCalibrationValues">setCustomCalibrationValues</a></li></ul></li><li><a href="ChargeRemainingModel.html">ChargeRemainingModel</a><ul class='methods'><li data-type='method'><a href="ChargeRemainingModel.html#.calculateValue#calculateValue">calculateValue</a></li><li data-type='method'><a href="ChargeRemainingModel.html#.formatData#formatData">formatData</a></li></ul></li><li><a href="Configuration.html">Configuration</a><ul class='methods'><li data-type='method'><a href="Configuration.html#.getConfiguration#getConfiguration">getConfiguration</a></li><li data-type='method'><a href="Configuration.html#.setConfiguration#setConfiguration">setConfiguration</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationBADC#setConfigurationBADC">setConfigurationBADC</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationByTemplate#setConfigurationByTemplate">setConfigurationByTemplate</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationMode#setConfigurationMode">setConfigurationMode</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationMode#setConfigurationMode">setConfigurationMode</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationPGA#setConfigurationPGA">setConfigurationPGA</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationSADC#setConfigurationSADC">setConfigurationSADC</a></li></ul></li><li><a href="ConfigurationModel.html">ConfigurationModel</a><ul class='methods'><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationBADC#editConfigurationBADC">editConfigurationBADC</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationBRNG#editConfigurationBRNG">editConfigurationBRNG</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationMode#editConfigurationMode">editConfigurationMode</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationPGain#editConfigurationPGain">editConfigurationPGain</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationSADC#editConfigurationSADC">editConfigurationSADC</a></li><li data-type='method'><a href="ConfigurationModel.html#.getCurrentConfiguration#getCurrentConfiguration">getCurrentConfiguration</a></li><li data-type='method'><a href="ConfigurationModel.html#.setActiveTemplate#setActiveTemplate">setActiveTemplate</a></li></ul></li><li><a href="Current.html">Current</a></li><li><a href="CurrentModel.html">CurrentModel</a><ul class='methods'><li data-type='method'><a href="CurrentModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Device.html">Device</a></li><li><a href="I2cBus.html">I2cBus</a><ul class='methods'><li data-type='method'><a href="I2cBus.html#.getConnectedDevices#getConnectedDevices">getConnectedDevices</a></li><li data-type='method'><a href="I2cBus.html#.initialize#initialize">initialize</a></li><li data-type='method'><a href="I2cBus.html#.readRegister#readRegister">readRegister</a></li><li data-type='method'><a href="I2cBus.html#.updateState#updateState">updateState</a></li><li data-type='method'><a href="I2cBus.html#.writeRegister#writeRegister">writeRegister</a></li></ul></li><li><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type='method'><a href="NI_INA219.html#.getBusVoltage#getBusVoltage">getBusVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.getCalibration#getCalibration">getCalibration</a></li><li data-type='method'><a href="NI_INA219.html#.getChargeRemaining#getChargeRemaining">getChargeRemaining</a></li><li data-type='method'><a href="NI_INA219.html#.getConfiguration#getConfiguration">getConfiguration</a></li><li data-type='method'><a href="NI_INA219.html#.getCurrent#getCurrent">getCurrent</a></li><li data-type='method'><a href="NI_INA219.html#.getDeviceInformation#getDeviceInformation">getDeviceInformation</a></li><li data-type='method'><a href="NI_INA219.html#.getPower#getPower">getPower</a></li><li data-type='method'><a href="NI_INA219.html#.getPowerSupplyVoltage#getPowerSupplyVoltage">getPowerSupplyVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.getShuntVoltage#getShuntVoltage">getShuntVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.initialize#initialize">initialize</a></li><li data-type='method'><a href="NI_INA219.html#.setConfigurationByTemplateId#setConfigurationByTemplateId">setConfigurationByTemplateId</a></li></ul></li><li><a href="Power.html">Power</a></li><li><a href="PowerModel.html">PowerModel</a><ul class='methods'><li data-type='method'><a href="PowerModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="PowerSupplyModel.html">PowerSupplyModel</a><ul class='methods'><li data-type='method'><a href="PowerSupplyModel.html#.calculateValue#calculateValue">calculateValue</a></li><li data-type='method'><a href="PowerSupplyModel.html#.formatData#formatData">formatData</a></li></ul></li><li><a href="ShuntVoltage.html">ShuntVoltage</a></li><li><a href="ShuntVoltageModel.html">ShuntVoltageModel</a><ul class='methods'><li data-type='method'><a href="ShuntVoltageModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Utilities.html">Utilities</a><ul class='methods'><li data-type='method'><a href="Utilities.html#.mappedLabelsAndBits#mappedLabelsAndBits">mappedLabelsAndBits</a></li><li data-type='method'><a href="Utilities.html#.registerAsBinaryString#registerAsBinaryString">registerAsBinaryString</a></li></ul></li><li><a href="WSchargeRemaining.html">WSchargeRemaining</a></li><li><a href="WSpowerSupplyVoltage.html">WSpowerSupplyVoltage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TEMPLATES">TEMPLATES</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">NI_INA219.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// V@ts-check &lt;- has problems with 'this' in the init method for some reason
 /**
  * @class NI_INA219
  * 
@@ -9,25 +56,25 @@
  * Texas Instruments INA219 Zero-Drift Bi-Directional Current/Power 
  * monitor with I2c interface. 
  * 
- * <br /><br />
- * [INA219 Chip Specs]{@link https://www.waveshare.com/w/upload/1/10/Ina219.pdf}<br />
+ * &lt;br />&lt;br />
+ * [INA219 Chip Specs]{@link https://www.waveshare.com/w/upload/1/10/Ina219.pdf}&lt;br />
  * [WaveShare UPS Product page]{@link https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm}
- * <br /><br />
- * This library builds on these two versions:<br />
- * <br />
- * [WaveShare's Python demo code]{@link https://www.waveshare.com/wiki/UPS_HAT}<br />
+ * &lt;br />&lt;br />
+ * This library builds on these two versions:&lt;br />
+ * &lt;br />
+ * [WaveShare's Python demo code]{@link https://www.waveshare.com/wiki/UPS_HAT}&lt;br />
  * [nodejs version by brettmarl on GitHub]{@link https://github.com/brettmarl/node-ina219}
- * <br />
- * <br />
+ * &lt;br />
+ * &lt;br />
  * Uses [I2c-bus]{@link https://github.com/fivdi/i2c-bus} temporarily for developing - 
  * but will be removed once complete as the module should be provided a promise-based bus 
- * on instantiation.<br /><br />
+ * on instantiation.&lt;br />&lt;br />
  * 
- * Testing hardware:<br /> 
- * 1 x Raspberry Pi 4b with the WaveShare UPS hat installed.<br />
- * 2 x NCR18650B 18650 Battery<br /><br />
- * #note: Battery type Panasonic-Japan 3400mAh Li-ion 3.7V Flat Top Rechargeable [3.6 <> 4.2 cutoff 2.5]<br />
- * [specs]{@link https://www.orbtronic.com/content/NCR18650B-Datasheet-Panasonic-Specifications.pdf}<br />
+ * Testing hardware:&lt;br /> 
+ * 1 x Raspberry Pi 4b with the WaveShare UPS hat installed.&lt;br />
+ * 2 x NCR18650B 18650 Battery&lt;br />&lt;br />
+ * #note: Battery type Panasonic-Japan 3400mAh Li-ion 3.7V Flat Top Rechargeable [3.6 &lt;> 4.2 cutoff 2.5]&lt;br />
+ * [specs]{@link https://www.orbtronic.com/content/NCR18650B-Datasheet-Panasonic-Specifications.pdf}&lt;br />
  */
 
 import { Constants } from "./Constants/index.js";
@@ -55,7 +102,7 @@ class NI_INA219 {
      * @method NI_INA219#initialize
      * 
      * @summary
-     * Start register/calibrate bus & sensor
+     * Start register/calibrate bus &amp; sensor
      * 
      * @description 
      * Gets a handler to the INA219 chip via I2c.
@@ -70,7 +117,7 @@ class NI_INA219 {
      * @param {*} configurationTemplateId Configuring the sensor and calibration template Id
      * @param {*} useLogging Not implemented
      * @param {*} loggingType Not implemented
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto 
      */
     initialize = async function (
         i2cAddress = Constants.DEFAULT_I2C_ADDRESS,
@@ -110,7 +157,7 @@ class NI_INA219 {
      * 
      * @async 
      * 
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto 
      */
     getDeviceInformation = async function () {
         // Hook - Pre-Action
@@ -126,12 +173,12 @@ class NI_INA219 {
      * Use a template Id to set a configuration profile
      * 
      * @description
-     * Sets the Configuration Register & the Calibration Register,
+     * Sets the Configuration Register &amp; the Calibration Register,
      * via a Template. Currently templates are located in the Constants
      * file but will be removed to external loaded JSON files.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>} returns dto
      */
     setConfigurationByTemplateId = async function (configurationTemplateId = "32V2A") {
 
@@ -169,7 +216,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>} returns dto
      */
     getConfiguration = async function () {
         // Hook - Pre-Action
@@ -184,7 +231,7 @@ class NI_INA219 {
      * @param {*} shuntResistanceOhms 
      * @param {*} gainVoltage 
      * @param {*} currentMaxExpected 
-     * @returns @returns {Promise<(ResultObject|ErrorResultObject)>} returns dto
+     * @returns @returns {Promise&lt;(ResultObject|ErrorResultObject)>} returns dto
      */
     setCustomCalibration = async function (busVoltageMax, shuntResistanceOhms, gainVoltage, currentMaxExpected) {
         // Hook - Pre-Action
@@ -209,7 +256,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getCalibration = async function () {
         // Hook - Pre-Action
@@ -231,7 +278,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getBusVoltage = async function () {
         // Hook - Pre-Action
@@ -252,7 +299,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getShuntVoltage = async function () {
         // Hook - Pre-Action
@@ -273,7 +320,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getPower = async function () {
         // Hook - Pre-Action
@@ -295,7 +342,7 @@ class NI_INA219 {
      * This is a method an external program would call.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getCurrent = async function () {
         // Hook - Pre-Action
@@ -317,7 +364,7 @@ class NI_INA219 {
      * This method is here for functional parity. If not using this hat, can ignore.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getPowerSupplyVoltageWS = async function () {
 
@@ -349,7 +396,7 @@ class NI_INA219 {
      * This method is here for functional parity. If not using this hat, can ignore.
      * 
      * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     * @returns {Promise&lt;(ResultObject|ErrorResultObject)>}  returns dto
      */
     getChargeRemainingWS = async function () {
 
@@ -368,4 +415,28 @@ class NI_INA219 {
 
 }
 
-export default new NI_INA219();
+export default new NI_INA219();</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sat Dec 03 2022 14:40:16 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

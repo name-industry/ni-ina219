@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Domain/BusVoltage/Model/index.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseRegisterModel.html">BaseRegisterModel</a><ul class='methods'><li data-type='method'><a href="BaseRegisterModel.html#.formatData#formatData">formatData</a></li><li data-type='method'><a href="BaseRegisterModel.html#.getCurrentValues#getCurrentValues">getCurrentValues</a></li><li data-type='method'><a href="BaseRegisterModel.html#.getCurrentValues#getCurrentValues">getCurrentValues</a></li><li data-type='method'><a href="BaseRegisterModel.html#.hydrate#hydrate">hydrate</a></li></ul></li><li><a href="BusVoltage.html">BusVoltage</a></li><li><a href="BusVoltageModel.html">BusVoltageModel</a><ul class='methods'><li data-type='method'><a href="BusVoltageModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Calibration.html">Calibration</a><ul class='methods'><li data-type='method'><a href="Calibration.html#.getCalculationValues#getCalculationValues">getCalculationValues</a></li><li data-type='method'><a href="Calibration.html#.getCalibration#getCalibration">getCalibration</a></li><li data-type='method'><a href="Calibration.html#.setCalibrationByTemplate#setCalibrationByTemplate">setCalibrationByTemplate</a></li><li data-type='method'><a href="Calibration.html#.setCustomCalibration#setCustomCalibration">setCustomCalibration</a></li><li data-type='method'><a href="Calibration.html#.triggerCalibration#triggerCalibration">triggerCalibration</a></li></ul></li><li><a href="CalibrationModel.html">CalibrationModel</a><ul class='methods'><li data-type='method'><a href="CalibrationModel.html#.getCalibrationValues#getCalibrationValues">getCalibrationValues</a></li><li data-type='method'><a href="CalibrationModel.html#.setActiveTemplate#setActiveTemplate">setActiveTemplate</a></li><li data-type='method'><a href="CalibrationModel.html#.setCustomCalibrationValues#setCustomCalibrationValues">setCustomCalibrationValues</a></li></ul></li><li><a href="ChargeRemainingModel.html">ChargeRemainingModel</a><ul class='methods'><li data-type='method'><a href="ChargeRemainingModel.html#.calculateValue#calculateValue">calculateValue</a></li><li data-type='method'><a href="ChargeRemainingModel.html#.formatData#formatData">formatData</a></li></ul></li><li><a href="Configuration.html">Configuration</a><ul class='methods'><li data-type='method'><a href="Configuration.html#.getConfiguration#getConfiguration">getConfiguration</a></li><li data-type='method'><a href="Configuration.html#.setConfiguration#setConfiguration">setConfiguration</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationBADC#setConfigurationBADC">setConfigurationBADC</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationByTemplate#setConfigurationByTemplate">setConfigurationByTemplate</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationMode#setConfigurationMode">setConfigurationMode</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationMode#setConfigurationMode">setConfigurationMode</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationPGA#setConfigurationPGA">setConfigurationPGA</a></li><li data-type='method'><a href="Configuration.html#.setConfigurationSADC#setConfigurationSADC">setConfigurationSADC</a></li></ul></li><li><a href="ConfigurationModel.html">ConfigurationModel</a><ul class='methods'><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationBADC#editConfigurationBADC">editConfigurationBADC</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationBRNG#editConfigurationBRNG">editConfigurationBRNG</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationMode#editConfigurationMode">editConfigurationMode</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationPGain#editConfigurationPGain">editConfigurationPGain</a></li><li data-type='method'><a href="ConfigurationModel.html#.editConfigurationSADC#editConfigurationSADC">editConfigurationSADC</a></li><li data-type='method'><a href="ConfigurationModel.html#.getCurrentConfiguration#getCurrentConfiguration">getCurrentConfiguration</a></li><li data-type='method'><a href="ConfigurationModel.html#.setActiveTemplate#setActiveTemplate">setActiveTemplate</a></li></ul></li><li><a href="Current.html">Current</a></li><li><a href="CurrentModel.html">CurrentModel</a><ul class='methods'><li data-type='method'><a href="CurrentModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Device.html">Device</a></li><li><a href="I2cBus.html">I2cBus</a><ul class='methods'><li data-type='method'><a href="I2cBus.html#.getConnectedDevices#getConnectedDevices">getConnectedDevices</a></li><li data-type='method'><a href="I2cBus.html#.initialize#initialize">initialize</a></li><li data-type='method'><a href="I2cBus.html#.readRegister#readRegister">readRegister</a></li><li data-type='method'><a href="I2cBus.html#.updateState#updateState">updateState</a></li><li data-type='method'><a href="I2cBus.html#.writeRegister#writeRegister">writeRegister</a></li></ul></li><li><a href="NI_INA219.html">NI_INA219</a><ul class='methods'><li data-type='method'><a href="NI_INA219.html#.getBusVoltage#getBusVoltage">getBusVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.getCalibration#getCalibration">getCalibration</a></li><li data-type='method'><a href="NI_INA219.html#.getChargeRemaining#getChargeRemaining">getChargeRemaining</a></li><li data-type='method'><a href="NI_INA219.html#.getConfiguration#getConfiguration">getConfiguration</a></li><li data-type='method'><a href="NI_INA219.html#.getCurrent#getCurrent">getCurrent</a></li><li data-type='method'><a href="NI_INA219.html#.getDeviceInformation#getDeviceInformation">getDeviceInformation</a></li><li data-type='method'><a href="NI_INA219.html#.getPower#getPower">getPower</a></li><li data-type='method'><a href="NI_INA219.html#.getPowerSupplyVoltage#getPowerSupplyVoltage">getPowerSupplyVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.getShuntVoltage#getShuntVoltage">getShuntVoltage</a></li><li data-type='method'><a href="NI_INA219.html#.initialize#initialize">initialize</a></li><li data-type='method'><a href="NI_INA219.html#.setConfigurationByTemplateId#setConfigurationByTemplateId">setConfigurationByTemplateId</a></li></ul></li><li><a href="Power.html">Power</a></li><li><a href="PowerModel.html">PowerModel</a><ul class='methods'><li data-type='method'><a href="PowerModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="PowerSupplyModel.html">PowerSupplyModel</a><ul class='methods'><li data-type='method'><a href="PowerSupplyModel.html#.calculateValue#calculateValue">calculateValue</a></li><li data-type='method'><a href="PowerSupplyModel.html#.formatData#formatData">formatData</a></li></ul></li><li><a href="ShuntVoltage.html">ShuntVoltage</a></li><li><a href="ShuntVoltageModel.html">ShuntVoltageModel</a><ul class='methods'><li data-type='method'><a href="ShuntVoltageModel.html#.calculateValue#calculateValue">calculateValue</a></li></ul></li><li><a href="Utilities.html">Utilities</a><ul class='methods'><li data-type='method'><a href="Utilities.html#.mappedLabelsAndBits#mappedLabelsAndBits">mappedLabelsAndBits</a></li><li data-type='method'><a href="Utilities.html#.registerAsBinaryString#registerAsBinaryString">registerAsBinaryString</a></li></ul></li><li><a href="WSchargeRemaining.html">WSchargeRemaining</a></li><li><a href="WSpowerSupplyVoltage.html">WSpowerSupplyVoltage</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TEMPLATES">TEMPLATES</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Domain/BusVoltage/Model/index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @class BusVoltageModel
+ * 
+ * @summary
+ * BUS VOLTAGE REGISTER: PDF REF: Figure 24 pg. 23
+ * 
+ * @description
+ * BIT 1: Conversion ready&lt;br />
+ *  CNVR is 1 when data from conversion is available at the data registers
+ *  reading the Power Register resets this to 0
+ * &lt;br />&lt;br />
+ * BIT 0: Math Overflow Flag&lt;br />
+ *  OVF is set when Power or Current calculations are out of range
+ *  probably need board reset after seeing this
+ */
+import BaseRegisterModel from "../../BaseModels/BaseRegisterModel.js";
+import Big from 'big.js';
+
+class BusVoltageModel extends BaseRegisterModel {
+
+    constructor() {
+        super("BusVoltage");
+    }
+
+    /**
+     * @type {object}
+     * 
+     * @summary
+     * If useFullReturn is true then the labels are added to the return
+     * object. 
+     * 
+     * @description
+     * These are labels the directly match the reference sensor PDF doc. When
+     * debugging or in case UI desires it, arrays of labels and bits in the 
+     * register will be matched.
+     */
+    bitLabels = [
+        'BD12', 'BD11', 'BD10', 'BD9',
+        'BD8', 'BD7', 'BD6', 'BD5',
+        'BD4', 'BD3', 'BD2', 'BD1',
+        'BD0',
+        '-',
+        'CNVR',
+        'OVF'
+    ];
+
+    /**
+     * @type {object}
+     * 
+     * @summary
+     * the type of value in the register
+     * 
+     * @description
+     * Currently only english language value types
+     */
+    measurement = {
+        en: {
+            full: "volt",
+            plural: "volts",
+            short: "V"
+        }
+    }
+
+    /**
+     * @method BusVoltageModel#calculateValue
+     * 
+     * @summary
+     * Get the Bus voltage. Takes the raw register value and formats it
+     * 
+     * @description
+     * Calculates the Bus voltage in volts
+     * The BusVoltage is set with the configuration register to be 
+     * either 16v or 32v this means the Full Scale Range to try and 
+     * store in bits 15 -> 3
+     *  
+     * Bus voltage LSB is 4mV at both 32V and 16V settings.
+     * 
+     * see pg 23 in PDF of ina219, 8.6.3.2 Bus Voltage Register (address = 02h)
+     * 
+     * Note: the register value is shifted 3 bits to the left
+     * bit 2 '-',
+     * bit 1 'CNVR',
+     * bit 0 'OVF'
+     * 
+     * TODO: Check if value is correct via bit 0
+     * POST-IT: Need to play with with this to see what if anything changes
+     * internally when it captures the bus voltage.
+     * 
+     * @param {number} currentValue the current measurement in the register 
+     * 
+     * @returns {object} returns calculated values
+     */
+    calculateValue = function (currentValue) {
+        // get bits 15 to 3
+        let shifted = currentValue >> 3;
+        // multiply by 4mV per bit
+        let calculation = shifted * 0.004;
+        let formatted = new Big(calculation).toFixed(this.defaultPrecision);
+        return {
+            rawNumber: calculation,
+            withPrecision: formatted
+        }
+    }
+}
+
+export default new BusVoltageModel();</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sat Dec 03 2022 14:40:16 GMT-0500 (Eastern Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

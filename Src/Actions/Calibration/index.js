@@ -80,6 +80,28 @@ class Calibration {
 
     }
 
+    /**
+     * @method Calibration#setCustomCalibration
+     * 
+     * @summary
+     * set custom calibration values
+     * 
+     * @description
+     * Opens up the calibration register for advanced usage. You can 
+     * can use the Constants file exposed to create any calibration values
+     * and have them stored on the register. This is for uses outside the
+     * Templates where you need to fine tune the measured results returned
+     * via the public interface calls. Setting these randomly will not 
+     * do much as they should be properly matched to the configuration
+     * register inputs.  
+     * 
+     * @async
+     * @param {Number} busVoltageMax 
+     * @param {Number} shuntResistanceOhms 
+     * @param {Number} gainVoltage 
+     * @param {Number} currentMaxExpected 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     */
     setCustomCalibration = async function (
         busVoltageMax,
         shuntResistanceOhms,
@@ -117,6 +139,21 @@ class Calibration {
         }
     }
 
+    /**
+     * @method Calibration#triggerCalibration
+     * 
+     * @summary
+     * Trigger a calibration register write
+     * 
+     * @description
+     * Takes the current calibration register and re-writes it to 
+     * the register. Forces a calculation. Is a helper action in case
+     * an action requires another write to force a calculation to 
+     * happen.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     */
     triggerCalibration = async function () {
         let calculationValues = CalibrationModel.getCalibrationValues();
 
@@ -140,6 +177,19 @@ class Calibration {
         }
     }
 
+    /**
+     * @method Calibration#getCalibration
+     * 
+     * @summary
+     * Reads the Calibration register
+     * 
+     * @description
+     * Basic read of the calibration register. Non-cached. Currently
+     * there are no cached reads implemented in the Module.
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     */
     getCalibration = async function () {
         let readResult = await CalibrationService.readRegister();
         if (readResult.success === true) {
@@ -154,6 +204,19 @@ class Calibration {
         }
     }
 
+    /**
+     * @method Calibration#getCalculationValues
+     * 
+     * @summary
+     * Gets the calculation values from the model
+     * 
+     * @description
+     * Helper method to get the calculation numbers back from the 
+     * CalibrationModel. For example: powerLSB, currentLSB
+     * 
+     * @async
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     */
     getCalculationValues = function () {
         return CalibrationModel.getCalibrationValues();
     }

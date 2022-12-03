@@ -97,8 +97,10 @@ class CalibrationModel extends BaseRegisterModel {
      * @method CalibrationModel#setActiveTemplate
      * 
      * @summary
+     * Sets active Template 
      * 
      * @description
+     * Set the active template internally if using templates.
      * 
      * @param {number} newCalibration calibration register as an int
      * @returns {object} currently active template

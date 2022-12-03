@@ -203,9 +203,11 @@ class I2CBus {
     /**
      * @method I2cBus#writeRegister 
      * 
-     * @summary
+     * @summary 
+     * Write wrapper for INA-219 register
      * 
-     * @description
+     * @description 
+     * Use I2C lib to write to the INA-219 register - writeI2cBlock method
      * 
      * @param {Number} register address in hex of the register to write to ie: 0x04 
      * @param {Number} value the new value to be written to the register

@@ -1184,6 +1184,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@jsdoc/salty@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@jsdoc/salty/-/salty-0.2.1.tgz#815c487c859eca81ad3dfea540f830e1ff9d3392"
+  integrity sha512-JXwylDNSHa549N9uceDYu8D4GMXwSo3H8CCPYEQqxhhHpxD28+lRl2b3bS/caaPj5w1YD3SWtrficJNTnUjGpg==
+  dependencies:
+    lodash "^4.17.21"
+
 "@sinclair/typebox@^0.24.1":
   version "0.24.47"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.47.tgz#530b67163714356f93e82bdb871e7db4b7bc564e"
@@ -1856,6 +1863,13 @@ dmd@^6.1.0:
     reduce-without "^1.0.1"
     test-value "^3.0.0"
     walk-back "^5.1.0"
+
+docdash@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/docdash/-/docdash-2.0.0.tgz#1db24c934f9d4feb5576c638e8c061deb5ae1832"
+  integrity sha512-AxxZwrMLmiArEHJirdyZmW6YTBKxkd/Z5V9U2EU1crIMtpgoU/cH7Hnc9n1E0lzB1ZSam+VVMSnvlc+9+GUGVg==
+  dependencies:
+    "@jsdoc/salty" "^0.2.1"
 
 electron-to-chromium@^1.4.251:
   version "1.4.284"
@@ -2718,10 +2732,6 @@ jsdoc-parse@^6.1.0:
     sort-array "^4.1.4"
     test-value "^3.0.0"
 
-jsdoc-template@braintree/jsdoc-template:
-  version "3.4.0"
-  resolved "https://codeload.github.com/braintree/jsdoc-template/tar.gz/22300dcd7627ed0d51ffa0cf2a559756d7580fe2"
-
 jsdoc-to-markdown@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/jsdoc-to-markdown/-/jsdoc-to-markdown-7.1.1.tgz#dde4ef32fd0b28b2695c919a08fd65ae98317bcd"
@@ -2837,7 +2847,7 @@ lodash.pick@^4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
   integrity sha512-hXt6Ul/5yWjfklSGvLQl8vM//l3FtyHZeuelpzK6mm99pNvN9yTDruNZPEJZD1oWrqo+izBmB7oUfWgcCX7s4Q==
 
-lodash@^4.17.14, lodash@^4.17.15:
+lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
