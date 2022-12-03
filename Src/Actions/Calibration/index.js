@@ -59,23 +59,22 @@ class Calibration {
             updatedCalibrationValues.calculationValue_R
         );
 
-        // we updated the model and the register return the new calibration values
-        if (calibrationUpdated.success === true) {
-            // update model values and return them
-            CalibrationModel.setActiveTemplate(
-                TEMPLATES[templateId]
-            );
-            return {
-                success: true,
-                msg: "Calibration register updated",
-                data: {
-                    template: TEMPLATES[templateId],
-                    calculationValues: updatedCalibrationValues
-                }
+        // error writing to register
+        if (!calibrationUpdated.success) return calibrationUpdated;
+
+        // set active calibration values
+        CalibrationModel.setActiveTemplate(
+            TEMPLATES[templateId]
+        );
+
+        // return DTO
+        return {
+            success: true,
+            msg: "Calibration register updated",
+            data: {
+                template: TEMPLATES[templateId],
+                calculationValues: updatedCalibrationValues
             }
-        } else {
-            // Error writing register return dto
-            return calibrationUpdated;
         }
 
     }
@@ -121,21 +120,17 @@ class Calibration {
             updatedCalibrationValues.calculationValue_R
         );
 
-        // we updated the model and the register return the new calibration values
-        if (calibrationUpdated.success === true) {
-            // update model values and return them
-            CalibrationModel.setActiveTemplate();
-            return {
-                success: true,
-                msg: "Calibration register updated",
-                data: {
-                    template: undefined,
-                    calculationValues: updatedCalibrationValues
-                }
+        if (!calibrationUpdated.success) return calibrationUpdated;
+
+        // update model values and return them
+        CalibrationModel.setActiveTemplate();
+        return {
+            success: true,
+            msg: "Calibration register updated",
+            data: {
+                template: undefined,
+                calculationValues: updatedCalibrationValues
             }
-        } else {
-            // Error writing register return dto
-            return calibrationUpdated;
         }
     }
 
@@ -161,19 +156,16 @@ class Calibration {
             calculationValues.calculationValue_R
         );
 
+        if (!calibrationTriggered.success) return calibrationTriggered;
+
         // we updated the model and the register return the new calibration values
-        if (calibrationTriggered.success === true) {
-            return {
-                success: true,
-                msg: "Calibration register triggered",
-                data: {
-                    template: CalibrationModel.getActiveTemplate(),
-                    calculationValues: calculationValues
-                }
+        return {
+            success: true,
+            msg: "Calibration register triggered",
+            data: {
+                template: CalibrationModel.getActiveTemplate(),
+                calculationValues: calculationValues
             }
-        } else {
-            // Error writing register return dto
-            return calibrationTriggered;
         }
     }
 
@@ -192,16 +184,18 @@ class Calibration {
      */
     getCalibration = async function () {
         let readResult = await CalibrationService.readRegister();
-        if (readResult.success === true) {
-            CalibrationModel.hydrate(readResult.data, "en", true);
-            return {
-                success: true,
-                msg: "Calibration",
-                data: CalibrationModel.getCurrentValues()
-            }
-        } else {
-            return readResult;
+
+        // error reading from register
+        if (!readResult.success) return readResult;
+
+        CalibrationModel.hydrate(readResult.data, "en", true);
+
+        return {
+            success: true,
+            msg: "Calibration",
+            data: CalibrationModel.getCurrentValues()
         }
+
     }
 
     /**
@@ -214,8 +208,7 @@ class Calibration {
      * Helper method to get the calculation numbers back from the 
      * CalibrationModel. For example: powerLSB, currentLSB
      * 
-     * @async
-     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto 
+     * @returns {Object}  returns dto 
      */
     getCalculationValues = function () {
         return CalibrationModel.getCalibrationValues();

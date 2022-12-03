@@ -9,9 +9,6 @@
  * Actions for the WaveShare UPS device
  */
 
-// import BusVoltageModel from "../../Domain/BusVoltage/Model/index.js";
-// import BusVoltageService from "../../Domain/BusVoltage/Service/index.js";
-
 // Wrapper for I2c npm package
 import I2CBus from "../../Bus/I2C/index.js";
 
@@ -20,6 +17,20 @@ class Device {
         this.isInitialized = false;
     };
 
+    /**
+     * @method Device#initialize
+     * 
+     * @summary
+     * Initializes the device on the I2C bus
+     * 
+     * @description
+     * Sets up a promisified I2C instance via the 3rd party npm lib
+     * 
+     * @async
+     * @param {Number} i2cAddress value in Hex ie: 0x42
+     * @param {Number} busNumber value as INT ie: 1 
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     */
     initialize = async function (i2cAddress, busNumber) {
         let initI2cBus = await I2CBus.initialize(i2cAddress, busNumber);
         if (initI2cBus.success === false) {
@@ -30,6 +41,21 @@ class Device {
         }
     }
 
+    /**
+     * @method Device#getDeviceInformation
+     * 
+     * @summary
+     * Dump of the device info and values
+     * 
+     * @description
+     * Uses the initialized and connected Device to gather system and 
+     * device status.
+     * 
+     * @async
+     * @param {Object} Configuration passing in a reference to the Configuration class
+     * @param {Object} Calibration passing in a reference to the Calibration class
+     * @returns {Promise<(ResultObject|ErrorResultObject)>}  returns dto
+     */
     getDeviceInformation = async function (Configuration, Calibration) {
 
         let baseInformation = {
