@@ -15,6 +15,11 @@
 
 <br />
 
+Documents are found here:<br /> 
+[![Deploy static content to Pages](https://github.com/name-industry/ni-ina219/actions/workflows/static.yml/badge.svg)](https://name-industry.github.io/ni-ina219)
+
+<br />
+
 #### Module for using the [WaveShare UPS Raspberry Pi Hat](https://www.waveshare.com/product/raspberry-pi/hats/ups-hat.htm) that has an embedded [Texas Instruments INA219 sensor](https://www.ti.com/lit/ds/symlink/ina219.pdf).
 <br />
 
