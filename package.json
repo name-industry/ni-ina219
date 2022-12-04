@@ -9,6 +9,19 @@
     "nodeJS",
     "ups"
   ],
+  "files": [
+    "yarn.lock",
+    "README.md",
+    "package.json",
+    "jest.config.js",
+    "index.js",
+    "babel.config.json",
+    ".jsDoc.json",
+    "Src/",
+    "Test/",
+    "Scripts/",
+    "Example/"
+  ],
   "repository": "https://github.com/name-industry/ni-ina219.git",
   "author": "alexander davis <nameindustry@gmail.com>",
   "license": "MIT",
