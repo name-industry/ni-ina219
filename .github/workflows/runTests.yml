@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Run Tests then upload coverage to codecov.io
 name: Run Tests
 
 on:
@@ -20,10 +20,15 @@ jobs:
       run: yarn --frozen-lockfile
     - name: Run Tests and output Coverage
       run: yarn test
-      
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
         path: coverage
-      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./coverage
+        fail_ci_if_error: true
+        path_to_write_report: ./coverage/codecov_report.txt
+        verbose: true
