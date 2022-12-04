@@ -18,8 +18,6 @@ jobs:
         node-version: '18.x'
     - name: Install dependencies
       run: yarn --frozen-lockfile
-    - name: Build modulke
-      run: yarn build
     - name: Run Tests and output Coverage
       run: yarn test
       
