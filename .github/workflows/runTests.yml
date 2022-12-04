@@ -1,3 +1,4 @@
+# Simple workflow for deploying static content to GitHub Pages
 name: Run Tests
 
 on:
@@ -10,14 +11,21 @@ jobs:
     
     steps:
     
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          
-      - name: Install dependencies
-      - run: npm ci
-      - run: yarn --frozen-lockfile
-      - run: yarn build
-      - run: yarn test
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+    - name: Build modulke
+      run: yarn build
+    - name: Run Tests and output Coverage
+      run: yarn test
+      
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: coverage
+      
